@@ -391,7 +391,7 @@ def main():
     app.add_error_handler(error_handler)
 
     # Check every 5 minutes. The publication rule remains 5,000 تومان.
-    app.job_queue.run_repeating(auto_update, interval=300, first=10)
+    app.job_queue.run_repeating(auto_update, interval=1800, first=10)
     app.job_queue.run_daily(close_day, time=time(21, 0, tzinfo=TZ))
     app.run_polling()
 
