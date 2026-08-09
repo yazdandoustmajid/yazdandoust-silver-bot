@@ -573,15 +573,16 @@ f_big = font(48)
 f_money = font(44)
 f_small = font(28)
 f_tiny = font(24)
-    # انس
 
-    draw_center(
-        draw,
-        f"{data['ounce']:.2f}",
-        areas["ounce"],
-        f_big,
-        gold
-    )
+# انس
+
+draw_center(
+    draw,
+    f"{data['ounce']:.2f}",
+    areas["ounce"],
+    f_big,
+    gold
+)
 
 
     # دلار مشهد
