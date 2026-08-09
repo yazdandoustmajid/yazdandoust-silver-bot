@@ -69,17 +69,42 @@ def theoretical_995(ounce,dollar):
 
 def calculate_price(ounce,dollar,premium):
     return round_5000(theoretical_995(ounce,dollar)+premium)
-
 def fetch_silver_ounce():
-    if not METALPRICE_API_KEY:return None
-    r=requests.get("https://api.metalpriceapi.com/v1/latest",
-    params={"api_key":METALPRICE_API_KEY,"base":"USD","currencies":"XAG"},timeout=20)
-    r.raise_for_status()
-    d=r.json()
-    if not d.get("success"):raise ValueError(f"MetalpriceAPI error: {d}")
-    rate=d.get("rates",{}).get("XAG")
-    if rate is None:raise ValueError(f"XAG rate missing: {d}")
-    return 1/float(rate)
+    if not METALPRICE_API_KEY:
+        log.warning("METALPRICE_API_KEY is not set")
+        return None
+
+    try:
+        r = requests.get(
+            "https://api.metalpriceapi.com/v1/latest",
+            params={
+                "api_key": METALPRICE_API_KEY,
+                "base": "USD",
+                "currencies": "XAG"
+            },
+            timeout=20
+        )
+
+        r.raise_for_status()
+        data = r.json()
+
+        if not data.get("success"):
+            raise ValueError(f"MetalpriceAPI error: {data}")
+
+        rate = data.get("rates", {}).get("XAG")
+
+        if rate is None:
+            raise ValueError("XAG silver rate not found")
+
+        ounce = 1 / float(rate)
+
+        log.info("Silver ounce fetched successfully: %s USD", ounce)
+
+        return ounce
+
+    except Exception as e:
+        log.exception("Silver ounce fetch failed: %s", e)
+        return None
 def fetch_iran_dollar_toman():
     if not IRAN_FX_API_KEY:
         log.warning("IRAN_FX_API_KEY is not set")
