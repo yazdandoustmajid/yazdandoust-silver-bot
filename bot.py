@@ -205,95 +205,154 @@ def read_tgh():
 
 def read_site():
 
-    log.info(
-        "Reading Taghizadegan website..."
-    )
+    log.info("Reading Taghizadegan website...")
 
     html = get_page(SITE_URL)
 
-    text = normalize(
-        BeautifulSoup(
-            html,
-            "html.parser"
-        ).get_text(
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
+
+    page_text = normalize(
+        soup.get_text(
             "\n",
             strip=True
         )
     )
 
 
-    # ساچمه 995 یک کیلویی
+    def find_price(
+        keyword,
+        weight=None
+    ):
 
-    shot_995 = None
+        # جستجوی مستقیم در متن صفحه
 
-    patterns = [
-
-        r"نقره\s+ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995\s*(?:\n|\s)+([\d,.]+)\s*تومان",
-
-        r"ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995\s*(?:\n|\s)+([\d,.]+)\s*تومان"
-
-    ]
-
-    for pattern in patterns:
-
-        m = re.search(
-            pattern,
-            text,
-            re.I
+        pattern = (
+            rf"{keyword}"
+            rf".{{0,500}}?"
+            rf"([\d.,]+)\s*تومان"
         )
 
-        if m:
-
-            shot_995 = number(
-                m.group(1)
-            )
-
-            break
-
-
-    # روش پشتیبان
-
-    if shot_995 is None:
-
-        m = re.search(
-            r"ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995.*?([\d,.]+)\s*تومان",
-            text,
+        matches = re.findall(
+            pattern,
+            page_text,
             re.I | re.S
         )
 
-        if m:
-            shot_995 = number(
-                m.group(1)
+        if matches:
+
+            values = []
+
+            for x in matches:
+
+                v = number(x)
+
+                if v:
+                    values.append(v)
+
+            if values:
+
+                # قیمت‌های خیلی کوچک مثل 1000 را حذف می‌کنیم
+
+                values = [
+                    v for v in values
+                    if v > 1_000_000
+                ]
+
+                if values:
+
+                    return values[0]
+
+
+        # جستجوی بر اساس عنوان محصول
+
+        for tag in soup.find_all(
+            string=re.compile(
+                keyword,
+                re.I
             )
+        ):
+
+            parent = tag.parent
+
+            for _ in range(6):
+
+                if parent is None:
+                    break
+
+                block = normalize(
+                    parent.get_text(
+                        " ",
+                        strip=True
+                    )
+                )
+
+                prices = re.findall(
+                    r"([\d.,]+)\s*تومان",
+                    block
+                )
+
+                values = []
+
+                for p in prices:
+
+                    v = number(p)
+
+                    if v and v > 1_000_000:
+
+                        values.append(v)
+
+                if values:
+
+                    return values[-1]
+
+                parent = parent.parent
 
 
-    # Nadir یک کیلو
+        return None
 
-    nadir = None
 
-    patterns = [
+    # =========================
+    # SAچمه 995 - یک کیلو
+    # =========================
 
-        r"شمش\s+1000\s+گرمی\s+999\.9\s+نادیر\s*(?:\n|\s)+([\d,.]+)\s*تومان",
+    shot_995 = find_price(
+        r"نقره\s+ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995"
+    )
 
-        r"1000\s+گرمی\s+999\.9\s+نادیر\s*(?:\n|\s)+([\d,.]+)\s*تومان"
 
-    ]
+    if shot_995 is None:
 
-    for pattern in patterns:
-
-        m = re.search(
-            pattern,
-            text,
-            re.I
+        shot_995 = find_price(
+            r"ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995"
         )
 
-        if m:
 
-            nadir = number(
-                m.group(1)
-            )
+    # =========================
+    # NADIR - یک کیلو
+    # =========================
 
-            break
+    nadir = find_price(
+        r"شمش\s+1000\s+گرمی\s+999\.9\s+نادیر"
+    )
+
+
+    if nadir is None:
+
+        nadir = find_price(
+            r"1000\s+گرمی\s+999\.9\s+نادیر"
+        )
+
+
+    # روش پشتیبان برای Nadir
+
+    if nadir is None:
+
+        nadir = find_price(
+            r"نادیر"
+        )
 
 
     if shot_995 is None:
@@ -318,9 +377,15 @@ def read_site():
 
 
     return {
-        "shot_995_kg": shot_995,
-        "nadir_kg": nadir
+
+        "shot_995_kg":
+        shot_995,
+
+        "nadir_kg":
+        nadir
+
     }
+
 
 
 # =========================
