@@ -694,7 +694,7 @@ img.save(
 
 output.seek(0)
 
-return output
+ return output
 
 
 # =========================
