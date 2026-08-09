@@ -247,7 +247,7 @@ async def calc(update, context):
         return
     t = theoretical_995(ounce, dollar)
     p = calculate_price(ounce, dollar, premium)
-    await update.message.reply_text(
+    await update.effective_message.reply_text(
         f"🧮 تئوریک ۹۹۵: <b>{fmt(t)} تومان</b>\n"
         f"📈 پرمیوم: <b>{fmt(premium)}</b>\n"
         f"🥈 نرخ قابل انتشار: <b>{fmt(p)} تومان</b>",
@@ -533,15 +533,15 @@ async def news_update(context):
 async def manual_publish(update, context):
     if not admin(update): return
     if not session_open():
-        await update.message.reply_text("⏰ خارج از ساعت نرخ‌دهی ۱۱ تا ۲۱ هستیم.")
+        await update.effective_message.reply_text("⏰ خارج از ساعت نرخ‌دهی ۱۱ تا ۲۱ هستیم.")
         return
     before = get_setting("last_published")
     await publish_if_needed(context)
     after = get_setting("last_published")
     if after == before:
-        await update.message.reply_text("ℹ️ تغییر کمتر از ۵٬۰۰۰ تومان بود؛ نرخ کانال تغییر نکرد.")
+        await update.effective_message.reply_text("ℹ️ تغییر کمتر از ۵٬۰۰۰ تومان بود؛ نرخ کانال تغییر نکرد.")
     else:
-        await update.message.reply_text(f"✅ نرخ کانال به {fmt(after)} تومان بروزرسانی شد.")
+        await update.effective_message.reply_text(f"✅ نرخ کانال به {fmt(after)} تومان بروزرسانی شد.")
 
 async def status(update, context):
     if not admin(update): return
@@ -552,7 +552,7 @@ async def status(update, context):
     text="📊 امروز هنوز نرخ رسمی ثبت نشده."
 )
         return
-    await update.message.reply_text(
+    await update.effective_message.reply_text(
         "📊 <b>وضعیت امروز</b>\n\n"
         f"🔺 بیشترین: {fmt(row['high_price'])}\n"
         f"🔻 کمترین: {fmt(row['low_price'])}\n"
