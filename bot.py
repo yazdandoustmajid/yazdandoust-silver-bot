@@ -300,6 +300,33 @@ async def publish_if_needed(context, force=False):
     """, (datetime.now(TZ).isoformat(), ounce, dollar, premium,
           theoretical_995(ounce, dollar), price))
     con.commit(); con.close()
+def translate_to_farsi(text):
+    if not text:
+        return ""
+
+    try:
+        response = requests.get(
+            "https://translate.googleapis.com/translate_a/single",
+            params={
+                "client": "gtx",
+                "sl": "en",
+                "tl": "fa",
+                "dt": "t",
+                "q": text
+            },
+            timeout=15
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+        return "".join(
+            item[0] for item in data[0] if item[0]
+        )
+
+    except Exception as e:
+        log.warning("Translation failed: %s", e)
+        return text
 async def silver_news_update(context):
     if not GNEWS_API_KEY:
         log.warning("GNEWS_API_KEY is not set")
@@ -329,7 +356,14 @@ async def silver_news_update(context):
 
         for article in articles:
             title = str(article.get("title", "")).strip()
-            description = str(article.get("description", "")).strip()
+description = str(article.get("description", "")).strip()
+
+title_fa = translate_to_farsi(title)
+
+if description:
+    description_fa = translate_to_farsi(description)
+else:
+    description_fa = ""
             url = str(article.get("url", "")).strip()
 
             source_data = article.get("source", {})
@@ -348,11 +382,11 @@ async def silver_news_update(context):
 
             message = (
                 "🥈 <b>اخبار جهانی نقره</b>\n\n"
-                f"📰 <b>{title}</b>\n\n"
+                f"📰 <b>{title_fa}</b>\n\n"
             )
 
             if description:
-                message += f"{description}\n\n"
+                message += f"{description_fa}\n\n"
 
             message += f"🌍 منبع: {source}\n"
             message += f"🔗 <a href=\"{url}\">مشاهده خبر اصلی</a>\n\n"
