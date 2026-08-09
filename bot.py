@@ -319,58 +319,86 @@ async def news_update(context):
         )
 
         response.raise_for_status()
-        data = response.json()
+        items = response.json()
 
-        # پیدا کردن لیست اخبار
-        items = None
-
-        if isinstance(data, list):
-            items = data
-        elif isinstance(data, dict):
-            for key in ("data", "results", "news", "items"):
-                if isinstance(data.get(key), list):
-                    items = data[key]
-                    break
-
-        if not items:
-            log.warning("No news items found")
+        if not isinstance(items, list):
+            log.warning("News API returned unexpected data")
             return
 
-        news = items[0]
+        # کلمات مرتبط با ایران، جنگ و تحولات منطقه
+        keywords = [
+            "ایران", "اسرائیل", "آمریکا", "جنگ", "حمله",
+            "موشک", "بمباران", "سنتکام", "ارتش", "سپاه",
+            "آتش‌بس", "درگیری", "پهپاد", "مذاکرات",
+            "لبنان", "غزه", "سوریه", "عراق", "فلسطین",
+            "هسته‌ای", "تأسیسات", "حمله هوایی", "عملیات",
+            "کشته", "انفجار", "پدافند", "ترور", "تحریم"
+        ]
 
-        if not isinstance(news, dict):
+        # خبرهای مرتبط را پیدا کن
+        relevant_news = []
+
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+
+            title = str(item.get("title", "")).strip()
+
+            if not title:
+                continue
+
+            title_lower = title.lower()
+
+            if any(keyword in title_lower for keyword in keywords):
+                relevant_news.append(item)
+
+        if not relevant_news:
+            log.info("No relevant news found")
             return
 
-        title = (
-            news.get("title")
-            or news.get("name")
-            or news.get("headline")
-            or "خبر جدید"
+        # خبرهای مهم‌تر اول
+        relevant_news.sort(
+            key=lambda x: (
+                bool(x.get("special", False)),
+                x.get("id", 0)
+            ),
+            reverse=True
         )
 
-        url = (
-            news.get("url")
-            or news.get("link")
-            or news.get("news_url")
-            or ""
-        )
+        news = relevant_news[0]
 
-        news_id = (
-            str(news.get("id"))
-            if news.get("id") is not None
-            else str(news.get("newsId", ""))
-        )
+        news_id = str(news.get("id", ""))
 
-        # جلوگیری از ارسال دوباره همان خبر
+        if not news_id:
+            return
+
+        # جلوگیری از ارسال دوباره
         last_news_id = get_setting("last_news_id")
 
-        if news_id and news_id == last_news_id:
+        if str(last_news_id) == news_id:
             return
 
-        text = f"🔥 <b>خبر داغ</b>\n\n<b>{title}</b>"
+        title = str(news.get("title", "")).strip()
+        source = str(news.get("source", "")).strip()
+        date = str(news.get("date", "")).strip()
+        special = bool(news.get("special", False))
 
-        if url:
-            text += f'\n\n🔗 <a href="{url}">مشاهده خبر</a>'
+        if special:
+            header = "🚨 <b>خبر فوری</b>"
+        else:
+            header = "📰 <b>خبر جدید</b>"
+
+        text = f"{header}\n\n"
+        text += f"🔴 <b>{title}</b>\n\n"
+
+        if source:
+            text += f"🗞 منبع: {source}\n"
+
+        if date:
+            text += f"🕐 زمان: {date}\n"
+
+        text += "\n━━━━━━━━━━━━━━\n"
+        text += "📡 <b>ساچمه نقره یزدان دوست</b>"
 
         await context.bot.send_message(
             chat_id=CHANNEL_ID,
@@ -378,11 +406,12 @@ async def news_update(context):
             parse_mode="HTML"
         )
 
-        if news_id:
-            set_setting("last_news_id", news_id)
+        set_setting("last_news_id", news_id)
+
+        log.info("News sent: %s", title)
 
     except Exception as e:
-        log.exception("news update failed: %s", e)
+        log.exception("News update failed: %s", e)
 async def manual_publish(update, context):
     if not admin(update): return
     if not session_open():
