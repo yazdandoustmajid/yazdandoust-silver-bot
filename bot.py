@@ -569,7 +569,7 @@ def make_board(data):
         )
 
 
-  f_big = font(48)
+f_big = font(48)
 f_money = font(44)
 f_small = font(28)
 f_tiny = font(24)
