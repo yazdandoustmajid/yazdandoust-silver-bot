@@ -243,7 +243,7 @@ async def calc(update, context):
     if not admin(update): return
     ounce, dollar, premium = current_inputs()
     if ounce is None or dollar is None:
-        await update.message.reply_text("❌ هنوز انس و دلار مشخص نیست.")
+        await update.effective_message.reply_text("❌ هنوز انس و دلار مشخص نیست.")
         return
     t = theoretical_995(ounce, dollar)
     p = calculate_price(ounce, dollar, premium)
