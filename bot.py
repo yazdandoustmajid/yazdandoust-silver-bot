@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os
-import re
-import time
-import json
-import logging
+import os,re,time,json,logging
 from pathlib import Path
 from io import BytesIO
 from datetime import datetime
@@ -12,662 +8,238 @@ from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image,ImageDraw,ImageFont
 
+BOT_TOKEN=os.environ["BOT_TOKEN"]
+CHANNEL_ID=os.environ["CHANNEL_ID"]
+CHECK_SECONDS=int(os.getenv("CHECK_SECONDS","60"))
 
-# =========================
-# SETTINGS
-# =========================
+TGH_URL="https://t.me/s/tghsilver"
+SITE_URL="https://taghizadegan.com/"
+TEMPLATE_PATH=os.getenv("TEMPLATE_PATH","template.png")
+STATE_PATH=os.getenv("STATE_PATH","state.json")
 
-BOT_TOKEN = os.environ["BOT_TOKEN"]
-CHANNEL_ID = os.environ["CHANNEL_ID"]
+TROY_OUNCE_GRAMS=31.1034768
+SILVER_PURITY=0.995
 
-CHECK_SECONDS = 60
+logging.basicConfig(level=logging.INFO,format="%(asctime)s %(levelname)s %(message)s")
+log=logging.getLogger("yazdandoust")
 
-TGH_URL = "https://t.me/s/tghsilver"
-SITE_URL = "https://taghizadegan.com/"
+FA_DIGITS=str.maketrans("۰۱۲۳۴۵۶۷۸۹٬","0123456789,")
+AR_DIGITS=str.maketrans("٠١٢٣٤٥٦٧٨٩٬","0123456789,")
 
-TEMPLATE = "template.png"
-STATE_FILE = "state.json"
+def normalize_text(s):
+    return (s or "").translate(FA_DIGITS).translate(AR_DIGITS).replace("٬",",")
 
-OUNCE_GRAMS = 31.1034768
-PURITY_995 = 0.995
+def money(s):
+    s=normalize_text(s).replace(",","").replace(".","")
+    m=re.search(r"\d+",s)
+    return int(m.group()) if m else None
 
+def fmt(n):
+    return "—" if n is None else f"{int(round(n)):,}"
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s"
-)
+def fmt_decimal(n,digits=2):
+    return f"{n:.{digits}f}"
 
-log = logging.getLogger("Yazdandoust")
-
-
-# =========================
-# NUMBER
-# =========================
-
-def normalize(text):
-
-    if not text:
-        return ""
-
-    table = str.maketrans(
-        "۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩",
-        "01234567890123456789"
-    )
-
-    return (
-        text.translate(table)
-        .replace("٬", ",")
-        .replace("،", ",")
-    )
-
-
-def number(text):
-
-    text = normalize(text)
-    text = text.replace(",", "")
-    text = text.replace(".", "")
-
-    m = re.search(r"\d+", text)
-
-    if not m:
-        return None
-
-    return int(m.group())
-
-
-def money(value):
-
-    if value is None:
-        return "—"
-
-    return f"{int(round(value)):,}"
-
-
-# =========================
-# GET WEB
-# =========================
-
-def get_page(url):
-
-    r = requests.get(
+def fetch(url):
+    r=requests.get(
         url,
-        headers={
-            "User-Agent":
-            "Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X)"
-        },
-        timeout=30
+        timeout=20,
+        headers={"User-Agent":"Mozilla/5.0 Yazdandoust Silver Rate Bot"}
     )
-
     r.raise_for_status()
-
     return r.text
 
+def parse_tgh():
+    html=fetch(TGH_URL)
+    soup=BeautifulSoup(html,"html.parser")
+    text=normalize_text(soup.get_text("\n",strip=True))
 
-# =========================
-# TGH CHANNEL
-# =========================
+    m=re.search(r"انس\s*[:：]?\s*(\d+(?:\.\d+)?)",text)
+    ounce=float(m.group(1)) if m else None
 
-def read_tgh():
+    m=re.search(r"دلار\s*تهران\s*حدود\s*([\d,]+)",text)
+    usd_tehran=money(m.group(1)) if m else None
 
-    log.info("Reading TGH channel...")
+    m=re.search(r"دلار\s*مشهد\s*حدود\s*([\d,]+)",text)
+    usd_mashhad=money(m.group(1)) if m else None
 
-    html = get_page(TGH_URL)
+    if not ounce:
+        raise RuntimeError("انس نقره پیدا نشد")
 
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
-    )
-
-    text = normalize(
-        soup.get_text(
-            "\n",
-            strip=True
-        )
-    )
-
-
-    # انس نقره
-
-    ounce = None
-
-    m = re.search(
-        r"انس\s*[:：]?\s*(\d+(?:\.\d+)?)",
-        text
-    )
-
-    if m:
-        ounce = float(
-            m.group(1)
-        )
-
-
-    # دلار تهران
-
-    tehran = None
-
-    m = re.search(
-        r"دلار\s*تهران\s*(?:حدود)?\s*([\d,]+)",
-        text
-    )
-
-    if m:
-        tehran = number(
-            m.group(1)
-        )
-
-
-    # دلار مشهد
-
-    mashhad = None
-
-    m = re.search(
-        r"دلار\s*مشهد\s*(?:حدود)?\s*([\d,]+)",
-        text
-    )
-
-    if m:
-        mashhad = number(
-            m.group(1)
-        )
-
-
-    if ounce is None:
-        raise Exception(
-            "انس نقره از کانال پیدا نشد"
-        )
-
-    if mashhad is None:
-        raise Exception(
-            "دلار مشهد از کانال پیدا نشد"
-        )
-
-
-    log.info(
-        "Ounce=%s | Tehran=%s | Mashhad=%s",
-        ounce,
-        tehran,
-        mashhad
-    )
-
+    if not usd_mashhad:
+        raise RuntimeError("دلار مشهد پیدا نشد")
 
     return {
-        "ounce": ounce,
-        "usd_tehran": tehran,
-        "usd_mashhad": mashhad
+        "ounce":ounce,
+        "usd_tehran":usd_tehran,
+        "usd_mashhad":usd_mashhad
     }
 
-
-# =========================
-# TAGHIZADEGAN WEBSITE
-# =========================
-
-def read_site():
-
-    log.info("Reading Taghizadegan website...")
-
-    html = get_page(SITE_URL)
-
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
-    )
-
-    page_text = normalize(
-        soup.get_text(
-            "\n",
-            strip=True
-        )
-    )
-
-
-    def find_price(
-        keyword,
-        weight=None
-    ):
-
-        # جستجوی مستقیم در متن صفحه
-
-        pattern = (
-            rf"{keyword}"
-            rf".{{0,500}}?"
-            rf"([\d.,]+)\s*تومان"
-        )
-
-        matches = re.findall(
-            pattern,
-            page_text,
-            re.I | re.S
-        )
-
-        if matches:
-
-            values = []
-
-            for x in matches:
-
-                v = number(x)
-
-                if v:
-                    values.append(v)
-
-            if values:
-
-                # قیمت‌های خیلی کوچک مثل 1000 را حذف می‌کنیم
-
-                values = [
-                    v for v in values
-                    if v > 1_000_000
-                ]
-
-                if values:
-
-                    return values[0]
-
-
-        # جستجوی بر اساس عنوان محصول
-
-        for tag in soup.find_all(
-            string=re.compile(
-                keyword,
-                re.I
-            )
-        ):
-
-            parent = tag.parent
-
-            for _ in range(6):
-
-                if parent is None:
-                    break
-
-                block = normalize(
-                    parent.get_text(
-                        " ",
-                        strip=True
-                    )
-                )
-
-                prices = re.findall(
-                    r"([\d.,]+)\s*تومان",
-                    block
-                )
-
-                values = []
-
-                for p in prices:
-
-                    v = number(p)
-
-                    if v and v > 1_000_000:
-
-                        values.append(v)
-
-                if values:
-
-                    return values[-1]
-
-                parent = parent.parent
-
-
-        return None
-
-
-    # =========================
-    # SAچمه 995 - یک کیلو
-    # =========================
-
-    shot_995 = find_price(
-        r"نقره\s+ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995"
-    )
-
-
-    if shot_995 is None:
-
-        shot_995 = find_price(
-            r"ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995"
-        )
-
-
-    # =========================
-    # NADIR - یک کیلو
-    # =========================
-
-    nadir = find_price(
-        r"شمش\s+1000\s+گرمی\s+999\.9\s+نادیر"
-    )
-
-
-    if nadir is None:
-
-        nadir = find_price(
-            r"1000\s+گرمی\s+999\.9\s+نادیر"
-        )
-
-
-    # روش پشتیبان برای Nadir
-
-    if nadir is None:
-
-        nadir = find_price(
-            r"نادیر"
-        )
-
-
-    if shot_995 is None:
-
-        raise Exception(
-            "قیمت ساچمه 995 پیدا نشد"
-        )
-
-
-    if nadir is None:
-
-        raise Exception(
-            "قیمت Nadir پیدا نشد"
-        )
-
-
-    log.info(
-        "Shot995=%s | Nadir=%s",
-        shot_995,
-        nadir
-    )
-
-
-    return {
-
-        "shot_995_kg":
-        shot_995,
-
-        "nadir_kg":
-        nadir
-
-    }
-
-
-
-# =========================
-# CALCULATE
-# =========================
-
-def calculate():
-
-    tgh = read_tgh()
-
-    site = read_site()
-
-
-    # قیمت تئوریک نقره 999.9 هر گرم
-
-    silver_9999 = (
-        tgh["ounce"]
-        *
-        tgh["usd_mashhad"]
-        /
-        OUNCE_GRAMS
-    )
-
-
-    # ساچمه 995 بدون حباب
-
-    no_bubble = (
-        silver_9999
-        *
-        PURITY_995
-    )
-
-
-    # قیمت بازار ساچمه 995 هر گرم
-
-    market = (
-        site["shot_995_kg"]
-        /
-        1000
-    )
-
-
-    # حباب
-
-    bubble = (
-        (market / no_bubble) - 1
-    ) * 100
-
-
-    return {
-
-        **tgh,
-        **site,
-
-        "no_bubble":
-        round(no_bubble),
-
-        "market":
-        round(market),
-
-        "bubble":
-        round(bubble, 2)
-
-    }
-
-
-# =========================
-# FONT
-# =========================
-
-def font(size):
-
-    paths = [
-
-        "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf",
-
-        "/usr/share/fonts/opentype/noto/NotoSansArabic-Regular.ttf",
-
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-
+def parse_site():
+    html=fetch(SITE_URL)
+    soup=BeautifulSoup(html,"html.parser")
+    text=normalize_text(soup.get_text("\n",strip=True))
+
+    shot_995_kg=None
+    patterns_995=[
+        r"نقره\s+ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995.*?\n\s*([\d,.]+)\s*تومان",
+        r"ساچمه\s+1000\s+گرمی\s+با\s+عیار\s+995.*?\n\s*([\d,.]+)\s*تومان"
     ]
 
-    for p in paths:
+    for p in patterns_995:
+        m=re.search(p,text,re.S|re.I)
+        if m:
+            shot_995_kg=money(m.group(1))
+            break
 
+    nadir_kg=None
+    patterns_nadir=[
+        r"شمش\s+1000\s+گرمی\s+999\.9\s+نادیر.*?\n\s*([\d,.]+)\s*تومان",
+        r"1000\s+گرمی\s+999\.9\s+نادیر.*?\n\s*([\d,.]+)\s*تومان"
+    ]
+
+    for p in patterns_nadir:
+        m=re.search(p,text,re.S|re.I)
+        if m:
+            nadir_kg=money(m.group(1))
+            break
+
+    if not shot_995_kg:
+        raise RuntimeError("قیمت ساچمه 995 پیدا نشد")
+
+    if not nadir_kg:
+        raise RuntimeError("قیمت شمش نادیر پیدا نشد")
+
+    return {
+        "shot_995_kg":shot_995_kg,
+        "nadir_kg":nadir_kg
+    }
+
+def get_rates():
+    tgh=parse_tgh()
+    site=parse_site()
+
+    spot_9999=tgh["ounce"]*tgh["usd_mashhad"]/TROY_OUNCE_GRAMS
+    no_bubble_995=spot_9999*SILVER_PURITY
+    market_995=site["shot_995_kg"]/1000
+    bubble_pct=(market_995/no_bubble_995-1)*100
+
+    return {
+        **tgh,
+        **site,
+        "no_bubble_995":round(no_bubble_995),
+        "market_995":round(market_995),
+        "bubble_pct":round(bubble_pct,2)
+    }
+
+def load_font(size,bold=False):
+    candidates=[
+        "/usr/share/fonts/truetype/noto/NotoSansArabic-Bold.ttf" if bold else "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf",
+        "/usr/share/fonts/opentype/noto/NotoSansArabic-Bold.ttf" if bold else "/usr/share/fonts/opentype/noto/NotoSansArabic-Regular.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+    ]
+
+    for p in candidates:
         if Path(p).exists():
-
-            return ImageFont.truetype(
-                p,
-                size
-            )
+            return ImageFont.truetype(p,size)
 
     return ImageFont.load_default()
 
+def cover(draw,box,fill=(1,18,10)):
+    draw.rectangle(box,fill=fill)
 
-# =========================
-# DRAW NUMBER
-# =========================
+def centered(draw,text,box,font,fill=(239,213,166)):
+    x1,y1,x2,y2=box
+    bb=draw.textbbox((0,0),text,font=font)
+    w=bb[2]-bb[0]
+    h=bb[3]-bb[1]
+    x=(x1+x2-w)/2
+    y=(y1+y2-h)/2-bb[1]
+    draw.text((x,y),text,font=font,fill=fill)
 
-def draw_center(
-    draw,
-    text,
-    box,
-    f,
-    fill=(239, 213, 166)
-):
+def make_board(r):
+    img=Image.open(TEMPLATE_PATH).convert("RGB")
+    draw=ImageDraw.Draw(img)
+    gold=(239,213,166)
 
-    x1, y1, x2, y2 = box
-
-    bbox = draw.textbbox(
-        (0, 0),
-        text,
-        font=f
-    )
-
-    w = bbox[2] - bbox[0]
-    h = bbox[3] - bbox[1]
-
-    x = x1 + ((x2 - x1 - w) / 2)
-    y = y1 + ((y2 - y1 - h) / 2)
-
-    draw.text(
-        (x, y),
-        text,
-        font=f,
-        fill=fill
-    )
-
-
-# =========================
-# CREATE BOARD
-# =========================
-
-def make_board(data):
-
-    img = Image.open(
-        TEMPLATE
-    ).convert("RGB")
-
-    draw = ImageDraw.Draw(img)
-
-    # رنگ پس‌زمینه داخل کادرهای عدد
-
-    bg = (
-        1,
-        18,
-        10
-    )
-
-    gold = (
-        239,
-        213,
-        166
-    )
-
-
-    # محل اعداد روی قالب
-    # قالب همان template.png است
-
-    areas = {
-    "ounce": (610, 305, 915, 360),
-    "dollar": (600, 382, 915, 440),
-
-    "no_bubble": (600, 565, 905, 625),
-    "market": (600, 625, 905, 690),
-    "bubble": (600, 690, 900, 750),
-
-    "nadir": (545, 785, 925, 850),
-
-    "date": (625, 885, 850, 930),
-    "time": (890, 885, 1025, 930),
-}
-
-
-    # پاک کردن فقط محل اعداد
+    areas={
+        "ounce":(600,305,915,360),
+        "dollar":(590,382,915,440),
+        "no_bubble":(590,565,905,625),
+        "market":(590,625,905,690),
+        "bubble":(600,690,900,750),
+        "nadir":(545,785,925,850),
+        "date":(625,885,850,930),
+        "time":(890,885,1025,930)
+    }
 
     for box in areas.values():
+        cover(draw,box)
 
-        draw.rectangle(
-            box,
-            fill=bg
-        )
+    f_big=load_font(48)
+    f_money=load_font(44)
+    f_small=load_font(28)
+    f_tiny=load_font(24)
 
-
-f_big = font(48)
-f_money = font(44)
-f_small = font(28)
-f_tiny = font(24)
-
-# انس
-
-draw_center(
-    draw,
-    f"{data['ounce']:.2f}",
-    areas["ounce"],
-    f_big,
-    gold
-)
-
-
-    # دلار مشهد
-
-draw_center(
+    centered(
         draw,
-        money(
-            data["usd_mashhad"]
-        ),
+        f"{r['ounce']:.2f}",
+        areas["ounce"],
+        f_big,
+        gold
+    )
+
+    centered(
+        draw,
+        fmt(r["usd_mashhad"]),
         areas["dollar"],
         f_big,
         gold
     )
 
-
-    # بدون حباب
-
-draw_center(
+    centered(
         draw,
-        money(
-            data["no_bubble"]
-        ),
+        fmt(r["no_bubble_995"]),
         areas["no_bubble"],
         f_money,
         gold
     )
 
-
-    # بازار
-
-draw_center(
+    centered(
         draw,
-        money(
-            data["market"]
-        ),
+        fmt(r["market_995"]),
         areas["market"],
         f_money,
         gold
     )
 
-
-    # حباب
-
-draw_center(
+    centered(
         draw,
-        f"{data['bubble']:+.2f}",
+        f"{r['bubble_pct']:+.2f}",
         areas["bubble"],
         f_money,
         gold
     )
 
-
-    # Nadir
-
-draw_center(
+    centered(
         draw,
-        money(
-            data["nadir_kg"]
-        ),
+        fmt(r["nadir_kg"]),
         areas["nadir"],
         f_money,
         gold
     )
 
+    try:
+        now=datetime.now(ZoneInfo("Asia/Tehran"))
+    except Exception:
+        now=datetime.now()
 
-now = datetime.now(
-        ZoneInfo(
-            "Asia/Tehran"
-        )
-    )
+    date_text=now.strftime("%Y/%m/%d")
+    time_text=now.strftime("%H:%M")
 
-
-    # تاریخ شمسی فعلاً از تاریخ سیستم
-    # ساعت دقیق تهران
-
-date_text = now.strftime(
-        "%Y/%m/%d"
-    )
-
-time_text = now.strftime(
-        "%H:%M"
-    )
-
-
-draw_center(
+    centered(
         draw,
         date_text,
         areas["date"],
@@ -675,8 +247,7 @@ draw_center(
         gold
     )
 
-
-draw_center(
+    centered(
         draw,
         time_text,
         areas["time"],
@@ -684,235 +255,101 @@ draw_center(
         gold
     )
 
-
-    output = BytesIO()
-
-    img.save(
-        output,
-        "PNG"
-    )
-
+    output=BytesIO()
+    img.save(output,format="PNG",optimize=True)
     output.seek(0)
 
     return output
 
-
-# =========================
-# CAPTION
-# =========================
-
-def caption(
-    dollar
-):
-
-    return f"""نرخ خرید فروش #ساچمه و #شمش
-💵دلارمشهد حدود {money(dollar)}
-✅خریدبالای۲ کیلو تماس تلفنی
+CAPTION="""نرخ خرید فروش #ساچمه و #شمش
+💵 دلار مشهد حدود {usd}
+✅ خرید بالای ۲ کیلو تماس تلفنی
 خرید و فروش انواع شمش های نقره و مستعمل
 
 نرخ خرید فاکتورهای مجموعه همانند همیشه هست"""
 
+def telegram_send(photo,caption):
+    url=f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
 
-# =========================
-# SEND TELEGRAM
-# =========================
-
-def send_to_channel(
-    image,
-    text
-):
-
-    url = (
-        f"https://api.telegram.org/"
-        f"bot{BOT_TOKEN}/sendPhoto"
-    )
-
-
-    response = requests.post(
-
+    response=requests.post(
         url,
-
         data={
-            "chat_id":
-            CHANNEL_ID,
-
-            "caption":
-            text
+            "chat_id":CHANNEL_ID,
+            "caption":caption
         },
-
         files={
-            "photo":
-            (
-                "rate.png",
-                image,
+            "photo":(
+                "yazdandoust-rate.png",
+                photo,
                 "image/png"
             )
         },
-
         timeout=30
-
     )
-
 
     if not response.ok:
-
-        raise Exception(
-            response.text
+        raise RuntimeError(
+            f"Telegram error: {response.status_code} {response.text}"
         )
 
-
-    log.info(
-        "Telegram post sent."
-    )
-
-
-# =========================
-# STATE
-# =========================
+    return response.json()
 
 def load_state():
-
     try:
-
         return json.loads(
-            Path(
-                STATE_FILE
-            ).read_text(
-                encoding="utf-8"
-            )
+            Path(STATE_PATH).read_text(encoding="utf-8")
         )
-
     except Exception:
-
         return None
 
-
-def save_state(
-    state
-):
-
-    Path(
-        STATE_FILE
-    ).write_text(
-
-        json.dumps(
-            state,
-            ensure_ascii=False
-        ),
-
+def save_state(r):
+    Path(STATE_PATH).write_text(
+        json.dumps(r,ensure_ascii=False),
         encoding="utf-8"
     )
 
-
-def comparable(
-    data
-):
-
+def comparable(r):
     return {
-
-        "ounce":
-        data["ounce"],
-
-        "usd_tehran":
-        data["usd_tehran"],
-
-        "usd_mashhad":
-        data["usd_mashhad"],
-
-        "shot_995_kg":
-        data["shot_995_kg"],
-
-        "nadir_kg":
-        data["nadir_kg"],
-
-        "no_bubble":
-        data["no_bubble"],
-
-        "market":
-        data["market"],
-
-        "bubble":
-        data["bubble"]
-
+        "ounce":r["ounce"],
+        "usd_tehran":r["usd_tehran"],
+        "usd_mashhad":r["usd_mashhad"],
+        "shot_995_kg":r["shot_995_kg"],
+        "nadir_kg":r["nadir_kg"],
+        "no_bubble_995":r["no_bubble_995"],
+        "market_995":r["market_995"],
+        "bubble_pct":r["bubble_pct"]
     }
 
-
-# =========================
-# MAIN
-# =========================
-
 def main():
-
-    log.info(
-        "YAZDANDOUST SILVER BOT STARTED"
-    )
-
-
-    previous = load_state()
-
+    log.info("Yazdandoust rate bot started")
+    previous=load_state()
 
     while True:
-
         try:
+            rates=get_rates()
+            current=comparable(rates)
 
-            data = calculate()
+            if previous!=current:
+                log.info("Rate changed: %s",current)
 
-            current = comparable(
-                data
-            )
+                photo=make_board(rates)
 
-
-            if current != previous:
-
-                log.info(
-                    "PRICE CHANGED"
+                caption=CAPTION.format(
+                    usd=fmt(rates["usd_mashhad"])
                 )
 
+                telegram_send(photo,caption)
 
-                image = make_board(
-                    data
-                )
-
-
-                text = caption(
-                    data["usd_mashhad"]
-                )
-
-
-                send_to_channel(
-                    image,
-                    text
-                )
-
-
-                save_state(
-                    current
-                )
-
-
-                previous = current
-
+                save_state(current)
+                previous=current
 
             else:
+                log.info("No rate change")
 
-                log.info(
-                    "No price change."
-                )
+        except Exception:
+            log.exception("Update failed")
 
+        time.sleep(CHECK_SECONDS)
 
-        except Exception as e:
-
-            log.exception(
-                "ERROR: %s",
-                e
-            )
-
-
-        time.sleep(
-            CHECK_SECONDS
-        )
-
-
-if __name__ == "__main__":
-
+if __name__=="__main__":
     main()
