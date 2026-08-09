@@ -513,7 +513,10 @@ async def status(update, context):
     if not admin(update): return
     row = daily_row()
     if not row:
-        await update.callback_query.message.reply_text("امروز هنوز نرخ رسمی ثبت نشده.")
+        await context.bot.send_message(
+    chat_id=update.effective_chat.id,
+    text="📊 امروز هنوز نرخ رسمی ثبت نشده."
+)
         return
     await update.message.reply_text(
         "📊 <b>وضعیت امروز</b>\n\n"
