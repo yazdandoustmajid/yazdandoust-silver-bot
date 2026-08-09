@@ -648,7 +648,7 @@ draw_center(
     )
 
 
-    now = datetime.now(
+now = datetime.now(
         ZoneInfo(
             "Asia/Tehran"
         )
