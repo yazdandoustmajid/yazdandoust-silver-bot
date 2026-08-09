@@ -290,7 +290,81 @@ async def publish_if_needed(context, force=False):
     """, (datetime.now(TZ).isoformat(), ounce, dollar, premium,
           theoretical_995(ounce, dollar), price))
     con.commit(); con.close()
+async def silver_news_update(context):
+    if not GNEWS_API_KEY:
+        log.warning("GNEWS_API_KEY is not set")
+        return
 
+    try:
+        response = requests.get(
+            "https://gnews.io/api/v4/search",
+            params={
+                "q": '"silver" OR "silver price" OR "silver market" OR "silver demand" OR "silver supply" OR "silver mining" OR "silver production"',
+                "lang": "en",
+                "max": 10,
+                "sortby": "publishedAt",
+                "apikey": GNEWS_API_KEY
+            },
+            timeout=20
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+        articles = data.get("articles", [])
+
+        if not articles:
+            log.info("No new silver news found")
+            return
+
+        for article in articles:
+            title = str(article.get("title", "")).strip()
+            description = str(article.get("description", "")).strip()
+            url = str(article.get("url", "")).strip()
+
+            source_data = article.get("source", {})
+            source = str(source_data.get("name", "Unknown")).strip()
+
+            if not title or not url:
+                continue
+
+            # جلوگیری از ارسال خبر تکراری
+            news_key = f"silver_{url}"
+
+            last_news = get_setting("last_silver_news")
+
+            if last_news == news_key:
+                continue
+
+            message = (
+                "🥈 <b>اخبار جهانی نقره</b>\n\n"
+                f"📰 <b>{title}</b>\n\n"
+            )
+
+            if description:
+                message += f"{description}\n\n"
+
+            message += f"🌍 منبع: {source}\n"
+            message += f"🔗 <a href=\"{url}\">مشاهده خبر اصلی</a>\n\n"
+            message += "━━━━━━━━━━━━━━\n"
+            message += "🥈 <b>Yazdandoust Silver</b>"
+
+            await context.bot.send_message(
+                chat_id=CHANNEL_ID,
+                text=message,
+                parse_mode="HTML",
+                disable_web_page_preview=False
+            )
+
+            set_setting("last_silver_news", news_key)
+
+            log.info("Silver news sent: %s", title)
+
+            # در هر اجرا فقط یک خبر جدید منتشر شود
+            break
+
+    except Exception as e:
+        log.exception("Silver news update failed: %s", e)
 async def auto_update(context):
     if not session_open():
         return
