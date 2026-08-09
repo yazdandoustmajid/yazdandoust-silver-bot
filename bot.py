@@ -80,19 +80,60 @@ def fetch_silver_ounce():
     rate=d.get("rates",{}).get("XAG")
     if rate is None:raise ValueError(f"XAG rate missing: {d}")
     return 1/float(rate)
-
 def fetch_iran_dollar_toman():
-    if not IRAN_FX_API_KEY:return None
-    r=requests.post("https://api.apidevelopers.ir/v1/exchange-rates",
-    json={"apiKey":IRAN_FX_API_KEY},timeout=15)
-    r.raise_for_status()
-    usd=r.json().get("result",{}).get("usd")
-    if not usd:raise ValueError("پاسخ سرویس دلار شامل usd نیست.")
-    value=usd.get("sell") or usd.get("buy")
-    if value is None:raise ValueError("قیمت دلار پیدا نشد.")
-    value=float(value)
-    unit=str(usd.get("currency","irt")).lower()
-    return value/10 if unit=="irt" else value
+    if not IRAN_FX_API_KEY:
+        log.warning("IRAN_FX_API_KEY is not set")
+        return None
+
+    try:
+        response = requests.post(
+            "https://api.apidevelopers.ir/v1/exchange-rates",
+            json={"apiKey": IRAN_FX_API_KEY},
+            timeout=20
+        )
+
+        response.raise_for_status()
+
+        data = response.json()
+
+        if not data.get("ok"):
+            raise ValueError(f"Exchange API error: {data}")
+
+        usd = data.get("result", {}).get("usd")
+
+        if not usd:
+            raise ValueError("USD data not found")
+
+        value = usd.get("sell")
+
+        if value is None:
+            value = usd.get("buy")
+
+        if value is None:
+            raise ValueError("USD sell/buy not found")
+
+        value = float(value)
+
+        currency = str(
+            usd.get("currency", "irt")
+        ).lower()
+
+        if currency == "irt":
+            value = value / 10
+
+        log.info(
+            "USD rate fetched successfully: %s Toman",
+            value
+        )
+
+        return value
+
+    except Exception as e:
+        log.exception(
+            "Dollar fetch failed: %s",
+            e
+        )
+        return None
 
 def daily_row():
     d=datetime.now(TZ).date().isoformat()
