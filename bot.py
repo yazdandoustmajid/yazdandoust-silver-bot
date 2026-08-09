@@ -587,7 +587,7 @@ draw_center(
 
     # دلار مشهد
 
-    draw_center(
+draw_center(
         draw,
         money(
             data["usd_mashhad"]
@@ -600,7 +600,7 @@ draw_center(
 
     # بدون حباب
 
-    draw_center(
+draw_center(
         draw,
         money(
             data["no_bubble"]
@@ -613,7 +613,7 @@ draw_center(
 
     # بازار
 
-    draw_center(
+draw_center(
         draw,
         money(
             data["market"]
@@ -626,7 +626,7 @@ draw_center(
 
     # حباب
 
-    draw_center(
+draw_center(
         draw,
         f"{data['bubble']:+.2f}",
         areas["bubble"],
@@ -637,7 +637,7 @@ draw_center(
 
     # Nadir
 
-    draw_center(
+draw_center(
         draw,
         money(
             data["nadir_kg"]
@@ -667,7 +667,7 @@ draw_center(
     )
 
 
-    draw_center(
+draw_center(
         draw,
         date_text,
         areas["date"],
@@ -676,7 +676,7 @@ draw_center(
     )
 
 
-    draw_center(
+draw_center(
         draw,
         time_text,
         areas["time"],
