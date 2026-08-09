@@ -310,7 +310,7 @@ async def silver_news_update(context):
 
         response.raise_for_status()
         data = response.json()
-log.info("GNEWS TEST: status=%s articles=%s", response.status_code, len(data.get("articles", [])))
+        log.info("GNEWS TEST: status=%s articles=%s", response.status_code, len(data.get("articles", [])))
         articles = data.get("articles", [])
 
         if not articles:
