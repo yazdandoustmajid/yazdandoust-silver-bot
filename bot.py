@@ -685,16 +685,17 @@ draw_center(
     )
 
 
-output = BytesIO()
+    output = BytesIO()
 
-img.save(
+        img.save(
         output,
         "PNG"
- )
+  
+   )
 
-output.seek(0)
+    output.seek(0)
 
-return output
+    return output
 
 
 # =========================
