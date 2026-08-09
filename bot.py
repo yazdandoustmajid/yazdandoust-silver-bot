@@ -573,7 +573,7 @@ def main():
 
     # Check every 5 minutes. The publication rule remains 5,000 تومان.
     app.job_queue.run_repeating(auto_update, interval=1800, first=10)
-   app.job_queue.run_repeating(silver_news_update, interval=3600, first=30)
+    app.job_queue.run_repeating(silver_news_update, interval=3600, first=30)
     app.job_queue.run_daily(close_day, time=time(21, 0, tzinfo=TZ))
     app.run_polling()
 
