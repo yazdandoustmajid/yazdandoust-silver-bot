@@ -18,7 +18,7 @@ CHANNEL_ID = os.environ["CHANNEL_ID"]
 # APIs
 METALPRICE_API_KEY = os.getenv("METALPRICE_API_KEY", "")
 IRAN_FX_API_KEY = os.getenv("IRAN_FX_API_KEY", "")
-
+NEWS_API_TOKEN = os.getenv("NEWS_API_TOKEN", "")
 DB = os.getenv("DB_PATH", "yazdandoust.db")
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("yazdandoust")
