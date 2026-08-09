@@ -304,7 +304,85 @@ async def auto_update(context):
         await publish_if_needed(context)
     except Exception as e:
         log.exception("auto update failed: %s", e)
+async def news_update(context):
+    if not NEWS_API_TOKEN:
+        return
 
+    try:
+        response = requests.get(
+            "https://api.majidapi.ir/akhbar-dagh",
+            params={
+                "action": "latest",
+                "token": NEWS_API_TOKEN
+            },
+            timeout=15
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+        # پیدا کردن لیست اخبار
+        items = None
+
+        if isinstance(data, list):
+            items = data
+        elif isinstance(data, dict):
+            for key in ("data", "results", "news", "items"):
+                if isinstance(data.get(key), list):
+                    items = data[key]
+                    break
+
+        if not items:
+            log.warning("No news items found")
+            return
+
+        news = items[0]
+
+        if not isinstance(news, dict):
+            return
+
+        title = (
+            news.get("title")
+            or news.get("name")
+            or news.get("headline")
+            or "خبر جدید"
+        )
+
+        url = (
+            news.get("url")
+            or news.get("link")
+            or news.get("news_url")
+            or ""
+        )
+
+        news_id = (
+            str(news.get("id"))
+            if news.get("id") is not None
+            else str(news.get("newsId", ""))
+        )
+
+        # جلوگیری از ارسال دوباره همان خبر
+        last_news_id = get_setting("last_news_id")
+
+        if news_id and news_id == last_news_id:
+            return
+
+        text = f"🔥 <b>خبر داغ</b>\n\n<b>{title}</b>"
+
+        if url:
+            text += f'\n\n🔗 <a href="{url}">مشاهده خبر</a>'
+
+        await context.bot.send_message(
+            chat_id=CHANNEL_ID,
+            text=text,
+            parse_mode="HTML"
+        )
+
+        if news_id:
+            set_setting("last_news_id", news_id)
+
+    except Exception as e:
+        log.exception("news update failed: %s", e)
 async def manual_publish(update, context):
     if not admin(update): return
     if not session_open():
