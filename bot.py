@@ -102,19 +102,29 @@ def calculate_price(ounce, dollar, premium):
 def fetch_silver_ounce():
     if not METALPRICE_API_KEY:
         return None
+
     url = "https://api.metalpriceapi.com/v1/latest"
+
     params = {
         "api_key": METALPRICE_API_KEY,
         "base": "USD",
         "currencies": "XAG"
     }
-    r = requests.get(url, params=params, timeout=15)
-    r.raise_for_status()
-    data = r.json()
-    rate = float(data["rates"]["XAG"])
-    # XAG is ounces of silver per 1 USD in this response.
-    return 1.0 / rate
 
+    r = requests.get(url, params=params, timeout=20)
+    r.raise_for_status()
+
+    data = r.json()
+
+    if not data.get("success"):
+        raise ValueError(f"MetalpriceAPI error: {data}")
+
+    rate = data.get("rates", {}).get("XAG")
+
+    if rate is None:
+        raise ValueError(f"XAG rate missing: {data}")
+
+    return 1.0 / float(rate)
 def fetch_iran_dollar_toman():
     if not IRAN_FX_API_KEY:
         return None
