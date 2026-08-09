@@ -662,7 +662,7 @@ date_text = now.strftime(
         "%Y/%m/%d"
     )
 
-    time_text = now.strftime(
+time_text = now.strftime(
         "%H:%M"
     )
 
