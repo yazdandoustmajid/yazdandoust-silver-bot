@@ -232,32 +232,84 @@ def translate_to_farsi(text):
 
 async def silver_news_update(context):
     if not GNEWS_API_KEY:
-        log.warning("GNEWS_API_KEY is not set");return
+        log.warning("GNEWS_API_KEY is not set")
+        return
+
     try:
-        r=requests.get("https://gnews.io/api/v4/search",params={
-        "q":'"silver" OR "silver price" OR "silver market" OR "silver demand" OR "silver supply" OR "silver mining" OR "silver production"',
-        "lang":"en","max":10,"sortby":"publishedAt","apikey":GNEWS_API_KEY},timeout=20)
-        r.raise_for_status()
-        articles=r.json().get("articles",[])
-        if not articles:return
-        for a in articles:
-            title=str(a.get("title","")).strip()
-            desc=str(a.get("description","")).strip()
-            url=str(a.get("url","")).strip()
-            source=str(a.get("source",{}).get("name","Unknown")).strip()
-            if not title or not url:continue
-            key=f"silver_{url}"
-            if get_setting("last_silver_news")==key:continue
-            title_fa=translate_to_farsi(title)
-            desc_fa=translate_to_farsi(desc) if desc else ""
-            message=(f"🥈 <b>اخبار جهانی نقره</b>\n\n📰 <b>{title_fa}</b>\n\n")
-            if desc_fa:message+=f"{desc_fa}\n\n"
-            message+=f'🌍 منبع: {source}\n🔗 <a href="{url}">مشاهده خبر اصلی</a>\n\n━━━━━━━━━━━━━━\n🥈 <b>Yazdandoust Silver</b>'
-            await context.bot.send_message(chat_id=CHANNEL_ID,text=message,parse_mode="HTML",disable_web_page_preview=False)
-            set_setting("last_silver_news",key)
+        response = requests.get(
+            "https://gnews.io/api/v4/search",
+            params={
+                "q": "silver OR silver price OR silver market OR silver demand OR silver supply OR silver mining OR silver production",
+                "lang": "en",
+                "max": 10,
+                "sortby": "publishedAt",
+                "apikey": GNEWS_API_KEY
+            },
+            timeout=20
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+        articles = data.get("articles", [])
+
+        if not articles:
+            log.info("No new silver news found")
+            return
+
+        for article in articles:
+            title = str(article.get("title", "")).strip()
+            description = str(article.get("description", "")).strip()
+            url = str(article.get("url", "")).strip()
+
+            source_data = article.get("source", {})
+            source = str(
+                source_data.get("name", "Unknown")
+            ).strip()
+
+            if not title or not url:
+                continue
+
+            news_key = f"silver_{url}"
+
+            if get_setting("last_silver_news") == news_key:
+                continue
+
+            title_fa = translate_to_farsi(title)
+
+            if description:
+                description_fa = translate_to_farsi(description)
+            else:
+                description_fa = ""
+
+            message = (
+                "🥈 <b>اخبار جهانی نقره</b>\n\n"
+                f"📰 <b>{title_fa}</b>\n\n"
+            )
+
+            if description_fa:
+                message += f"{description_fa}\n\n"
+
+            message += f"🌍 منبع: {source}\n"
+            message += f"🔗 <a href=\"{url}\">مشاهده خبر اصلی</a>\n\n"
+            message += "━━━━━━━━━━━━━━\n"
+            message += "🥈 <b>YAZDANDOUST SILVER</b>"
+
+            await context.bot.send_message(
+                chat_id=CHANNEL_ID,
+                text=message,
+                parse_mode="HTML",
+                disable_web_page_preview=False
+            )
+
+            set_setting("last_silver_news", news_key)
+
+            log.info("Silver news sent: %s", title)
+
             break
+
     except Exception as e:
-        log.exception("Silver news update failed: %s",e)
+        log.exception("Silver news update failed: %s", e)
 
 async def auto_update(context):
     if not session_open():return
