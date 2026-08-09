@@ -687,11 +687,10 @@ draw_center(
 
     output = BytesIO()
 
-        img.save(
+    img.save(
         output,
         "PNG"
-  
-   )
+    )
 
     output.seek(0)
 
