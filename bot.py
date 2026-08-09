@@ -658,7 +658,7 @@ now = datetime.now(
     # تاریخ شمسی فعلاً از تاریخ سیستم
     # ساعت دقیق تهران
 
-    date_text = now.strftime(
+date_text = now.strftime(
         "%Y/%m/%d"
     )
 
