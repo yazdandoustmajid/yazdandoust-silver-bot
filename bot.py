@@ -766,48 +766,27 @@ async def find_existing_post(
     client,
     target
 ):
-
     state = load_state()
 
-    saved_id = state.get(
-        "message_id"
-    )
+    saved_id = state.get("message_id")
 
-    if saved_id:
+    if not saved_id:
+        return None
 
-        try:
-
-            message = await client.get_messages(
-                target,
-                ids=int(saved_id)
-            )
-
-            if message:
-                return message
-
-        except Exception as error:
-
-            log.warning(
-                "Saved message not found: %s",
-                error
-            )
-
-    async for message in client.iter_messages(
-        target,
-        limit=50
-    ):
-
-        text = (
-            message.raw_text
-            or ""
+    try:
+        message = await client.get_messages(
+            target,
+            ids=int(saved_id)
         )
 
-        if (
-            message.photo
-            and PHONE in text
-        ):
-
+        if message:
             return message
+
+    except Exception as error:
+        log.warning(
+            "Saved message not found: %s",
+            error
+        )
 
     return None
 
