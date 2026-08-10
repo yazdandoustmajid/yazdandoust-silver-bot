@@ -5,18 +5,16 @@ import json
 import logging
 import os
 import re
-import time
+import hashlib
 from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 from telethon import TelegramClient
 
-
-# =========================================================
-# YAZDANDOUST SILVER RATE BOT
-# =========================================================
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -25,45 +23,25 @@ OUTPUT_FILE = BASE_DIR / "latest_price.jpg"
 STATE_FILE = BASE_DIR / "state.json"
 
 
-# =========================================================
-# GITHUB SECRETS
-# =========================================================
-
 API_ID = os.getenv("API_ID", "").strip()
 API_HASH = os.getenv("API_HASH", "").strip()
 BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
 TARGET_CHANNEL = os.getenv("TARGET_CHANNEL", "").strip()
 
 
-# =========================================================
-# PUBLIC SOURCES
-# =========================================================
-
 SOURCE_URL = "https://t.me/s/tghsilver"
 WEBSITE_URL = "https://taghizadegan.com"
 
-
-# =========================================================
-# CONTACT
-# =========================================================
 
 PHONE = "09152449600"
 TELEGRAM_ID = "@MajidYazdandoust"
 
 
-# =========================================================
-# CONSTANTS
-# =========================================================
-
 MITHQAL_GRAMS = 4.6083
-
-# هر چند ثانیه منابع بررسی شوند
 CHECK_INTERVAL = 30
 
+IRAN_TZ = ZoneInfo("Asia/Tehran")
 
-# =========================================================
-# LOG
-# =========================================================
 
 logging.basicConfig(
     level=logging.INFO,
@@ -72,10 +50,6 @@ logging.basicConfig(
 
 log = logging.getLogger("YAZDANDOUST")
 
-
-# =========================================================
-# DIGITS
-# =========================================================
 
 PERSIAN = "۰۱۲۳۴۵۶۷۸۹"
 ARABIC = "٠١٢٣٤٥٦٧٨٩"
@@ -146,10 +120,6 @@ def format_price(value):
     return f"{int(round(value)):,}"
 
 
-# =========================================================
-# HTTP
-# =========================================================
-
 SESSION = requests.Session()
 
 SESSION.headers.update({
@@ -173,10 +143,6 @@ def http_get(url):
     return response.text
 
 
-# =========================================================
-# TELEGRAM PUBLIC CHANNEL
-# =========================================================
-
 def get_source_page():
     return http_get(
         SOURCE_URL
@@ -184,6 +150,7 @@ def get_source_page():
 
 
 def parse_telegram_rate(html):
+
     soup = BeautifulSoup(
         html,
         "html.parser"
@@ -195,10 +162,6 @@ def parse_telegram_rate(html):
             strip=True
         )
     )
-
-    # -----------------------------------------------------
-    # انس
-    # -----------------------------------------------------
 
     ounce_match = re.search(
         r"انس\s*[:：]?\s*"
@@ -212,10 +175,6 @@ def parse_telegram_rate(html):
     ounce = decimal_value(
         ounce_match.group(1)
     )
-
-    # -----------------------------------------------------
-    # دلار تهران
-    # -----------------------------------------------------
 
     dollar_match = re.search(
         r"دلار\s*تهران\s*"
@@ -232,42 +191,6 @@ def parse_telegram_rate(html):
         dollar_match.group(1)
     )
 
-    # -----------------------------------------------------
-    # تاریخ
-    # -----------------------------------------------------
-
-    date_match = re.search(
-        r"تاریخ\s*[:：]?\s*"
-        r"(\d{4}/\d{1,2}/\d{1,2})",
-        text
-    )
-
-    date = (
-        date_match.group(1)
-        if date_match
-        else ""
-    )
-
-    # -----------------------------------------------------
-    # ساعت
-    # -----------------------------------------------------
-
-    time_match = re.search(
-        r"ساعت\s*[:：]?\s*"
-        r"(\d{1,2}:\d{2})",
-        text
-    )
-
-    clock = (
-        time_match.group(1)
-        if time_match
-        else ""
-    )
-
-    # -----------------------------------------------------
-    # کنترل منطقی
-    # -----------------------------------------------------
-
     if ounce is None:
         return None
 
@@ -282,15 +205,9 @@ def parse_telegram_rate(html):
 
     return {
         "ounce": ounce,
-        "dollar_tehran": dollar_tehran,
-        "date": date,
-        "time": clock
+        "dollar_tehran": dollar_tehran
     }
 
-
-# =========================================================
-# WEBSITE
-# =========================================================
 
 def get_website_page():
     return http_get(
@@ -302,9 +219,6 @@ def extract_product_price(
     text,
     product_name
 ):
-    """
-    قیمت محصول را از نزدیک نام همان محصول می‌خواند.
-    """
 
     normalized = clean_text(
         text
@@ -358,10 +272,6 @@ def parse_website_prices(html):
         strip=True
     )
 
-    # -----------------------------------------------------
-    # ساچمه 995 یک کیلویی
-    # -----------------------------------------------------
-
     shot_995_package = (
         extract_product_price(
             text,
@@ -377,10 +287,6 @@ def parse_website_prices(html):
                 "نقره ساچمه ۱۰۰۰ گرمی با عیار ۹۹۵"
             )
         )
-
-    # -----------------------------------------------------
-    # شمش نادیر 999.9 یک کیلویی
-    # -----------------------------------------------------
 
     nader_package = (
         extract_product_price(
@@ -401,18 +307,14 @@ def parse_website_prices(html):
     if shot_995_package is None:
 
         raise RuntimeError(
-            "قیمت ساچمه 995 در سایت تقی زادگان پیدا نشد."
+            "\u0642\u06cc\u0645\u062a \u0633\u0627\u0686\u0645\u0647 995 \u062f\u0631 \u0633\u0627\u06cc\u062a \u062a\u0642\u06cc \u0632\u0627\u062f\u06af\u0627\u0646 \u067e\u06cc\u062f\u0627 \u0646\u0634\u062f."
         )
 
     if nader_package is None:
 
         raise RuntimeError(
-            "قیمت شمش نادیر 999.9 در سایت پیدا نشد."
+            "\u0642\u06cc\u0645\u062a \u0634\u0645\u0634 \u0646\u0627\u062f\u06cc\u0631 999.9 \u062f\u0631 \u0633\u0627\u06cc\u062a \u067e\u06cc\u062f\u0627 \u0646\u0634\u062f."
         )
-
-    # -----------------------------------------------------
-    # هر گرم
-    # -----------------------------------------------------
 
     shot_995_per_gram = (
         shot_995_package / 1000
@@ -421,10 +323,6 @@ def parse_website_prices(html):
     nader_per_gram = (
         nader_package / 1000
     )
-
-    # -----------------------------------------------------
-    # مثقال 995
-    # -----------------------------------------------------
 
     mithqal_995 = (
         shot_995_per_gram
@@ -461,15 +359,17 @@ def parse_website_prices(html):
 
 
 # =========================================================
-# FONT
+# FONT - BOLD PRICE FONT
 # =========================================================
 
 def get_font(size):
 
     candidates = [
-        "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/usr/share/fonts/truetype/liberation2/LiberationSerif-Regular.ttf"
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
+        "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
+        "/usr/share/fonts/truetype/liberation2/LiberationSerif-Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
     ]
 
     for path in candidates:
@@ -482,6 +382,56 @@ def get_font(size):
             )
 
     return ImageFont.load_default()
+
+
+def get_best_font(
+    draw,
+    text,
+    box
+):
+
+    x1, y1, x2, y2 = box
+
+    max_width = (
+        x2 - x1
+    ) * 0.82
+
+    max_height = (
+        y2 - y1
+    ) * 0.70
+
+    for size in range(
+        48,
+        27,
+        -1
+    ):
+
+        font = get_font(
+            size
+        )
+
+        bbox = draw.textbbox(
+            (0, 0),
+            text,
+            font=font
+        )
+
+        width = (
+            bbox[2] - bbox[0]
+        )
+
+        height = (
+            bbox[3] - bbox[1]
+        )
+
+        if (
+            width <= max_width
+            and height <= max_height
+        ):
+
+            return font
+
+    return get_font(28)
 
 
 # =========================================================
@@ -502,6 +452,34 @@ def load_template():
     ).convert(
         "RGB"
     )
+
+
+def get_template_hash():
+
+    if not TEMPLATE_FILE.exists():
+        return ""
+
+    sha = hashlib.sha256()
+
+    with open(
+        TEMPLATE_FILE,
+        "rb"
+    ) as file:
+
+        while True:
+
+            chunk = file.read(
+                1024 * 1024
+            )
+
+            if not chunk:
+                break
+
+            sha.update(
+                chunk
+            )
+
+    return sha.hexdigest()
 
 
 # =========================================================
@@ -570,57 +548,90 @@ def create_board(
         image
     )
 
+    width, height = image.size
+
     # =====================================================
-    # قالب فعلی board_only_preview.png
-    #
-    # فقط قسمت عددی هر ردیف تغییر می‌کند.
-    #
-    # اگر قالبی که آپلود کردی همان قالب تأییدشده قبلی
-    # باشد، این پنج محدوده محل عددها هستند.
+    # EXACT BOXES FOR THE SELECTED TEMPLATE
+    # board_only_preview.png = 1086 x 1448
     # =====================================================
 
-    boxes = [
+    original_width = 1086
+    original_height = 1448
 
-        # 1 - انس نقره
+    base_boxes = [
+
+        # 1 - OUNCE
         (
-            570,
-            435,
-            850,
-            510
+            487,
+            531,
+            865,
+            663
         ),
 
-        # 2 - دلار تهران
+        # 2 - DOLLAR
         (
-            570,
-            550,
-            850,
-            635
+            487,
+            690,
+            865,
+            823
         ),
 
-        # 3 - ساچمه 995
+        # 3 - SHOT 995
         (
-            570,
-            665,
+            487,
             850,
-            750
+            865,
+            982
         ),
 
-        # 4 - شمش نادیر 999.9
+        # 4 - NADER 999.9
         (
-            570,
-            785,
-            850,
-            870
+            487,
+            1012,
+            865,
+            1145
         ),
 
-        # 5 - مثقال 995
+        # 5 - MITHQAL 995
         (
-            570,
-            900,
-            850,
-            990
+            487,
+            1174,
+            865,
+            1307
         )
     ]
+
+    boxes = []
+
+    for x1, y1, x2, y2 in base_boxes:
+
+        boxes.append(
+            (
+                int(
+                    x1
+                    * width
+                    / original_width
+                ),
+
+                int(
+                    y1
+                    * height
+                    / original_height
+                ),
+
+                int(
+                    x2
+                    * width
+                    / original_width
+                ),
+
+                int(
+                    y2
+                    * height
+                    / original_height
+                )
+            )
+        )
 
     values = [
 
@@ -643,26 +654,22 @@ def create_board(
         )
     ]
 
-    for index, (
-        box,
-        value
-    ) in enumerate(
-        zip(
-            boxes,
-            values
-        )
+    for box, value in zip(
+        boxes,
+        values
     ):
 
-        if index == 0:
-            size = 44
-        else:
-            size = 39
+        font = get_best_font(
+            draw,
+            value,
+            box
+        )
 
         draw_centered(
             draw,
             box,
             value,
-            get_font(size)
+            font
         )
 
     image.save(
@@ -677,21 +684,170 @@ def create_board(
 
 
 # =========================================================
+# IRAN DATE / TIME
+# =========================================================
+
+def gregorian_to_jalali(
+    gy,
+    gm,
+    gd
+):
+
+    g_days = [
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31
+    ]
+
+    j_days = [
+        31, 31, 31, 31, 31, 31,
+        30, 30, 30, 30, 30, 29
+    ]
+
+    gy -= 1600
+    gm -= 1
+    gd -= 1
+
+    days = (
+        365 * gy
+        + (gy + 3) // 4
+        - (gy + 99) // 100
+        + (gy + 399) // 400
+    )
+
+    for i in range(gm):
+        days += g_days[i]
+
+    if (
+        gm > 1
+        and (
+            (gy + 1600) % 4 == 0
+            and (
+                (gy + 1600) % 100 != 0
+                or (gy + 1600) % 400 == 0
+            )
+        )
+    ):
+        days += 1
+
+    days += gd
+    days -= 79
+
+    jy = 979 + 33 * (days // 12053)
+
+    days %= 12053
+
+    jy += 4 * (days // 1461)
+
+    days %= 1461
+
+    if days >= 366:
+
+        jy += (
+            days - 1
+        ) // 365
+
+        days = (
+            days - 1
+        ) % 365
+
+    i = 0
+
+    while (
+        i < 11
+        and days >= j_days[i]
+    ):
+
+        days -= j_days[i]
+
+        i += 1
+
+    return (
+        jy,
+        i + 1,
+        days + 1
+    )
+
+
+def get_iran_datetime():
+
+    return datetime.now(
+        IRAN_TZ
+    )
+
+
+def get_iran_date():
+
+    now = get_iran_datetime()
+
+    jy, jm, jd = (
+        gregorian_to_jalali(
+            now.year,
+            now.month,
+            now.day
+        )
+    )
+
+    return (
+        f"{jy:04d}/"
+        f"{jm:02d}/"
+        f"{jd:02d}"
+    )
+
+
+def get_iran_time():
+
+    return get_iran_datetime().strftime(
+        "%H:%M"
+    )
+
+
+# =========================================================
 # CAPTION
 # =========================================================
 
-def make_caption(rate):
+def make_caption():
+
+    date = get_iran_date()
+
+    clock = get_iran_time()
 
     return (
-        f"📅 تاریخ: {rate['date']}\n"
-        f"🕐 ساعت: {rate['time']}\n\n"
-        f"📞 {PHONE}\n\n"
-        "✅ خرید بالای ۲ کیلو "
-        "تماس تلفنی جهت استعلام نرخ\n\n"
-        "🔹 خرید و فروش انواع شمش‌های معتبر (قانونی)\n"
-        "🔹 خرید مستعمل نقره\n"
-        "🔹 نرخ خرید فاکتورهای مجموعه همانند همیشه هست\n\n"
-        "💬 برای خرید یا هرگونه سؤال:\n"
+        "\U0001f4c5 "
+        "\u062a\u0627\u0631\u06cc\u062e: "
+        f"{date}\n"
+
+        "\U0001f550 "
+        "\u0633\u0627\u0639\u062a: "
+        f"{clock}\n\n"
+
+        "\U0001f4de "
+        f"{PHONE}\n\n"
+
+        "\u2705 "
+        "\u062e\u0631\u06cc\u062f \u0628\u0627\u0644\u0627\u06cc "
+        "\u06f2 \u06a9\u06cc\u0644\u0648 "
+        "\u062a\u0645\u0627\u0633 \u062a\u0644\u0641\u0646\u06cc "
+        "\u062c\u0647\u062a \u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0646\u0631\u062e\n\n"
+
+        "\U0001f539 "
+        "\u062e\u0631\u06cc\u062f \u0648 \u0641\u0631\u0648\u0634 "
+        "\u0627\u0646\u0648\u0627\u0639 \u0634\u0645\u0634\u200c\u0647\u0627\u06cc "
+        "\u0645\u0639\u062a\u0628\u0631 "
+        "(\u0642\u0627\u0646\u0648\u0646\u06cc)\n"
+
+        "\U0001f539 "
+        "\u062e\u0631\u06cc\u062f \u0645\u0633\u062a\u0639\u0645\u0644 \u0646\u0642\u0631\u0647\n"
+
+        "\U0001f539 "
+        "\u0646\u0631\u062e \u062e\u0631\u06cc\u062f "
+        "\u0641\u0627\u06a9\u062a\u0648\u0631\u0647\u0627\u06cc "
+        "\u0645\u062c\u0645\u0648\u0639\u0647 "
+        "\u0647\u0645\u0627\u0646\u0646\u062f \u0647\u0645\u06cc\u0634\u0647 \u0647\u0633\u062a\n\n"
+
+        "\U0001f4ac "
+        "\u0628\u0631\u0627\u06cc \u062e\u0631\u06cc\u062f "
+        "\u06cc\u0627 \u0647\u0631\u06af\u0648\u0646\u0647 \u0633\u0624\u0627\u0644:\n"
+
         f"{TELEGRAM_ID}"
     )
 
@@ -738,17 +894,17 @@ async def get_bot_client():
 
     if not API_ID:
         raise RuntimeError(
-            "API_ID تنظیم نشده است."
+            "API_ID"
         )
 
     if not API_HASH:
         raise RuntimeError(
-            "API_HASH تنظیم نشده است."
+            "API_HASH"
         )
 
     if not BOT_TOKEN:
         raise RuntimeError(
-            "BOT_TOKEN تنظیم نشده است."
+            "BOT_TOKEN"
         )
 
     return TelegramClient(
@@ -766,27 +922,48 @@ async def find_existing_post(
     client,
     target
 ):
+
     state = load_state()
 
-    saved_id = state.get("message_id")
+    saved_id = state.get(
+        "message_id"
+    )
 
-    if not saved_id:
-        return None
+    if saved_id:
 
-    try:
-        message = await client.get_messages(
-            target,
-            ids=int(saved_id)
+        try:
+
+            message = await client.get_messages(
+                target,
+                ids=int(saved_id)
+            )
+
+            if message:
+                return message
+
+        except Exception as error:
+
+            log.warning(
+                "Saved message not found: %s",
+                error
+            )
+
+    async for message in client.iter_messages(
+        target,
+        limit=50
+    ):
+
+        text = (
+            message.raw_text
+            or ""
         )
 
-        if message:
+        if (
+            message.photo
+            and PHONE in text
+        ):
+
             return message
-
-    except Exception as error:
-        log.warning(
-            "Saved message not found: %s",
-            error
-        )
 
     return None
 
@@ -808,9 +985,7 @@ async def publish(
         products
     )
 
-    caption = make_caption(
-        rate
-    )
+    caption = make_caption()
 
     old = await find_existing_post(
         client,
@@ -865,11 +1040,8 @@ async def publish(
             "mithqal_995":
                 products["mithqal_995"],
 
-            "date":
-                rate["date"],
-
-            "time":
-                rate["time"]
+            "template":
+                get_template_hash()
         },
         sort_keys=True,
         ensure_ascii=False
@@ -907,8 +1079,7 @@ async def update_once(
     if rate is None:
 
         raise RuntimeError(
-            "نرخ معتبر انس و دلار تهران "
-            "در کانال تقی زادگان پیدا نشد."
+            "Invalid ounce/dollar data"
         )
 
     website_html = (
@@ -940,11 +1111,8 @@ async def update_once(
             "mithqal_995":
                 products["mithqal_995"],
 
-            "date":
-                rate["date"],
-
-            "time":
-                rate["time"]
+            "template":
+                get_template_hash()
         },
         sort_keys=True,
         ensure_ascii=False
@@ -988,7 +1156,7 @@ async def main():
     if not TARGET_CHANNEL:
 
         raise RuntimeError(
-            "TARGET_CHANNEL تنظیم نشده است."
+            "TARGET_CHANNEL"
         )
 
     client = await get_bot_client()
@@ -998,42 +1166,7 @@ async def main():
     )
 
     log.info(
-        "======================================"
-    )
-
-    log.info(
         "YAZDANDOUST SILVER BOT STARTED"
-    )
-
-    log.info(
-        "SOURCE: %s",
-        SOURCE_URL
-    )
-
-    log.info(
-        "WEBSITE: %s",
-        WEBSITE_URL
-    )
-
-    log.info(
-        "TARGET: %s",
-        TARGET_CHANNEL
-    )
-
-    log.info(
-        "DOLLAR SOURCE: TEHRAN"
-    )
-
-    log.info(
-        "MASHHAD DOLLAR: NOT USED"
-    )
-
-    log.info(
-        "SOURCE_SESSION: NOT USED"
-    )
-
-    log.info(
-        "======================================"
     )
 
     while True:
