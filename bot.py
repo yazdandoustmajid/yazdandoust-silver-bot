@@ -5,60 +5,42 @@ import json
 import logging
 import os
 import re
+import time
 from pathlib import Path
 
-import cv2
-import numpy as np
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
-from telethon import TelegramClient, events
-from telethon.sessions import StringSession
+from telethon import TelegramClient
 
 
 # =========================================================
-# YAZDANDOUST SILVER BOT
+# YAZDANDOUST SILVER RATE BOT
 # =========================================================
 
-BASE = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent
 
-TEMPLATE = BASE / "board_only_preview.png"
-STATE = BASE / "state.json"
-OUTPUT = BASE / "latest_price.jpg"
+TEMPLATE_FILE = BASE_DIR / "board_only_preview.png"
+OUTPUT_FILE = BASE_DIR / "latest_price.jpg"
+STATE_FILE = BASE_DIR / "state.json"
 
 
 # =========================================================
-# TELEGRAM CONFIG
+# GITHUB SECRETS
 # =========================================================
 
 API_ID = os.getenv("API_ID", "").strip()
 API_HASH = os.getenv("API_HASH", "").strip()
 BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
-
-SOURCE_SESSION = os.getenv(
-    "SOURCE_SESSION",
-    ""
-).strip()
-
-SOURCE_CHANNEL = os.getenv(
-    "SOURCE_CHANNEL",
-    "tghsilver"
-).strip()
-
-TARGET_CHANNEL = os.getenv(
-    "TARGET_CHANNEL",
-    ""
-).strip()
+TARGET_CHANNEL = os.getenv("TARGET_CHANNEL", "").strip()
 
 
 # =========================================================
-# WEBSITE
+# PUBLIC SOURCES
 # =========================================================
 
-WEBSITE_URL = os.getenv(
-    "WEBSITE_URL",
-    "https://taghizadegan.com"
-).strip()
+SOURCE_URL = "https://t.me/s/tghsilver"
+WEBSITE_URL = "https://taghizadegan.com"
 
 
 # =========================================================
@@ -66,7 +48,6 @@ WEBSITE_URL = os.getenv(
 # =========================================================
 
 PHONE = "09152449600"
-
 TELEGRAM_ID = "@MajidYazdandoust"
 
 
@@ -76,9 +57,12 @@ TELEGRAM_ID = "@MajidYazdandoust"
 
 MITHQAL_GRAMS = 4.6083
 
+# هر چند ثانیه منابع بررسی شوند
+CHECK_INTERVAL = 30
+
 
 # =========================================================
-# LOGGING
+# LOG
 # =========================================================
 
 logging.basicConfig(
@@ -86,59 +70,44 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(message)s"
 )
 
-log = logging.getLogger(
-    "YAZDANDOUST"
-)
+log = logging.getLogger("YAZDANDOUST")
 
 
 # =========================================================
 # DIGITS
 # =========================================================
 
-PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
-ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
-ENGLISH_DIGITS = "0123456789"
+PERSIAN = "۰۱۲۳۴۵۶۷۸۹"
+ARABIC = "٠١٢٣٤٥٦٧٨٩"
+ENGLISH = "0123456789"
 
 DIGIT_TABLE = str.maketrans(
-    PERSIAN_DIGITS + ARABIC_DIGITS,
-    ENGLISH_DIGITS + ENGLISH_DIGITS
+    PERSIAN + ARABIC,
+    ENGLISH + ENGLISH
 )
 
 
 def normalize_digits(text):
-
-    return (
-        text or ""
-    ).translate(
-        DIGIT_TABLE
-    )
+    return (text or "").translate(DIGIT_TABLE)
 
 
 def clean_text(text):
-
-    text = normalize_digits(
-        text
-    )
+    text = normalize_digits(text)
 
     text = (
         text
+        .replace("\u200c", " ")
         .replace("٬", ",")
         .replace("٫", ".")
-        .replace("\u200c", " ")
     )
 
-    return re.sub(
-        r"\s+",
-        " ",
-        text
-    ).strip()
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
 
 
 def integer_value(text):
-
-    text = normalize_digits(
-        text
-    )
+    text = normalize_digits(text)
 
     text = (
         text
@@ -147,11 +116,7 @@ def integer_value(text):
         .replace(" ", "")
     )
 
-    text = re.sub(
-        r"[^\d]",
-        "",
-        text
-    )
+    text = re.sub(r"[^\d]", "", text)
 
     if not text:
         return None
@@ -160,10 +125,7 @@ def integer_value(text):
 
 
 def decimal_value(text):
-
-    text = normalize_digits(
-        text
-    )
+    text = normalize_digits(text)
 
     text = (
         text
@@ -172,11 +134,7 @@ def decimal_value(text):
         .replace("٫", ".")
     )
 
-    text = re.sub(
-        r"[^\d.]",
-        "",
-        text
-    )
+    text = re.sub(r"[^\d.]", "", text)
 
     if not text:
         return None
@@ -185,48 +143,66 @@ def decimal_value(text):
 
 
 def format_price(value):
-
     return f"{int(round(value)):,}"
 
 
 # =========================================================
-# PARSE TGH TELEGRAM RATE
+# HTTP
 # =========================================================
 
-def parse_rate_message(text):
+SESSION = requests.Session()
 
-    if not text:
-        return None
+SESSION.headers.update({
+    "User-Agent":
+        "Mozilla/5.0 "
+        "(iPhone; CPU iPhone OS 18_0 like Mac OS X) "
+        "AppleWebKit/605.1.15 "
+        "(KHTML, like Gecko) "
+        "Version/18.0 Mobile/15E148 Safari/604.1"
+})
+
+
+def http_get(url):
+    response = SESSION.get(
+        url,
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    return response.text
+
+
+# =========================================================
+# TELEGRAM PUBLIC CHANNEL
+# =========================================================
+
+def get_source_page():
+    return http_get(
+        SOURCE_URL
+    )
+
+
+def parse_telegram_rate(html):
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
 
     text = clean_text(
-        text
+        soup.get_text(
+            "\n",
+            strip=True
+        )
     )
-
-    compact = text.replace(
-        " ",
-        ""
-    )
-
-    # فقط پست‌های نرخ
-    if "انس" not in compact:
-        return None
-
-    if "دلارتهران" not in compact:
-        return None
-
-    if (
-        "جدولنرخ" not in compact
-        and "نرخخریدفروش" not in compact
-        and "نرخخریدفروش" not in compact
-    ):
-        return None
 
     # -----------------------------------------------------
-    # OUNCE
+    # انس
     # -----------------------------------------------------
 
     ounce_match = re.search(
-        r"انس\s*:?\s*(\d+(?:[.,]\d+)?)",
+        r"انس\s*[:：]?\s*"
+        r"(\d+(?:[.,]\d+)?)",
         text
     )
 
@@ -238,29 +214,30 @@ def parse_rate_message(text):
     )
 
     # -----------------------------------------------------
-    # TEHRAN DOLLAR
+    # دلار تهران
     # -----------------------------------------------------
 
-    tehran_match = re.search(
+    dollar_match = re.search(
         r"دلار\s*تهران\s*"
-        r"(?:حدود)?\s*:?\s*"
+        r"(?:حدود)?\s*"
+        r"[:：]?\s*"
         r"([\d,]+)",
         text
     )
 
-    if not tehran_match:
+    if not dollar_match:
         return None
 
-    tehran = integer_value(
-        tehran_match.group(1)
+    dollar_tehran = integer_value(
+        dollar_match.group(1)
     )
 
     # -----------------------------------------------------
-    # DATE
+    # تاریخ
     # -----------------------------------------------------
 
     date_match = re.search(
-        r"تاریخ\s*:?\s*"
+        r"تاریخ\s*[:：]?\s*"
         r"(\d{4}/\d{1,2}/\d{1,2})",
         text
     )
@@ -272,155 +249,156 @@ def parse_rate_message(text):
     )
 
     # -----------------------------------------------------
-    # TIME
+    # ساعت
     # -----------------------------------------------------
 
     time_match = re.search(
-        r"ساعت\s*:?\s*"
+        r"ساعت\s*[:：]?\s*"
         r"(\d{1,2}:\d{2})",
         text
     )
 
-    time = (
+    clock = (
         time_match.group(1)
         if time_match
         else ""
     )
 
     # -----------------------------------------------------
-    # SANITY CHECK
+    # کنترل منطقی
     # -----------------------------------------------------
 
     if ounce is None:
         return None
 
-    if tehran is None:
+    if dollar_tehran is None:
         return None
 
     if not 20 <= ounce <= 150:
         return None
 
-    if not 50_000 <= tehran <= 2_000_000:
+    if not 50_000 <= dollar_tehran <= 2_000_000:
         return None
 
     return {
         "ounce": ounce,
-        "tehran": tehran,
+        "dollar_tehran": dollar_tehran,
         "date": date,
-        "time": time
+        "time": clock
     }
 
 
 # =========================================================
-# WEBSITE PRICE READER
+# WEBSITE
 # =========================================================
 
-def find_product_price(
-    page_text,
-    product_names
-):
-
-    text = clean_text(
-        page_text
+def get_website_page():
+    return http_get(
+        WEBSITE_URL
     )
 
-    for product_name in product_names:
 
-        product_name = clean_text(
-            product_name
+def extract_product_price(
+    text,
+    product_name
+):
+    """
+    قیمت محصول را از نزدیک نام همان محصول می‌خواند.
+    """
+
+    normalized = clean_text(
+        text
+    )
+
+    position = normalized.find(
+        clean_text(product_name)
+    )
+
+    if position < 0:
+        return None
+
+    area = normalized[
+        position:
+        position + 500
+    ]
+
+    matches = re.findall(
+        r"([\d.]+)\s*تومان",
+        area
+    )
+
+    for item in matches:
+
+        value = integer_value(
+            item
         )
 
-        position = text.find(
-            product_name
-        )
-
-        if position < 0:
+        if value is None:
             continue
 
-        area = text[
-            position:
-            position + 500
-        ]
-
-        matches = re.findall(
-            r"([\d.]{6,})\s*تومان",
-            area
-        )
-
-        for match in matches:
-
-            value = integer_value(
-                match
-            )
-
-            if value is None:
-                continue
-
-            if (
-                1_000_000
-                <= value
-                <= 10_000_000_000
-            ):
-                return value
+        if (
+            1_000_000
+            <= value
+            <= 10_000_000_000
+        ):
+            return value
 
     return None
 
 
-def get_website_prices():
-
-    response = requests.get(
-        WEBSITE_URL,
-        headers={
-            "User-Agent":
-            "Mozilla/5.0 "
-            "(iPhone; CPU iPhone OS 26_0 like Mac OS X) "
-            "AppleWebKit/605.1.15 "
-            "Version/26.0 Mobile/15E148 Safari/604.1"
-        },
-        timeout=30
-    )
-
-    response.raise_for_status()
+def parse_website_prices(html):
 
     soup = BeautifulSoup(
-        response.text,
+        html,
         "html.parser"
     )
 
-    page_text = soup.get_text(
-        " ",
+    text = soup.get_text(
+        "\n",
         strip=True
     )
 
     # -----------------------------------------------------
-    # SAچمه 995 - 1KG
+    # ساچمه 995 یک کیلویی
     # -----------------------------------------------------
 
-    shot_package = find_product_price(
-        page_text,
-        [
-            "نقره ساچمه 1000 گرمی با عیار 995",
-            "نقره ساچمه 1000 گرمی با عیار ۹۹۵",
-            "نقره ساچمه ۱۰۰۰ گرمی با عیار 995",
-            "نقره ساچمه ۱۰۰۰ گرمی با عیار ۹۹۵"
-        ]
+    shot_995_package = (
+        extract_product_price(
+            text,
+            "نقره ساچمه 1000 گرمی با عیار 995"
+        )
     )
 
+    if shot_995_package is None:
+
+        shot_995_package = (
+            extract_product_price(
+                text,
+                "نقره ساچمه ۱۰۰۰ گرمی با عیار ۹۹۵"
+            )
+        )
+
     # -----------------------------------------------------
-    # NADER 999.9 - 1KG
+    # شمش نادیر 999.9 یک کیلویی
     # -----------------------------------------------------
 
-    nader_package = find_product_price(
-        page_text,
-        [
-            "شمش 1000 گرمی 999.9 نادیر",
-            "شمش 1000 گرمی ۹۹۹.۹ نادیر",
-            "شمش ۱۰۰۰ گرمی 999.9 نادیر",
-            "شمش ۱۰۰۰ گرمی ۹۹۹.۹ نادیر"
-        ]
+    nader_package = (
+        extract_product_price(
+            text,
+            "شمش 1000 گرمی 999.9 نادیر"
+        )
     )
 
-    if shot_package is None:
+    if nader_package is None:
+
+        nader_package = (
+            extract_product_price(
+                text,
+                "شمش 1000 گرمی ۹۹۹.۹ نادیر"
+            )
+        )
+
+    if shot_995_package is None:
 
         raise RuntimeError(
             "قیمت ساچمه 995 در سایت تقی زادگان پیدا نشد."
@@ -429,23 +407,23 @@ def get_website_prices():
     if nader_package is None:
 
         raise RuntimeError(
-            "قیمت شمش نادیر 999.9 در سایت تقی زادگان پیدا نشد."
+            "قیمت شمش نادیر 999.9 در سایت پیدا نشد."
         )
 
     # -----------------------------------------------------
-    # PRICE PER GRAM
+    # هر گرم
     # -----------------------------------------------------
 
     shot_995_per_gram = (
-        shot_package / 1000
+        shot_995_package / 1000
     )
 
-    nader_9999_per_gram = (
+    nader_per_gram = (
         nader_package / 1000
     )
 
     # -----------------------------------------------------
-    # MITHQAL 995
+    # مثقال 995
     # -----------------------------------------------------
 
     mithqal_995 = (
@@ -461,59 +439,25 @@ def get_website_prices():
     )
 
     return {
-
         "shot_995":
-        int(
-            round(
-                shot_995_per_gram
-            )
-        ),
+            int(
+                round(
+                    shot_995_per_gram
+                )
+            ),
 
         "nader_9999":
-        int(
-            round(
-                nader_9999_per_gram
-            )
-        ),
+            int(
+                round(
+                    nader_per_gram
+                )
+            ),
 
         "mithqal_995":
-        int(
-            mithqal_995
-        )
+            int(
+                mithqal_995
+            )
     }
-
-
-async def get_website_prices():
-
-    last_error = None
-
-    for attempt in range(
-        4
-    ):
-
-        try:
-
-            return await asyncio.to_thread(
-                get_website_prices
-            )
-
-        except Exception as error:
-
-            last_error = error
-
-            log.warning(
-                "Website attempt %s failed: %s",
-                attempt + 1,
-                error
-            )
-
-            await asyncio.sleep(
-                5
-            )
-
-    raise RuntimeError(
-        f"خطا در دریافت قیمت سایت: {last_error}"
-    )
 
 
 # =========================================================
@@ -522,16 +466,13 @@ async def get_website_prices():
 
 def get_font(size):
 
-    font_paths = [
-
-        "/usr/share/fonts/truetype/dejavu/"
-        "DejaVuSerif.ttf",
-
-        "/usr/share/fonts/truetype/liberation2/"
-        "LiberationSerif-Regular.ttf"
+    candidates = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/liberation2/LiberationSerif-Regular.ttf"
     ]
 
-    for path in font_paths:
+    for path in candidates:
 
         if Path(path).exists():
 
@@ -544,114 +485,27 @@ def get_font(size):
 
 
 # =========================================================
-# CLEAN CURRENT TEMPLATE
+# TEMPLATE
 # =========================================================
 
-def load_clean_template():
+def load_template():
 
-    if not TEMPLATE.exists():
+    if not TEMPLATE_FILE.exists():
 
         raise FileNotFoundError(
-            "فایل board_only_preview.png "
-            "کنار bot.py پیدا نشد."
+            "board_only_preview.png "
+            "در کنار bot.py پیدا نشد."
         )
 
-    original = cv2.imread(
-        str(TEMPLATE)
-    )
-
-    if original is None:
-
-        raise RuntimeError(
-            "خواندن فایل قالب امکان‌پذیر نیست."
-        )
-
-    height, width = (
-        original.shape[:2]
-    )
-
-    if (
-        width != 1086
-        or height != 1035
-    ):
-
-        raise RuntimeError(
-            "ابعاد board_only_preview.png "
-            "باید دقیقاً 1086x1035 باشد."
-        )
-
-    cleaned = original.copy()
-
-    # -----------------------------------------------------
-    # محل عددهای نمونه در قالب فعلی
-    # واحد USD و تومان دست‌نخورده می‌ماند.
-    # -----------------------------------------------------
-
-    number_boxes = [
-
-        (570, 435, 850, 510),
-
-        (570, 550, 850, 635),
-
-        (570, 665, 850, 750),
-
-        (570, 785, 850, 870),
-
-        (570, 900, 850, 990)
-    ]
-
-    for (
-        x1,
-        y1,
-        x2,
-        y2
-    ) in number_boxes:
-
-        clean_band = original[
-            y1:y2 + 1,
-            565:585
-        ]
-
-        row_average = (
-            clean_band
-            .mean(
-                axis=1,
-                keepdims=True
-            )
-            .astype(
-                np.float32
-            )
-        )
-
-        row_average = cv2.GaussianBlur(
-            row_average,
-            (1, 15),
-            0
-        )
-
-        fill = np.repeat(
-            row_average,
-            x2 - x1 + 1,
-            axis=1
-        )
-
-        cleaned[
-            y1:y2 + 1,
-            x1:x2 + 1
-        ] = fill.astype(
-            np.uint8
-        )
-
-    return Image.fromarray(
-        cv2.cvtColor(
-            cleaned,
-            cv2.COLOR_BGR2RGB
-        )
+    return Image.open(
+        TEMPLATE_FILE
+    ).convert(
+        "RGB"
     )
 
 
 # =========================================================
-# DRAW NUMBER
+# DRAW
 # =========================================================
 
 def draw_centered(
@@ -659,7 +513,7 @@ def draw_centered(
     box,
     text,
     font,
-    color=(232, 207, 161)
+    fill=(235, 214, 175)
 ):
 
     x1, y1, x2, y2 = box
@@ -670,25 +524,25 @@ def draw_centered(
         font=font
     )
 
-    text_width = (
+    width = (
         bbox[2] - bbox[0]
     )
 
-    text_height = (
+    height = (
         bbox[3] - bbox[1]
     )
 
     x = (
         x1
         + (
-            x2 - x1 - text_width
+            x2 - x1 - width
         ) / 2
     )
 
     y = (
         y1
         + (
-            y2 - y1 - text_height
+            y2 - y1 - height
         ) / 2
         - bbox[1]
     )
@@ -697,12 +551,12 @@ def draw_centered(
         (x, y),
         text,
         font=font,
-        fill=color
+        fill=fill
     )
 
 
 # =========================================================
-# CREATE FINAL BOARD
+# CREATE BOARD
 # =========================================================
 
 def create_board(
@@ -710,29 +564,62 @@ def create_board(
     products
 ):
 
-    image = load_clean_template()
+    image = load_template()
 
     draw = ImageDraw.Draw(
         image
     )
 
-    # دقیقاً ۵ ردیف موجود در قالب
-    number_boxes = [
+    # =====================================================
+    # قالب فعلی board_only_preview.png
+    #
+    # فقط قسمت عددی هر ردیف تغییر می‌کند.
+    #
+    # اگر قالبی که آپلود کردی همان قالب تأییدشده قبلی
+    # باشد، این پنج محدوده محل عددها هستند.
+    # =====================================================
 
-        # انس
-        (570, 435, 850, 510),
+    boxes = [
 
-        # دلار تهران
-        (570, 550, 850, 635),
+        # 1 - انس نقره
+        (
+            570,
+            435,
+            850,
+            510
+        ),
 
-        # ساچمه 995
-        (570, 665, 850, 750),
+        # 2 - دلار تهران
+        (
+            570,
+            550,
+            850,
+            635
+        ),
 
-        # شمش نادیر 999.9
-        (570, 785, 850, 870),
+        # 3 - ساچمه 995
+        (
+            570,
+            665,
+            850,
+            750
+        ),
 
-        # مثقال 995
-        (570, 900, 850, 990)
+        # 4 - شمش نادیر 999.9
+        (
+            570,
+            785,
+            850,
+            870
+        ),
+
+        # 5 - مثقال 995
+        (
+            570,
+            900,
+            850,
+            990
+        )
     ]
 
     values = [
@@ -740,7 +627,7 @@ def create_board(
         f"{rate['ounce']:.2f}",
 
         format_price(
-            rate["tehran"]
+            rate["dollar_tehran"]
         ),
 
         format_price(
@@ -756,15 +643,20 @@ def create_board(
         )
     ]
 
-    for box, value in zip(
-        number_boxes,
-        values
+    for index, (
+        box,
+        value
+    ) in enumerate(
+        zip(
+            boxes,
+            values
+        )
     ):
 
-        if len(value) <= 7:
+        if index == 0:
             size = 44
         else:
-            size = 42
+            size = 39
 
         draw_centered(
             draw,
@@ -774,45 +666,32 @@ def create_board(
         )
 
     image.save(
-        OUTPUT,
+        OUTPUT_FILE,
         "JPEG",
         quality=97,
         optimize=True,
         progressive=True
     )
 
-    return OUTPUT
+    return OUTPUT_FILE
 
 
 # =========================================================
 # CAPTION
 # =========================================================
 
-def make_caption(
-    rate
-):
+def make_caption(rate):
 
     return (
-
         f"📅 تاریخ: {rate['date']}\n"
-
         f"🕐 ساعت: {rate['time']}\n\n"
-
         f"📞 {PHONE}\n\n"
-
         "✅ خرید بالای ۲ کیلو "
         "تماس تلفنی جهت استعلام نرخ\n\n"
-
-        "🔹 خرید و فروش انواع "
-        "شمش‌های معتبر (قانونی)\n"
-
+        "🔹 خرید و فروش انواع شمش‌های معتبر (قانونی)\n"
         "🔹 خرید مستعمل نقره\n"
-
-        "🔹 نرخ خرید فاکتورهای مجموعه "
-        "همانند همیشه هست\n\n"
-
+        "🔹 نرخ خرید فاکتورهای مجموعه همانند همیشه هست\n\n"
         "💬 برای خرید یا هرگونه سؤال:\n"
-
         f"{TELEGRAM_ID}"
     )
 
@@ -823,13 +702,13 @@ def make_caption(
 
 def load_state():
 
-    if not STATE.exists():
+    if not STATE_FILE.exists():
         return {}
 
     try:
 
         return json.loads(
-            STATE.read_text(
+            STATE_FILE.read_text(
                 encoding="utf-8"
             )
         )
@@ -841,7 +720,7 @@ def load_state():
 
 def save_state(state):
 
-    STATE.write_text(
+    STATE_FILE.write_text(
         json.dumps(
             state,
             ensure_ascii=False,
@@ -852,13 +731,66 @@ def save_state(state):
 
 
 # =========================================================
-# FIND OLD TELEGRAM POST
+# TELEGRAM BOT CLIENT
 # =========================================================
 
-async def find_old_post(
+async def get_bot_client():
+
+    if not API_ID:
+        raise RuntimeError(
+            "API_ID تنظیم نشده است."
+        )
+
+    if not API_HASH:
+        raise RuntimeError(
+            "API_HASH تنظیم نشده است."
+        )
+
+    if not BOT_TOKEN:
+        raise RuntimeError(
+            "BOT_TOKEN تنظیم نشده است."
+        )
+
+    return TelegramClient(
+        "publisher_bot",
+        int(API_ID),
+        API_HASH
+    )
+
+
+# =========================================================
+# TARGET MESSAGE
+# =========================================================
+
+async def find_existing_post(
     client,
     target
 ):
+
+    state = load_state()
+
+    saved_id = state.get(
+        "message_id"
+    )
+
+    if saved_id:
+
+        try:
+
+            message = await client.get_messages(
+                target,
+                ids=int(saved_id)
+            )
+
+            if message:
+                return message
+
+        except Exception as error:
+
+            log.warning(
+                "Saved message not found: %s",
+                error
+            )
 
     async for message in client.iter_messages(
         target,
@@ -881,467 +813,272 @@ async def find_old_post(
 
 
 # =========================================================
-# SEND OR EDIT
+# PUBLISH
 # =========================================================
 
-async def send_or_edit(
+async def publish(
     client,
-    target,
-    image,
-    caption
+    rate,
+    products
 ):
 
-    state = load_state()
+    target = TARGET_CHANNEL
 
-    message_id = state.get(
-        "message_id"
+    image = create_board(
+        rate,
+        products
     )
 
-    # -----------------------------------------------------
-    # EDIT SAVED MESSAGE
-    # -----------------------------------------------------
+    caption = make_caption(
+        rate
+    )
 
-    if message_id:
-
-        try:
-
-            await client.edit_message(
-                target,
-                int(message_id),
-                file=str(image),
-                caption=caption
-            )
-
-            return int(
-                message_id
-            )
-
-        except Exception as error:
-
-            log.warning(
-                "Saved message edit failed: %s",
-                error
-            )
-
-    # -----------------------------------------------------
-    # SEARCH OLD MESSAGE
-    # -----------------------------------------------------
-
-    old = await find_old_post(
+    old = await find_existing_post(
         client,
         target
     )
 
     if old:
 
-        try:
-
-            await client.edit_message(
-                target,
-                old.id,
-                file=str(image),
-                caption=caption
-            )
-
-            return int(
-                old.id
-            )
-
-        except Exception as error:
-
-            log.warning(
-                "Old message edit failed: %s",
-                error
-            )
-
-    # -----------------------------------------------------
-    # SEND FIRST MESSAGE
-    # -----------------------------------------------------
-
-    sent = await client.send_file(
-        target,
-        str(image),
-        caption=caption
-    )
-
-    return int(
-        sent.id
-    )
-
-
-# =========================================================
-# UPDATE LOCK
-# =========================================================
-
-UPDATE_LOCK = asyncio.Lock()
-
-
-# =========================================================
-# PROCESS RATE MESSAGE
-# =========================================================
-
-async def process_rate_message(
-    message,
-    bot_client,
-    target
-):
-
-    rate = parse_rate_message(
-        message.raw_text or ""
-    )
-
-    if not rate:
-        return
-
-    async with UPDATE_LOCK:
-
-        log.info(
-            "RATE FOUND | "
-            "OUNCE=%s | "
-            "TEHRAN=%s",
-            rate["ounce"],
-            rate["tehran"]
-        )
-
-        products = (
-            await get_website_prices()
-        )
-
-        signature = json.dumps(
-            {
-                "ounce":
-                    rate["ounce"],
-
-                "tehran":
-                    rate["tehran"],
-
-                "shot_995":
-                    products["shot_995"],
-
-                "nader_9999":
-                    products["nader_9999"],
-
-                "mithqal_995":
-                    products["mithqal_995"]
-            },
-            sort_keys=True,
-            ensure_ascii=False
-        )
-
-        state = load_state()
-
-        # اگر هیچ چیزی تغییر نکرده، دوباره پست نکن
-        if (
-            state.get("signature")
-            == signature
-        ):
-
-            log.info(
-                "NO PRICE CHANGE"
-            )
-
-            return
-
-        image = create_board(
-            rate,
-            products
-        )
-
-        text = make_caption(
-            rate
-        )
-
-        message_id = await send_or_edit(
-            bot_client,
+        await client.edit_message(
             target,
-            image,
-            text
+            old.id,
+            file=str(OUTPUT_FILE),
+            caption=caption
         )
 
-        save_state(
-            {
-                "signature":
-                    signature,
-
-                "message_id":
-                    message_id,
-
-                "source_message_id":
-                    message.id,
-
-                "date":
-                    rate["date"],
-
-                "time":
-                    rate["time"]
-            }
-        )
+        message_id = old.id
 
         log.info(
-            "YAZDANDOUST BOARD UPDATED"
-        )
-
-
-# =========================================================
-# MAIN
-# =========================================================
-
-async def main():
-
-    missing = []
-
-    if not API_ID:
-        missing.append(
-            "API_ID"
-        )
-
-    if not API_HASH:
-        missing.append(
-            "API_HASH"
-        )
-
-    if not BOT_TOKEN:
-        missing.append(
-            "BOT_TOKEN"
-        )
-
-    if not TARGET_CHANNEL:
-        missing.append(
-            "TARGET_CHANNEL"
-        )
-
-    if missing:
-
-        raise RuntimeError(
-            "این متغیرها تنظیم نشده‌اند: "
-            + ", ".join(missing)
-        )
-
-    if not TEMPLATE.exists():
-
-        raise RuntimeError(
-            "فایل board_only_preview.png "
-            "باید کنار bot.py باشد."
-        )
-
-    try:
-
-        api_id = int(
-            API_ID
-        )
-
-    except ValueError:
-
-        raise RuntimeError(
-            "API_ID باید فقط عدد باشد."
-        )
-
-    # -----------------------------------------------------
-    # SOURCE TELEGRAM ACCOUNT
-    # -----------------------------------------------------
-
-    if SOURCE_SESSION:
-
-        source_client = TelegramClient(
-
-            StringSession(
-                SOURCE_SESSION
-            ),
-
-            api_id,
-            API_HASH,
-
-            sequential_updates=True,
-
-            auto_reconnect=True,
-
-            connection_retries=10,
-
-            retry_delay=5
+            "Existing Telegram post edited: %s",
+            message_id
         )
 
     else:
 
-        source_client = TelegramClient(
-
-            str(
-                BASE / "source"
-            ),
-
-            api_id,
-            API_HASH,
-
-            sequential_updates=True,
-
-            auto_reconnect=True,
-
-            connection_retries=10,
-
-            retry_delay=5
+        sent = await client.send_file(
+            target,
+            str(OUTPUT_FILE),
+            caption=caption
         )
 
-    # -----------------------------------------------------
-    # BOT
-    # -----------------------------------------------------
+        message_id = sent.id
 
-    bot_client = TelegramClient(
-
-        str(
-            BASE / "bot"
-        ),
-
-        api_id,
-        API_HASH,
-
-        sequential_updates=True,
-
-        auto_reconnect=True,
-
-        connection_retries=10,
-
-        retry_delay=5
-    )
-
-    # -----------------------------------------------------
-    # CONNECT
-    # -----------------------------------------------------
-
-    await source_client.start()
-
-    await bot_client.start(
-        bot_token=BOT_TOKEN
-    )
-
-    source_entity = (
-        await source_client.get_entity(
-            SOURCE_CHANNEL
+        log.info(
+            "First Telegram post created: %s",
+            message_id
         )
+
+    signature = json.dumps(
+        {
+            "ounce":
+                rate["ounce"],
+
+            "dollar_tehran":
+                rate["dollar_tehran"],
+
+            "shot_995":
+                products["shot_995"],
+
+            "nader_9999":
+                products["nader_9999"],
+
+            "mithqal_995":
+                products["mithqal_995"],
+
+            "date":
+                rate["date"],
+
+            "time":
+                rate["time"]
+        },
+        sort_keys=True,
+        ensure_ascii=False
     )
 
-    target_entity = (
-        await bot_client.get_entity(
-            TARGET_CHANNEL
-        )
+    save_state(
+        {
+            "message_id":
+                message_id,
+
+            "signature":
+                signature
+        }
     )
-
-    log.info(
-        "SOURCE CONNECTED: @%s",
-        SOURCE_CHANNEL
-    )
-
-    log.info(
-        "TARGET CONNECTED: %s",
-        TARGET_CHANNEL
-    )
-
-    # -----------------------------------------------------
-    # INITIAL UPDATE
-    # -----------------------------------------------------
-
-    async for message in source_client.iter_messages(
-        source_entity,
-        limit=100
-    ):
-
-        if parse_rate_message(
-            message.raw_text or ""
-        ):
-
-            try:
-
-                await process_rate_message(
-                    message,
-                    bot_client,
-                    target_entity
-                )
-
-            except Exception:
-
-                log.exception(
-                    "INITIAL UPDATE FAILED"
-                )
-
-            break
-
-    # -----------------------------------------------------
-    # NEW RATE
-    # -----------------------------------------------------
-
-    @source_client.on(
-        events.NewMessage(
-            chats=source_entity
-        )
-    )
-    async def new_rate(event):
-
-        try:
-
-            await process_rate_message(
-                event.message,
-                bot_client,
-                target_entity
-            )
-
-        except Exception:
-
-            log.exception(
-                "NEW MESSAGE ERROR"
-            )
-
-    # -----------------------------------------------------
-    # EDITED RATE
-    # -----------------------------------------------------
-
-    @source_client.on(
-        events.MessageEdited(
-            chats=source_entity
-        )
-    )
-    async def edited_rate(event):
-
-        try:
-
-            await process_rate_message(
-                event.message,
-                bot_client,
-                target_entity
-            )
-
-        except Exception:
-
-            log.exception(
-                "EDITED MESSAGE ERROR"
-            )
-
-    log.info(
-        "===================================="
-    )
-
-    log.info(
-        "YAZDANDOUST SILVER BOT IS RUNNING"
-    )
-
-    log.info(
-        "LIVE RATE UPDATE ENABLED"
-    )
-
-    log.info(
-        "DOLLAR = TEHRAN ONLY"
-    )
-
-    log.info(
-        "MASHHAD DOLLAR = NOT USED"
-    )
-
-    log.info(
-        "===================================="
-    )
-
-    await source_client.run_until_disconnected()
 
 
 # =========================================================
-# START
+# ONE UPDATE
+# =========================================================
+
+async def update_once(
+    client
+):
+
+    telegram_html = (
+        await asyncio.to_thread(
+            get_source_page
+        )
+    )
+
+    rate = parse_telegram_rate(
+        telegram_html
+    )
+
+    if rate is None:
+
+        raise RuntimeError(
+            "نرخ معتبر انس و دلار تهران "
+            "در کانال تقی زادگان پیدا نشد."
+        )
+
+    website_html = (
+        await asyncio.to_thread(
+            get_website_page
+        )
+    )
+
+    products = (
+        parse_website_prices(
+            website_html
+        )
+    )
+
+    signature = json.dumps(
+        {
+            "ounce":
+                rate["ounce"],
+
+            "dollar_tehran":
+                rate["dollar_tehran"],
+
+            "shot_995":
+                products["shot_995"],
+
+            "nader_9999":
+                products["nader_9999"],
+
+            "mithqal_995":
+                products["mithqal_995"],
+
+            "date":
+                rate["date"],
+
+            "time":
+                rate["time"]
+        },
+        sort_keys=True,
+        ensure_ascii=False
+    )
+
+    state = load_state()
+
+    if (
+        state.get("signature")
+        == signature
+    ):
+
+        log.info(
+            "No change: "
+            "ounce=%s | dollar=%s | "
+            "shot995=%s | nader=%s | mithqal=%s",
+            rate["ounce"],
+            rate["dollar_tehran"],
+            products["shot_995"],
+            products["nader_9999"],
+            products["mithqal_995"]
+        )
+
+        return False
+
+    await publish(
+        client,
+        rate,
+        products
+    )
+
+    return True
+
+
+# =========================================================
+# MAIN LOOP
+# =========================================================
+
+async def main():
+
+    if not TARGET_CHANNEL:
+
+        raise RuntimeError(
+            "TARGET_CHANNEL تنظیم نشده است."
+        )
+
+    client = await get_bot_client()
+
+    await client.start(
+        bot_token=BOT_TOKEN
+    )
+
+    log.info(
+        "======================================"
+    )
+
+    log.info(
+        "YAZDANDOUST SILVER BOT STARTED"
+    )
+
+    log.info(
+        "SOURCE: %s",
+        SOURCE_URL
+    )
+
+    log.info(
+        "WEBSITE: %s",
+        WEBSITE_URL
+    )
+
+    log.info(
+        "TARGET: %s",
+        TARGET_CHANNEL
+    )
+
+    log.info(
+        "DOLLAR SOURCE: TEHRAN"
+    )
+
+    log.info(
+        "MASHHAD DOLLAR: NOT USED"
+    )
+
+    log.info(
+        "SOURCE_SESSION: NOT USED"
+    )
+
+    log.info(
+        "======================================"
+    )
+
+    while True:
+
+        try:
+
+            await update_once(
+                client
+            )
+
+        except Exception as error:
+
+            log.exception(
+                "UPDATE ERROR: %s",
+                error
+            )
+
+        await asyncio.sleep(
+            CHECK_INTERVAL
+        )
+
+
+# =========================================================
+# RUN
 # =========================================================
 
 if __name__ == "__main__":
