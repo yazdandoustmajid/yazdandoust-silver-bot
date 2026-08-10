@@ -1,4 +1,6 @@
-requests==2.32.3
-beautifulsoup4==4.13.4
-Pillow==11.3.0
-python-telegram-bot==22.5
+telethon==1.44.0
+Pillow>=11.0,<13.0
+requests>=2.32,<3.0
+beautifulsoup4>=4.13,<5.0
+opencv-python-headless>=4.10,<5.0
+numpy>=2.0,<3.0
