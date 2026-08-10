@@ -1,4 +1,7 @@
-telethon==1.44.0
-Pillow>=11.0,<13.0
-requests>=2.32,<3.0
-beautifulsoup4>=4.13,<5.0
+telethon
+requests
+beautifulsoup4
+Pillow
+opencv-python-headless
+numpy
+tzdata
