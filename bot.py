@@ -28,25 +28,10 @@ STATE = BASE / "state.json"
 # ENVIRONMENT
 # =========================================================
 
-API_ID = os.getenv(
-    "API_ID",
-    ""
-).strip()
-
-API_HASH = os.getenv(
-    "API_HASH",
-    ""
-).strip()
-
-BOT_TOKEN = os.getenv(
-    "BOT_TOKEN",
-    ""
-).strip()
-
-TARGET_CHANNEL = os.getenv(
-    "TARGET_CHANNEL",
-    ""
-).strip()
+API_ID = os.getenv("API_ID", "").strip()
+API_HASH = os.getenv("API_HASH", "").strip()
+BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
+TARGET_CHANNEL = os.getenv("TARGET_CHANNEL", "").strip()
 
 SOURCE_CHANNEL = os.getenv(
     "SOURCE_CHANNEL",
@@ -60,53 +45,42 @@ WEBSITE_URL = os.getenv(
 
 
 # =========================================================
-# FIXED SETTINGS
+# SETTINGS
 # =========================================================
 
 PHONE = "09152449600"
 
 TELEGRAM_ID = "@MajidYazdandoust"
 
-IRAN_TZ = ZoneInfo(
-    "Asia/Tehran"
-)
+IRAN_TZ = ZoneInfo("Asia/Tehran")
 
 MITHQAL_GRAMS = 4.6083
 
 
-MIN_PRODUCT_PRICE = 1_000_000
-
-MAX_PRODUCT_PRICE = 20_000_000_000
-
-
 # =========================================================
-# IMAGE SETTINGS
-# =========================================================
+# IMPORTANT IMAGE COORDINATES
 #
-# REAL TEMPLATE:
-# 1086 x 1448
+# Template = 1086 x 1448
 #
-# The five boxes correspond to:
-#
-# 1. Ounce
-# 2. Tehran Dollar
-# 3. Shot 995
-# 4. Nader 999.9
-# 5. Mithqal 995
-#
+# These coordinates are the ACTUAL five number boxes.
 # =========================================================
 
 NUMBER_BOXES = [
 
-    (570, 435, 850, 510),
+    # 1 - انس نقره
+    (505, 585, 900, 665),
 
-    (570, 550, 850, 635),
+    # 2 - دلار
+    (505, 750, 900, 830),
 
-    (570, 665, 850, 750),
+    # 3 - ساچمه 995
+    (505, 915, 900, 995),
 
-    (570, 785, 850, 870),
+    # 4 - شمش نادیر 999.9
+    (505, 1075, 900, 1155),
 
-    (570, 900, 850, 990),
+    # 5 - مثقال نقره 995
+    (505, 1235, 900, 1315),
 
 ]
 
@@ -120,21 +94,16 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(message)s"
 )
 
-log = logging.getLogger(
-    "YAZDANDOUST"
-)
+log = logging.getLogger("YAZDANDOUST")
 
 
 # =========================================================
-# DIGIT NORMALIZATION
+# DIGITS
 # =========================================================
 
 PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
-
 ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
-
 ENGLISH_DIGITS = "0123456789"
-
 
 DIGIT_TABLE = str.maketrans(
     PERSIAN_DIGITS + ARABIC_DIGITS,
@@ -144,18 +113,12 @@ DIGIT_TABLE = str.maketrans(
 
 def normalize_digits(text):
 
-    return (
-        text or ""
-    ).translate(
-        DIGIT_TABLE
-    )
+    return (text or "").translate(DIGIT_TABLE)
 
 
 def clean_text(text):
 
-    text = normalize_digits(
-        text
-    )
+    text = normalize_digits(text)
 
     text = (
         text
@@ -174,9 +137,7 @@ def clean_text(text):
 
 def integer_value(text):
 
-    text = normalize_digits(
-        text or ""
-    )
+    text = normalize_digits(text or "")
 
     text = (
         text
@@ -192,7 +153,6 @@ def integer_value(text):
     )
 
     if not text:
-
         return None
 
     return int(text)
@@ -200,9 +160,7 @@ def integer_value(text):
 
 def decimal_value(text):
 
-    text = normalize_digits(
-        text or ""
-    )
+    text = normalize_digits(text or "")
 
     text = (
         text
@@ -218,15 +176,12 @@ def decimal_value(text):
     )
 
     if not text:
-
         return None
 
     try:
-
         return float(text)
 
     except ValueError:
-
         return None
 
 
@@ -236,56 +191,39 @@ def format_price(value):
 
 
 # =========================================================
-# IRAN DATE / TIME
+# IRAN DATE
 # =========================================================
 
 def iran_now():
 
-    return datetime.now(
-        IRAN_TZ
-    )
+    return datetime.now(IRAN_TZ)
 
 
-def gregorian_to_jalali(
-    gy,
-    gm,
-    gd
-):
+def gregorian_to_jalali(gy, gm, gd):
 
     g_days_in_month = [
-
         31, 28, 31, 30, 31, 30,
         31, 31, 30, 31, 30, 31
-
     ]
 
     j_days_in_month = [
-
         31, 31, 31, 31, 31, 31,
         30, 30, 30, 30, 30, 29
-
     ]
 
     gy2 = gy - 1600
-
     gm2 = gm - 1
-
     gd2 = gd - 1
 
     g_day_no = (
-
         365 * gy2
         + (gy2 + 3) // 4
         - (gy2 + 99) // 100
         + (gy2 + 399) // 400
-
     )
 
     for i in range(gm2):
-
-        g_day_no += (
-            g_days_in_month[i]
-        )
+        g_day_no += g_days_in_month[i]
 
     if (
         gm2 > 1
@@ -297,18 +235,13 @@ def gregorian_to_jalali(
             )
         )
     ):
-
         g_day_no += 1
 
     g_day_no += gd2
 
-    j_day_no = (
-        g_day_no - 79
-    )
+    j_day_no = g_day_no - 79
 
-    j_np = (
-        j_day_no // 12053
-    )
+    j_np = j_day_no // 12053
 
     j_day_no %= 12053
 
@@ -337,14 +270,11 @@ def gregorian_to_jalali(
         and j_day_no >= j_days_in_month[i]
     ):
 
-        j_day_no -= (
-            j_days_in_month[i]
-        )
+        j_day_no -= j_days_in_month[i]
 
         i += 1
 
     jm = i + 1
-
     jd = j_day_no + 1
 
     return jy, jm, jd
@@ -360,131 +290,19 @@ def iran_date_string():
         now.day
     )
 
-    return (
-        f"{jy:04d}/"
-        f"{jm:02d}/"
-        f"{jd:02d}"
-    )
+    return f"{jy:04d}/{jm:02d}/{jd:02d}"
 
 
 def iran_time_string():
 
-    return iran_now().strftime(
-        "%H:%M"
-    )
+    return iran_now().strftime("%H:%M")
 
 
 # =========================================================
-# SOURCE RATE PARSER
+# TELEGRAM PUBLIC SOURCE
 # =========================================================
 
-def parse_rate_message(text):
-
-    if not text:
-
-        return None
-
-    text = clean_text(
-        text
-    )
-
-    compact = text.replace(
-        " ",
-        ""
-    )
-
-    if "انس" not in compact:
-
-        return None
-
-    if "دلارتهران" not in compact:
-
-        return None
-
-    if not any(
-        marker in compact
-        for marker in (
-            "جدولنرخ",
-            "نرخخریددفروش",
-            "نرخ"
-        )
-    ):
-
-        return None
-
-    ounce_match = re.search(
-        r"انس\s*:?\s*([\d,.]+)",
-        text
-    )
-
-    if not ounce_match:
-
-        return None
-
-    tehran_match = re.search(
-        r"دلار\s*تهران"
-        r"\s*(?:حدود)?"
-        r"\s*:?\s*"
-        r"([\d,٬ ]+)",
-        text
-    )
-
-    if not tehran_match:
-
-        return None
-
-    ounce = decimal_value(
-        ounce_match.group(1)
-    )
-
-    tehran = integer_value(
-        tehran_match.group(1)
-    )
-
-    if ounce is None:
-
-        return None
-
-    if tehran is None:
-
-        return None
-
-    if not 20 <= ounce <= 150:
-
-        log.warning(
-            "Invalid ounce: %s",
-            ounce
-        )
-
-        return None
-
-    if not 50_000 <= tehran <= 2_000_000:
-
-        log.warning(
-            "Invalid Tehran dollar: %s",
-            tehran
-        )
-
-        return None
-
-    return {
-
-        "ounce":
-            ounce,
-
-        "tehran":
-            tehran
-
-    }
-
-
-# =========================================================
-# PUBLIC TELEGRAM SOURCE
-# =========================================================
-
-def public_source_url(
-    before=None
-):
+def public_source_url(before=None):
 
     url = (
         "https://t.me/s/"
@@ -492,25 +310,16 @@ def public_source_url(
     )
 
     if before:
-
-        url += (
-            f"?before={int(before)}"
-        )
+        url += f"?before={int(before)}"
 
     return url
 
 
-def fetch_public_page(
-    before=None
-):
-
-    url = public_source_url(
-        before
-    )
+def fetch_public_page(before=None):
 
     response = requests.get(
 
-        url,
+        public_source_url(before),
 
         headers={
 
@@ -530,7 +339,7 @@ def fetch_public_page(
 
             "Accept-Language":
                 "fa-IR,fa;q=0.9,"
-                "en-US;q=0.8,en;q=0.7",
+                "en-US;q=0.8,en;q=0.7"
 
         },
 
@@ -543,9 +352,7 @@ def fetch_public_page(
     return response.text
 
 
-def parse_public_messages(
-    html
-):
+def parse_public_messages(html):
 
     soup = BeautifulSoup(
         html,
@@ -602,29 +409,79 @@ def parse_public_messages(
         )
 
     result.sort(
-        key=lambda item: item[0],
+        key=lambda x: x[0],
         reverse=True
     )
 
     return result
 
 
+# =========================================================
+# RATE PARSER
+# =========================================================
+
+def parse_rate_message(text):
+
+    text = clean_text(text)
+
+    compact = text.replace(
+        " ",
+        ""
+    )
+
+    # Must be an actual rate-table message.
+    if "انس:" not in text and "انس :" not in text:
+        return None
+
+    if "دلارتهران" not in compact:
+        return None
+
+    ounce_match = re.search(
+        r"انس\s*:?\s*([\d,.]+)",
+        text
+    )
+
+    if not ounce_match:
+        return None
+
+    dollar_match = re.search(
+        r"دلار\s*تهران\s*(?:حدود)?\s*:?\s*([\d,٬ ]+)",
+        text
+    )
+
+    if not dollar_match:
+        return None
+
+    ounce = decimal_value(
+        ounce_match.group(1)
+    )
+
+    tehran = integer_value(
+        dollar_match.group(1)
+    )
+
+    if ounce is None or tehran is None:
+        return None
+
+    if not 20 <= ounce <= 150:
+        return None
+
+    if not 50_000 <= tehran <= 2_000_000:
+        return None
+
+    return {
+        "ounce": ounce,
+        "tehran": tehran
+    }
+
+
 def find_latest_public_rate():
 
     before = None
 
-    seen_min_ids = set()
+    seen = set()
 
-    # Search backwards through public
-    # Telegram pages.
-    #
-    # The first valid rate message found
-    # is the newest valid rate message.
-
-    for page_number in range(
-        1,
-        31
-    ):
+    for page_number in range(1, 31):
 
         html = fetch_public_page(
             before
@@ -635,7 +492,6 @@ def find_latest_public_rate():
         )
 
         if not messages:
-
             break
 
         log.info(
@@ -644,10 +500,7 @@ def find_latest_public_rate():
             len(messages)
         )
 
-        for (
-            message_id,
-            text
-        ) in messages:
+        for message_id, text in messages:
 
             rate = parse_rate_message(
                 text
@@ -656,7 +509,7 @@ def find_latest_public_rate():
             if rate:
 
                 log.info(
-                    "PUBLIC SOURCE RATE FOUND | %s/%s",
+                    "SOURCE RATE FOUND | %s/%s",
                     SOURCE_CHANNEL,
                     message_id
                 )
@@ -671,77 +524,32 @@ def find_latest_public_rate():
                     rate["tehran"]
                 )
 
-                return (
-                    rate,
-                    message_id
-                )
+                return rate, message_id
 
         min_id = min(
-            message_id
-            for message_id, _ in messages
+            x[0]
+            for x in messages
         )
 
-        if min_id in seen_min_ids:
-
+        if min_id in seen:
             break
 
-        seen_min_ids.add(
-            min_id
-        )
+        seen.add(min_id)
 
         before = min_id
 
     raise RuntimeError(
-        "هیچ پیام معتبر شامل "
-        "انس و دلار تهران "
-        "در کانال عمومی پیدا نشد."
+        "هیچ نرخ معتبر شامل انس و دلار تهران پیدا نشد."
     )
 
 
 # =========================================================
-# WEBSITE PRODUCTS
+# WEBSITE PRICE EXTRACTION
 # =========================================================
 
-PRODUCT_ALIASES = {
+def normalize_product_name(text):
 
-    "shot_995": [
-
-        "نقره ساچمه 1000 گرمی با عیار 995",
-
-        "نقره ساچمه ۱۰۰۰ گرمی با عیار ۹۹۵",
-
-        "ساچمه 1000 گرمی 995",
-
-        "ساچمه ۱۰۰۰ گرمی ۹۹۵",
-
-    ],
-
-    "nader_9999": [
-
-        "شمش 1000 گرمی 999.9 نادیر",
-
-        "شمش 1000 گرمی ۹۹۹.۹ نادیر",
-
-        "شمش ۱۰۰۰ گرمی 999.9 نادیر",
-
-        "شمش ۱۰۰۰ گرمی ۹۹۹.۹ نادیر",
-
-        "شمش 1000 گرمی نادیر",
-
-        "شمش ۱۰۰۰ گرمی نادیر",
-
-    ],
-
-}
-
-
-def normalize_product_name(
-    text
-):
-
-    text = clean_text(
-        text
-    )
+    text = clean_text(text)
 
     return (
         text
@@ -752,166 +560,177 @@ def normalize_product_name(
     )
 
 
-def product_name_matches(
-    text,
-    aliases
-):
+def parse_price_number(text):
 
-    normalized = normalize_product_name(
+    text = normalize_digits(
+        text or ""
+    )
+
+    text = (
         text
+        .replace("٬", ",")
+        .replace("٫", ".")
     )
 
-    compact = normalized.replace(
-        " ",
-        ""
-    )
-
-    for alias in aliases:
-
-        alias_normalized = (
-            normalize_product_name(
-                alias
-            )
-        )
-
-        if (
-            alias_normalized
-            in normalized
-        ):
-
-            return True
-
-        alias_compact = (
-            alias_normalized
-            .replace(" ", "")
-        )
-
-        if (
-            alias_compact
-            in compact
-        ):
-
-            return True
-
-    return False
-
-
-def extract_prices_from_text(
-    text
-):
-
-    text = clean_text(
+    matches = re.findall(
+        r"\d[\d,\.]*",
         text
     )
 
     values = []
 
-    patterns = [
+    for item in matches:
 
-        r"([\d][\d.,٬ ]*)\s*تومان",
-
-        r"تومان\s*([\d][\d.,٬ ]*)",
-
-    ]
-
-    for pattern in patterns:
-
-        for match in re.findall(
-            pattern,
-            text
-        ):
-
-            value = integer_value(
-                match
-            )
-
-            if value is None:
-
-                continue
-
-            if (
-                MIN_PRODUCT_PRICE
-                <= value
-                <= MAX_PRODUCT_PRICE
-            ):
-
-                if value not in values:
-
-                    values.append(
-                        value
-                    )
-
-    return values
-
-
-def find_exact_product_price(
-    soup,
-    aliases
-):
-
-    candidates = soup.find_all(
-
-        [
-            "h1",
-            "h2",
-            "h3",
-            "h4",
-            "h5",
-            "a",
-            "li",
-            "div",
-            "article",
-            "section"
-        ]
-
-    )
-
-    for element in candidates:
-
-        own_text = element.get_text(
-            " ",
-            strip=True
+        raw = item.replace(
+            ",",
+            ""
         )
 
-        if not own_text:
+        raw = raw.replace(
+            ".",
+            ""
+        )
+
+        if not raw:
+            continue
+
+        try:
+
+            value = int(raw)
+
+        except ValueError:
 
             continue
 
-        if not product_name_matches(
-            own_text,
-            aliases
+        if (
+            1_000_000
+            <= value
+            <= 20_000_000_000
         ):
 
-            continue
+            values.append(value)
 
-        parent = element
+    if not values:
+        return None
 
-        for _ in range(10):
+    return values[-1]
 
-            if parent is None:
 
-                break
+def find_product_card(
+    soup,
+    exact_title
+):
 
-            parent_text = parent.get_text(
+    wanted = normalize_product_name(
+        exact_title
+    )
+
+    # WooCommerce product title elements.
+    title_nodes = soup.select(
+        "h2.woocommerce-loop-product__title,"
+        "h3.woocommerce-loop-product__title,"
+        "h2,"
+        "h3"
+    )
+
+    for title in title_nodes:
+
+        title_text = normalize_product_name(
+            title.get_text(
                 " ",
                 strip=True
             )
+        )
 
-            if len(parent_text) > 1800:
+        if title_text != wanted:
+            continue
 
-                parent = parent.parent
+        # The product card is normally
+        # the nearest <li class="product">.
+        card = title.find_parent(
+            "li",
+            class_=lambda c:
+                c and "product" in c
+        )
 
-                continue
+        if card:
+            return card
 
-            prices = extract_prices_from_text(
-                parent_text
-            )
+        # Fallback: nearest element with
+        # product-related class.
+        parent = title
 
-            if prices:
-
-                return prices[-1]
+        for _ in range(8):
 
             parent = parent.parent
+
+            if parent is None:
+                break
+
+            classes = " ".join(
+                parent.get(
+                    "class",
+                    []
+                )
+            )
+
+            if "product" in classes:
+
+                return parent
+
+    return None
+
+
+def get_current_price_from_card(card):
+
+    # BEST CASE:
+    # WooCommerce sale product has:
+    #
+    # <del>old price</del>
+    # <ins>new price</ins>
+    #
+    # We ALWAYS prefer <ins>.
+
+    ins = card.select_one(
+        ".price ins"
+    )
+
+    if ins:
+
+        price = parse_price_number(
+            ins.get_text(
+                " ",
+                strip=True
+            )
+        )
+
+        if price:
+            return price
+
+    # Second choice:
+    # Any explicit current-price class.
+    for selector in [
+
+        ".woocommerce-Price-amount",
+        ".price"
+
+    ]:
+
+        nodes = card.select(
+            selector
+        )
+
+        for node in reversed(nodes):
+
+            price = parse_price_number(
+                node.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+
+            if price:
+                return price
 
     return None
 
@@ -940,7 +759,7 @@ def get_website_prices_sync():
 
             "Accept-Language":
                 "fa-IR,fa;q=0.9,"
-                "en-US;q=0.8,en;q=0.7",
+                "en-US;q=0.8,en;q=0.7"
 
         },
 
@@ -955,49 +774,67 @@ def get_website_prices_sync():
         "html.parser"
     )
 
-    shot_package = (
-        find_exact_product_price(
-            soup,
-            PRODUCT_ALIASES[
-                "shot_995"
-            ]
+    # =====================================================
+    # EXACT PRODUCT 1
+    # =====================================================
+
+    shot_title = (
+        "نقره ساچمه 1000 گرمی با عیار 995"
+    )
+
+    shot_card = find_product_card(
+        soup,
+        shot_title
+    )
+
+    if shot_card is None:
+
+        raise RuntimeError(
+            "محصول دقیق «نقره ساچمه 1000 گرمی با عیار 995» پیدا نشد."
         )
-    )
 
-    nader_package = (
-        find_exact_product_price(
-            soup,
-            PRODUCT_ALIASES[
-                "nader_9999"
-            ]
-        )
-    )
-
-    log.info(
-        "WEBSITE | Shot 995 / 1kg = %s",
-        shot_package
-    )
-
-    log.info(
-        "WEBSITE | Nader 999.9 / 1kg = %s",
-        nader_package
+    shot_package = get_current_price_from_card(
+        shot_card
     )
 
     if shot_package is None:
 
         raise RuntimeError(
-            "قیمت دقیق ساچمه "
-            "1000 گرمی عیار 995 "
-            "در سایت تقی‌زادگان پیدا نشد."
+            "قیمت محصول دقیق ساچمه 1000 گرمی 995 پیدا نشد."
         )
+
+    # =====================================================
+    # EXACT PRODUCT 2
+    # =====================================================
+
+    nader_title = (
+        "شمش 1000 گرمی 999.9 نادیر"
+    )
+
+    nader_card = find_product_card(
+        soup,
+        nader_title
+    )
+
+    if nader_card is None:
+
+        raise RuntimeError(
+            "محصول دقیق «شمش 1000 گرمی 999.9 نادیر» پیدا نشد."
+        )
+
+    nader_package = get_current_price_from_card(
+        nader_card
+    )
 
     if nader_package is None:
 
         raise RuntimeError(
-            "قیمت دقیق شمش "
-            "1000 گرمی 999.9 نادیر "
-            "در سایت تقی‌زادگان پیدا نشد."
+            "قیمت محصول دقیق شمش نادیر 1000 گرمی پیدا نشد."
         )
+
+    # =====================================================
+    # CALCULATIONS
+    # =====================================================
 
     shot_995_per_gram = (
         shot_package / 1000
@@ -1008,19 +845,55 @@ def get_website_prices_sync():
     )
 
     mithqal_995 = (
-
         shot_995_per_gram
         * MITHQAL_GRAMS
-
     )
 
+    # Round to nearest 100 تومان.
     mithqal_995 = (
-
         round(
             mithqal_995 / 100
         )
         * 100
+    )
 
+    log.info(
+        "WEBSITE EXACT PRODUCT:"
+    )
+
+    log.info(
+        "Shot 995 / 1kg = %s",
+        format_price(
+            shot_package
+        )
+    )
+
+    log.info(
+        "Nader 999.9 / 1kg = %s",
+        format_price(
+            nader_package
+        )
+    )
+
+    log.info(
+        "Shot 995 / gram = %s",
+        format_price(
+            shot_995_per_gram
+        )
+    )
+
+    log.info(
+        "Nader 999.9 / gram = %s",
+        format_price(
+            nader_9999_per_gram
+        )
+    )
+
+    log.info(
+        "Mithqal 995 = %s",
+        format_price(
+            mithqal_995
+        )
     )
 
     return {
@@ -1052,7 +925,7 @@ def get_website_prices_sync():
         "nader_package":
             int(
                 nader_package
-            ),
+            )
 
     }
 
@@ -1061,10 +934,7 @@ async def get_website_prices():
 
     last_error = None
 
-    for attempt in range(
-        1,
-        5
-    ):
+    for attempt in range(1, 5):
 
         try:
 
@@ -1084,9 +954,7 @@ async def get_website_prices():
 
             if attempt < 4:
 
-                await asyncio.sleep(
-                    5
-                )
+                await asyncio.sleep(5)
 
     raise RuntimeError(
         f"خطا در دریافت قیمت سایت: {last_error}"
@@ -1108,7 +976,7 @@ def get_font(size):
         "LiberationSans-Bold.ttf",
 
         "/usr/share/fonts/truetype/dejavu/"
-        "DejaVuSans.ttf",
+        "DejaVuSans.ttf"
 
     ]
 
@@ -1125,44 +993,31 @@ def get_font(size):
 
 
 # =========================================================
-# IMAGE
+# IMAGE DRAWING
 # =========================================================
 
 def fit_font_to_box(
-
     draw,
     text,
     box,
     max_size=46,
-    min_size=24,
-    horizontal_padding=16
-
+    min_size=25
 ):
 
     x1, y1, x2, y2 = box
 
     available_width = (
-
-        x2
-        - x1
-        - horizontal_padding * 2
-
+        x2 - x1 - 30
     )
 
     available_height = (
-
-        y2
-        - y1
-        - 8
-
+        y2 - y1 - 10
     )
 
     for size in range(
-
         max_size,
         min_size - 1,
         -1
-
     ):
 
         font = get_font(
@@ -1170,11 +1025,9 @@ def fit_font_to_box(
         )
 
         bbox = draw.textbbox(
-
             (0, 0),
             text,
             font=font
-
         )
 
         width = (
@@ -1188,15 +1041,9 @@ def fit_font_to_box(
         )
 
         if (
-
-            width
-            <= available_width
-
+            width <= available_width
             and
-
-            height
-            <= available_height
-
+            height <= available_height
         ):
 
             return font
@@ -1206,24 +1053,47 @@ def fit_font_to_box(
     )
 
 
-def draw_centered(
+def clear_number_box(
+    draw,
+    box
+):
 
+    # IMPORTANT:
+    # The clean template should already contain
+    # the original green/gold box.
+    #
+    # We only clear the central text area,
+    # not the borders.
+
+    x1, y1, x2, y2 = box
+
+    draw.rectangle(
+
+        (
+            x1 + 8,
+            y1 + 7,
+            x2 - 8,
+            y2 - 7
+        ),
+
+        fill=(7, 32, 24)
+
+    )
+
+
+def draw_centered(
     draw,
     box,
     text,
-    font,
-    color=(235, 213, 170)
-
+    font
 ):
 
     x1, y1, x2, y2 = box
 
     bbox = draw.textbbox(
-
         (0, 0),
         text,
         font=font
-
     )
 
     text_width = (
@@ -1237,27 +1107,19 @@ def draw_centered(
     )
 
     x = (
-
         x1
         + (
-            x2
-            - x1
-            - text_width
+            x2 - x1 - text_width
         ) / 2
         - bbox[0]
-
     )
 
     y = (
-
         y1
         + (
-            y2
-            - y1
-            - text_height
+            y2 - y1 - text_height
         ) / 2
         - bbox[1]
-
     )
 
     draw.text(
@@ -1271,7 +1133,7 @@ def draw_centered(
 
         font=font,
 
-        fill=color
+        fill=(235, 213, 170)
 
     )
 
@@ -1284,8 +1146,7 @@ def create_board(
     if not TEMPLATE.exists():
 
         raise RuntimeError(
-            "فایل "
-            "board_only_preview.png "
+            "فایل board_only_preview.png "
             "کنار bot.py پیدا نشد."
         )
 
@@ -1295,9 +1156,6 @@ def create_board(
         "RGB"
     )
 
-    # IMPORTANT:
-    # Actual template dimensions are 1086 x 1448.
-
     if image.size != (
         1086,
         1448
@@ -1305,13 +1163,9 @@ def create_board(
 
         raise RuntimeError(
 
-            "ابعاد "
-            "board_only_preview.png "
-            "باید دقیقاً "
-            "1086x1448 باشد. "
-            f"ابعاد فعلی: "
-            f"{image.size[0]}x"
-            f"{image.size[1]}"
+            "ابعاد فایل board_only_preview.png "
+            "باید 1086x1448 باشد. "
+            f"ابعاد فعلی: {image.size}"
 
         )
 
@@ -1319,46 +1173,58 @@ def create_board(
         image
     )
 
+    # =====================================================
+    # EXACT VALUES
+    # =====================================================
+
     values = [
 
+        # 1
         f"{rate['ounce']:.2f}",
 
+        # 2
         format_price(
             rate["tehran"]
         ),
 
+        # 3
         format_price(
             products["shot_995"]
         ),
 
+        # 4
         format_price(
             products["nader_9999"]
         ),
 
+        # 5
         format_price(
             products["mithqal_995"]
-        ),
+        )
 
     ]
 
-    for box, value in zip(
+    # =====================================================
+    # DRAW EACH VALUE IN ITS OWN ROW
+    # =====================================================
 
+    for box, value in zip(
         NUMBER_BOXES,
         values
-
     ):
 
-        if "." in value:
+        clear_number_box(
+            draw,
+            box
+        )
 
-            max_size = 43
+        if len(value) >= 10:
 
-        elif len(value) >= 10:
-
-            max_size = 39
+            max_size = 38
 
         elif len(value) >= 8:
 
-            max_size = 42
+            max_size = 41
 
         else:
 
@@ -1367,9 +1233,13 @@ def create_board(
         font = fit_font_to_box(
 
             draw,
+
             value,
+
             box,
+
             max_size=max_size,
+
             min_size=25
 
         )
@@ -1377,8 +1247,11 @@ def create_board(
         draw_centered(
 
             draw,
+
             box,
+
             value,
+
             font
 
         )
@@ -1443,61 +1316,52 @@ def make_caption():
 def load_state():
 
     if not STATE.exists():
-
         return {}
 
     try:
 
         data = json.loads(
-
             STATE.read_text(
                 encoding="utf-8"
             )
-
         )
 
-        if not isinstance(
+        if isinstance(
             data,
             dict
         ):
 
-            return {}
-
-        return data
+            return data
 
     except Exception as error:
 
         log.warning(
-            "Could not read state.json: %s",
+            "State read error: %s",
             error
         )
 
-        return {}
+    return {}
 
 
 def save_state(state):
 
-    temporary = STATE.with_suffix(
+    temp = STATE.with_suffix(
         ".tmp"
     )
 
-    temporary.write_text(
+    temp.write_text(
 
         json.dumps(
-
             state,
-
             ensure_ascii=False,
-
             indent=2
-
         ),
 
         encoding="utf-8"
 
     )
 
-    temporary.replace(
+    temp.replace(
         STATE
     )
 
@@ -1507,12 +1371,10 @@ def save_state(state):
 # =========================================================
 
 async def send_new_post(
-
     client,
     target,
     image,
     caption
-
 ):
 
     sent = await client.send_file(
@@ -1526,7 +1388,7 @@ async def send_new_post(
     )
 
     log.info(
-        "NEW TARGET POST SENT | message_id=%s",
+        "NEW POST CREATED | target_message_id=%s",
         sent.id
     )
 
@@ -1544,36 +1406,22 @@ async def main():
     missing = []
 
     if not API_ID:
-
-        missing.append(
-            "API_ID"
-        )
+        missing.append("API_ID")
 
     if not API_HASH:
-
-        missing.append(
-            "API_HASH"
-        )
+        missing.append("API_HASH")
 
     if not BOT_TOKEN:
-
-        missing.append(
-            "BOT_TOKEN"
-        )
+        missing.append("BOT_TOKEN")
 
     if not TARGET_CHANNEL:
-
-        missing.append(
-            "TARGET_CHANNEL"
-        )
+        missing.append("TARGET_CHANNEL")
 
     if missing:
 
         raise RuntimeError(
-
-            "این متغیرها تنظیم نشده‌اند: "
+            "Secrets missing: "
             + ", ".join(missing)
-
         )
 
     try:
@@ -1585,100 +1433,49 @@ async def main():
     except ValueError:
 
         raise RuntimeError(
-            "API_ID باید فقط عدد باشد."
+            "API_ID باید عدد باشد."
         )
 
     if not TEMPLATE.exists():
 
         raise RuntimeError(
-
-            "فایل "
-            "board_only_preview.png "
-            "باید کنار bot.py باشد."
-
+            "board_only_preview.png پیدا نشد."
         )
 
-    log.info(
-        "===================================="
-    )
+    # =====================================================
+    # GET LATEST SOURCE RATE
+    # =====================================================
 
-    log.info(
-        "YAZDANDOUST SILVER BOT"
-    )
-
-    log.info(
-        "ONE SHOT RUN"
-    )
-
-    log.info(
-        "PUBLIC SOURCE = https://t.me/s/%s",
-        SOURCE_CHANNEL
-    )
-
-    log.info(
-        "TARGET = %s",
-        TARGET_CHANNEL
-    )
-
-    log.info(
-        "WEBSITE = %s",
-        WEBSITE_URL
-    )
-
-    log.info(
-        "MODE = NEW POST FOR EVERY NEW SOURCE RATE MESSAGE"
-    )
-
-    log.info(
-        "===================================="
+    rate, source_message_id = (
+        await asyncio.to_thread(
+            find_latest_public_rate
+        )
     )
 
     # =====================================================
-    # 1. FIND LATEST VALID SOURCE MESSAGE
-    # =====================================================
-
-    (
-        rate,
-        source_message_id
-    ) = await asyncio.to_thread(
-
-        find_latest_public_rate
-
-    )
-
-    # =====================================================
-    # 2. LOAD STATE
+    # LOAD STATE
     # =====================================================
 
     state = load_state()
 
-    last_source_message_id = state.get(
-        "source_message_id"
+    last_source_message_id = (
+        state.get(
+            "source_message_id"
+        )
     )
 
     log.info(
-        "LAST SOURCE MESSAGE ID = %s",
+        "LAST SOURCE MESSAGE = %s",
         last_source_message_id
     )
 
     log.info(
-        "CURRENT SOURCE MESSAGE ID = %s",
+        "CURRENT SOURCE MESSAGE = %s",
         source_message_id
     )
 
     # =====================================================
-    # 3. IMPORTANT:
-    #
-    # Only message ID matters.
-    #
-    # If source posted a NEW message:
-    #     create a NEW target post.
-    #
-    # Even if prices are identical.
-    #
-    # If source message ID is unchanged:
-    #     do nothing.
-    #
+    # SAME MESSAGE = DO NOTHING
     # =====================================================
 
     if (
@@ -1697,59 +1494,32 @@ async def main():
     ):
 
         log.info(
-            "SAME SOURCE MESSAGE - NOTHING TO POST"
+            "SOURCE MESSAGE ALREADY PROCESSED."
         )
 
         return
 
     # =====================================================
-    # 4. GET WEBSITE PRICES
+    # GET EXACT WEBSITE PRICES
     # =====================================================
 
     products = (
         await get_website_prices()
     )
 
-    log.info(
-        "SOURCE OUNCE = %s",
-        rate["ounce"]
-    )
-
-    log.info(
-        "SOURCE TEHRAN USD = %s",
-        rate["tehran"]
-    )
-
-    log.info(
-        "SHOT 995 / GRAM = %s",
-        products["shot_995"]
-    )
-
-    log.info(
-        "NADER 999.9 / GRAM = %s",
-        products["nader_9999"]
-    )
-
-    log.info(
-        "MITHQAL 995 = %s",
-        products["mithqal_995"]
-    )
-
     # =====================================================
-    # 5. CREATE NEW BOARD
+    # CREATE IMAGE
     # =====================================================
 
     image = create_board(
-
         rate,
         products
-
     )
 
     caption = make_caption()
 
     # =====================================================
-    # 6. CONNECT BOT
+    # TELEGRAM
     # =====================================================
 
     client = TelegramClient(
@@ -1774,18 +1544,16 @@ async def main():
 
     )
 
-    message_id = None
+    target_message_id = None
 
     try:
 
         log.info(
-            "Connecting Telegram bot..."
+            "Connecting Telegram..."
         )
 
         await client.start(
-
             bot_token=BOT_TOKEN
-
         )
 
         target = (
@@ -1800,10 +1568,10 @@ async def main():
         )
 
         # =================================================
-        # 7. ALWAYS SEND A NEW POST
+        # NEW POST
         # =================================================
 
-        message_id = (
+        target_message_id = (
             await send_new_post(
 
                 client,
@@ -1822,68 +1590,47 @@ async def main():
         await client.disconnect()
 
     # =====================================================
-    # 8. SAVE SOURCE MESSAGE ID
-    # =====================================================
-    #
-    # This does NOT edit or delete old Telegram posts.
-    #
-    # It only remembers which source message has already
-    # been processed.
-    #
+    # SAVE STATE
     # =====================================================
 
-    save_state(
+    save_state({
 
-        {
+        "source_message_id":
+            int(
+                source_message_id
+            ),
 
-            "source_message_id":
-                int(
-                    source_message_id
-                ),
+        "target_message_id":
+            int(
+                target_message_id
+            ),
 
-            "target_message_id":
-                int(
-                    message_id
-                ),
+        "ounce":
+            rate["ounce"],
 
-            "ounce":
-                rate["ounce"],
+        "tehran":
+            rate["tehran"],
 
-            "tehran":
-                rate["tehran"],
+        "shot_995":
+            products["shot_995"],
 
-            "shot_995":
-                products["shot_995"],
+        "nader_9999":
+            products["nader_9999"],
 
-            "nader_9999":
-                products["nader_9999"],
+        "mithqal_995":
+            products["mithqal_995"],
 
-            "mithqal_995":
-                products["mithqal_995"],
+        "updated_at":
+            iran_now().isoformat()
 
-            "date":
-                iran_date_string(),
+    })
 
-            "time":
-                iran_time_string(),
-
-            "updated_at":
-                iran_now().isoformat()
-
-        }
-
+    log.info(
+        "STATE SAVED"
     )
 
     log.info(
-        "SOURCE MESSAGE PROCESSED"
-    )
-
-    log.info(
-        "NEW TARGET POST CREATED"
-    )
-
-    log.info(
-        "===================================="
+        "SUCCESS"
     )
 
 
@@ -1902,7 +1649,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         log.info(
-            "BOT STOPPED"
+            "STOPPED"
         )
 
     except Exception:
