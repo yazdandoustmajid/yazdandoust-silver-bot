@@ -12,9 +12,12 @@ import numpy as np
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
-from telethon import TelegramClient, events
-from telethon.sessions import StringSession
+from telethon import TelegramClient
 
+
+# =========================================================
+# PATHS
+# =========================================================
 
 BASE = Path(__file__).resolve().parent
 
@@ -24,34 +27,35 @@ STATE = BASE / "state.json"
 OUTPUT = BASE / "latest_price.jpg"
 
 
+# =========================================================
+# ENVIRONMENT
+# =========================================================
+
 API_ID = os.getenv("API_ID", "").strip()
+
 API_HASH = os.getenv("API_HASH", "").strip()
+
 BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
-
-
-SOURCE_SESSION = os.getenv(
-    "SOURCE_SESSION",
-    ""
-).strip()
-
 
 SOURCE_CHANNEL = os.getenv(
     "SOURCE_CHANNEL",
     "tghsilver"
-).strip()
-
+).strip().lstrip("@")
 
 TARGET_CHANNEL = os.getenv(
     "TARGET_CHANNEL",
     ""
 ).strip()
 
-
 WEBSITE_URL = os.getenv(
     "WEBSITE_URL",
     "https://taghizadegan.com"
 ).strip()
 
+
+# =========================================================
+# BUSINESS SETTINGS
+# =========================================================
 
 PHONE = "09152449600"
 
@@ -60,7 +64,6 @@ TELEGRAM_ID = "@MajidYazdandoust"
 IRAN_TZ = ZoneInfo(
     "Asia/Tehran"
 )
-
 
 MITHQAL_GRAMS = 4.6083
 
@@ -74,6 +77,10 @@ MIN_PRODUCT_PRICE = 1_000_000
 MAX_PRODUCT_PRICE = 20_000_000_000
 
 
+# =========================================================
+# NUMBER BOXES
+# =========================================================
+
 NUMBER_BOXES = [
     (570, 435, 850, 510),
     (570, 550, 850, 635),
@@ -83,11 +90,14 @@ NUMBER_BOXES = [
 ]
 
 
+# =========================================================
+# LOGGING
+# =========================================================
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s"
 )
-
 
 log = logging.getLogger(
     "YAZDANDOUST"
@@ -104,7 +114,6 @@ ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
 
 ENGLISH_DIGITS = "0123456789"
 
-
 DIGIT_TABLE = str.maketrans(
     PERSIAN_DIGITS + ARABIC_DIGITS,
     ENGLISH_DIGITS + ENGLISH_DIGITS
@@ -112,6 +121,7 @@ DIGIT_TABLE = str.maketrans(
 
 
 def normalize_digits(text):
+
     return (
         text or ""
     ).translate(
@@ -160,9 +170,16 @@ def integer_value(text):
     )
 
     if not text:
+
         return None
 
-    return int(text)
+    try:
+
+        return int(text)
+
+    except ValueError:
+
+        return None
 
 
 def decimal_value(text):
@@ -185,11 +202,15 @@ def decimal_value(text):
     )
 
     if not text:
+
         return None
 
     try:
+
         return float(text)
+
     except ValueError:
+
         return None
 
 
@@ -202,7 +223,11 @@ def format_price(value):
 # JALALI DATE
 # =========================================================
 
-def gregorian_to_jalali(gy, gm, gd):
+def gregorian_to_jalali(
+    gy,
+    gm,
+    gd
+):
 
     g_days_in_month = [
         31, 28, 31, 30, 31, 30,
@@ -317,6 +342,120 @@ def iran_time_string():
 
 
 # =========================================================
+# SOURCE CHANNEL
+# PUBLIC TELEGRAM CHANNEL
+# =========================================================
+
+def get_public_channel_url():
+
+    return (
+        f"https://t.me/s/"
+        f"{SOURCE_CHANNEL}"
+    )
+
+
+def get_public_channel_html():
+
+    response = requests.get(
+        get_public_channel_url(),
+        headers={
+            "User-Agent":
+                "Mozilla/5.0 "
+                "(iPhone; CPU iPhone OS 26_0 like Mac OS X) "
+                "AppleWebKit/605.1.15 "
+                "Version/26.0 Mobile/15E148 Safari/604.1",
+
+            "Accept":
+                "text/html,application/xhtml+xml,"
+                "application/xml;q=0.9,*/*;q=0.8",
+
+            "Accept-Language":
+                "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7",
+        },
+
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    return response.text
+
+
+def get_public_channel_messages():
+
+    html = get_public_channel_html()
+
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
+
+    messages = soup.select(
+        ".tgme_widget_message"
+    )
+
+    return messages
+
+
+def find_latest_public_rate():
+
+    messages = get_public_channel_messages()
+
+    if not messages:
+
+        raise RuntimeError(
+            "هیچ پیامی از کانال عمومی تلگرام پیدا نشد."
+        )
+
+    log.info(
+        "PUBLIC SOURCE | %s messages found",
+        len(messages)
+    )
+
+    for message in reversed(messages):
+
+        text_element = message.select_one(
+            ".tgme_widget_message_text"
+        )
+
+        if not text_element:
+
+            continue
+
+        text = text_element.get_text(
+            "\n",
+            strip=True
+        )
+
+        rate = parse_rate_message(
+            text
+        )
+
+        if rate:
+
+            data_post = message.get(
+                "data-post",
+                ""
+            )
+
+            log.info(
+                "PUBLIC SOURCE RATE FOUND | %s",
+                data_post
+            )
+
+            return {
+                "text": text,
+                "rate": rate,
+                "data_post": data_post
+            }
+
+    raise RuntimeError(
+        "در آخرین پیام‌های کانال عمومی، "
+        "هیچ نرخ معتبر شامل انس و دلار تهران پیدا نشد."
+    )
+
+
+# =========================================================
 # SOURCE RATE PARSER
 # =========================================================
 
@@ -343,17 +482,6 @@ def parse_rate_message(text):
 
         return None
 
-    if not any(
-        marker in compact
-        for marker in (
-            "جدولنرخ",
-            "نرخخریددفروش",
-            "نرخ"
-        )
-    ):
-
-        return None
-
     ounce_match = re.search(
         r"انس\s*:?\s*([\d,.]+)",
         text
@@ -367,25 +495,41 @@ def parse_rate_message(text):
         ounce_match.group(1)
     )
 
-    tehran_match = re.search(
+    if ounce is None:
+
+        return None
+
+    tehran_patterns = [
+
         r"دلار\s*تهران"
         r"\s*(?:حدود)?"
         r"\s*:?\s*"
         r"([\d,٬ ]+)",
-        text
-    )
 
-    if not tehran_match:
+        r"دلار\s*تهران"
+        r"\s*"
+        r"([\d,٬ ]+)",
 
-        return None
+    ]
 
-    tehran = integer_value(
-        tehran_match.group(1)
-    )
+    tehran = None
 
-    if ounce is None:
+    for pattern in tehran_patterns:
 
-        return None
+        match = re.search(
+            pattern,
+            text
+        )
+
+        if match:
+
+            tehran = integer_value(
+                match.group(1)
+            )
+
+            if tehran is not None:
+
+                break
 
     if tehran is None:
 
@@ -394,7 +538,7 @@ def parse_rate_message(text):
     if not 20 <= ounce <= 150:
 
         log.warning(
-            "Invalid ounce received: %s",
+            "Invalid ounce: %s",
             ounce
         )
 
@@ -403,7 +547,7 @@ def parse_rate_message(text):
     if not 50_000 <= tehran <= 2_000_000:
 
         log.warning(
-            "Invalid Tehran dollar received: %s",
+            "Invalid Tehran dollar: %s",
             tehran
         )
 
@@ -422,79 +566,41 @@ def parse_rate_message(text):
 PRODUCT_ALIASES = {
 
     "shot_995": [
+
         "نقره ساچمه 1000 گرمی با عیار 995",
+
         "نقره ساچمه 1000 گرمی با عیار ۹۹۵",
+
         "نقره ساچمه ۱۰۰۰ گرمی با عیار 995",
+
         "نقره ساچمه ۱۰۰۰ گرمی با عیار ۹۹۵",
+
         "ساچمه 1000 گرمی 995",
+
         "ساچمه 1000 گرمی ۹۹۵",
+
         "ساچمه ۱۰۰۰ گرمی 995",
+
         "ساچمه ۱۰۰۰ گرمی ۹۹۵",
+
     ],
 
     "nader_9999": [
+
         "شمش 1000 گرمی 999.9 نادیر",
+
         "شمش 1000 گرمی ۹۹۹.۹ نادیر",
+
         "شمش ۱۰۰۰ گرمی 999.9 نادیر",
+
         "شمش ۱۰۰۰ گرمی ۹۹۹.۹ نادیر",
+
         "شمش 1000 گرمی نادیر",
+
         "شمش ۱۰۰۰ گرمی نادیر",
+
     ],
 }
-
-
-def extract_prices_from_text(text):
-
-    text = clean_text(
-        text
-    )
-
-    patterns = [
-
-        r"([\d][\d.,٬ ]*)\s*تومان",
-
-        r"تومان\s*([\d][\d.,٬ ]*)",
-
-    ]
-
-    values = []
-
-    for pattern in patterns:
-
-        for match in re.findall(
-            pattern,
-            text
-        ):
-
-            value = integer_value(
-                match
-            )
-
-            if value is None:
-
-                continue
-
-            if (
-                MIN_PRODUCT_PRICE
-                <= value
-                <= MAX_PRODUCT_PRICE
-            ):
-
-                values.append(
-                    value
-                )
-
-    result = []
-
-    for value in values:
-
-        if value not in result:
-
-            result.append(
-                value
-            )
-
-    return result
 
 
 def normalize_product_name(text):
@@ -522,7 +628,7 @@ def product_name_matches(
         text
     )
 
-    normalized_compact = normalized.replace(
+    compact = normalized.replace(
         " ",
         ""
     )
@@ -537,16 +643,64 @@ def product_name_matches(
 
             return True
 
-        alias_compact = alias_normalized.replace(
-            " ",
-            ""
+        alias_compact = (
+            alias_normalized
+            .replace(" ", "")
         )
 
-        if alias_compact in normalized_compact:
+        if alias_compact in compact:
 
             return True
 
     return False
+
+
+def extract_prices_from_text(text):
+
+    text = clean_text(
+        text
+    )
+
+    patterns = [
+
+        r"([\d][\d.,٬ ]*)\s*تومان",
+
+        r"تومان\s*([\d][\d.,٬ ]*)",
+
+    ]
+
+    values = []
+
+    for pattern in patterns:
+
+        matches = re.findall(
+            pattern,
+            text
+        )
+
+        for match in matches:
+
+            value = integer_value(
+                match
+            )
+
+            if value is None:
+
+                continue
+
+            if (
+                MIN_PRODUCT_PRICE
+                <= value
+                <= MAX_PRODUCT_PRICE
+            ):
+
+                if value not in values:
+
+                    values.append(
+                        value
+                    )
+
+    return values
 
 
 def find_exact_product_price(
@@ -554,7 +708,11 @@ def find_exact_product_price(
     aliases
 ):
 
-    candidates = soup.find_all(
+    # -----------------------------------------------------
+    # First: look for elements containing exact product name
+    # -----------------------------------------------------
+
+    elements = soup.find_all(
         [
             "h1",
             "h2",
@@ -562,14 +720,12 @@ def find_exact_product_price(
             "h4",
             "h5",
             "a",
-            "li",
-            "div",
             "article",
-            "section"
+            "li"
         ]
     )
 
-    for element in candidates:
+    for element in elements:
 
         own_text = element.get_text(
             " ",
@@ -587,9 +743,13 @@ def find_exact_product_price(
 
             continue
 
+        # -------------------------------------------------
+        # Search nearby parent containers
+        # -------------------------------------------------
+
         parent = element
 
-        for _ in range(10):
+        for _ in range(6):
 
             if parent is None:
 
@@ -600,19 +760,21 @@ def find_exact_product_price(
                 strip=True
             )
 
-            if len(parent_text) > 1800:
+            if (
+                0
+                < len(parent_text)
+                <= 1500
+            ):
 
-                parent = parent.parent
+                prices = extract_prices_from_text(
+                    parent_text
+                )
 
-                continue
+                if prices:
 
-            prices = extract_prices_from_text(
-                parent_text
-            )
-
-            if prices:
-
-                return prices[-1]
+                    # Prefer the first valid price
+                    # near the exact product.
+                    return prices[0]
 
             parent = parent.parent
 
@@ -659,7 +821,7 @@ def get_website_prices_sync():
     )
 
     log.info(
-        "WEBSITE | shot 995 / 1kg = %s",
+        "WEBSITE | Shot 995 / 1kg = %s",
         shot_package
     )
 
@@ -945,12 +1107,14 @@ def fit_font_to_box(
     x1, y1, x2, y2 = box
 
     available_width = (
-        x2 - x1
+        x2
+        - x1
         - horizontal_padding * 2
     )
 
     available_height = (
-        y2 - y1
+        y2
+        - y1
         - 8
     )
 
@@ -971,11 +1135,13 @@ def fit_font_to_box(
         )
 
         width = (
-            bbox[2] - bbox[0]
+            bbox[2]
+            - bbox[0]
         )
 
         height = (
-            bbox[3] - bbox[1]
+            bbox[3]
+            - bbox[1]
         )
 
         if (
@@ -1007,17 +1173,20 @@ def draw_centered(
     )
 
     text_width = (
-        bbox[2] - bbox[0]
+        bbox[2]
+        - bbox[0]
     )
 
     text_height = (
-        bbox[3] - bbox[1]
+        bbox[3]
+        - bbox[1]
     )
 
     x = (
         x1
         + (
-            x2 - x1
+            x2
+            - x1
             - text_width
         ) / 2
         - bbox[0]
@@ -1026,7 +1195,8 @@ def draw_centered(
     y = (
         y1
         + (
-            y2 - y1
+            y2
+            - y1
             - text_height
         ) / 2
         - bbox[1]
@@ -1166,14 +1336,14 @@ def load_state():
             )
         )
 
-        if not isinstance(
+        if isinstance(
             data,
             dict
         ):
 
-            return {}
+            return data
 
-        return data
+        return {}
 
     except Exception as error:
 
@@ -1206,11 +1376,11 @@ def save_state(state):
 
 
 # =========================================================
-# SEND / EDIT TARGET POST
+# TARGET POST
 # =========================================================
 
 async def send_or_edit(
-    client,
+    bot_client,
     target,
     image,
     caption
@@ -1226,7 +1396,7 @@ async def send_or_edit(
 
         try:
 
-            await client.edit_message(
+            await bot_client.edit_message(
                 target,
                 int(message_id),
                 file=str(image),
@@ -1245,11 +1415,11 @@ async def send_or_edit(
         except Exception as error:
 
             log.warning(
-                "Saved message edit failed: %s",
+                "Saved target message could not be edited: %s",
                 error
             )
 
-    sent = await client.send_file(
+    sent = await bot_client.send_file(
         target,
         str(image),
         caption=caption
@@ -1266,197 +1436,191 @@ async def send_or_edit(
 
 
 # =========================================================
-# UPDATE LOCK
+# MAIN PROCESS
 # =========================================================
 
-UPDATE_LOCK = asyncio.Lock()
-
-
-# =========================================================
-# PROCESS RATE
-# =========================================================
-
-async def process_rate_message(
-    message,
+async def process_update(
     bot_client,
     target
 ):
 
-    rate = parse_rate_message(
-        message.raw_text or ""
+    log.info(
+        "===================================="
     )
 
-    if not rate:
+    log.info(
+        "STARTING PRICE UPDATE"
+    )
+
+    # -----------------------------------------------------
+    # PUBLIC TELEGRAM SOURCE
+    # -----------------------------------------------------
+
+    source = await asyncio.to_thread(
+        find_latest_public_rate
+    )
+
+    rate = source["rate"]
+
+    log.info(
+        "SOURCE CHANNEL = @%s",
+        SOURCE_CHANNEL
+    )
+
+    log.info(
+        "SOURCE OUNCE = %s",
+        rate["ounce"]
+    )
+
+    log.info(
+        "SOURCE TEHRAN USD = %s",
+        rate["tehran"]
+    )
+
+    # -----------------------------------------------------
+    # WEBSITE
+    # -----------------------------------------------------
+
+    products = (
+        await get_website_prices()
+    )
+
+    log.info(
+        "SHOT 995 / GRAM = %s",
+        products["shot_995"]
+    )
+
+    log.info(
+        "NADER 999.9 / GRAM = %s",
+        products["nader_9999"]
+    )
+
+    log.info(
+        "MITHQAL 995 = %s",
+        products["mithqal_995"]
+    )
+
+    # -----------------------------------------------------
+    # SIGNATURE
+    # -----------------------------------------------------
+
+    signature = json.dumps(
+        {
+            "ounce":
+                rate["ounce"],
+
+            "tehran":
+                rate["tehran"],
+
+            "shot_995":
+                products["shot_995"],
+
+            "nader_9999":
+                products["nader_9999"],
+
+            "mithqal_995":
+                products["mithqal_995"]
+        },
+
+        sort_keys=True,
+
+        ensure_ascii=False
+    )
+
+    state = load_state()
+
+    # -----------------------------------------------------
+    # NO CHANGE
+    # -----------------------------------------------------
+
+    if (
+        state.get("signature")
+        == signature
+    ):
 
         log.info(
-            "Message %s is not a rate message.",
-            getattr(
-                message,
-                "id",
-                "?"
-            )
+            "NO PRICE CHANGE - NOTHING TO POST"
         )
 
         return
 
-    async with UPDATE_LOCK:
+    # -----------------------------------------------------
+    # CREATE IMAGE
+    # -----------------------------------------------------
 
-        log.info(
-            "===================================="
-        )
+    image = create_board(
+        rate,
+        products
+    )
 
-        log.info(
-            "RATE FOUND"
-        )
+    caption = make_caption()
 
-        log.info(
-            "OUNCE = %s",
-            rate["ounce"]
-        )
+    # -----------------------------------------------------
+    # SEND / EDIT
+    # -----------------------------------------------------
 
-        log.info(
-            "TEHRAN USD = %s",
-            rate["tehran"]
-        )
+    message_id = await send_or_edit(
+        bot_client,
+        target,
+        image,
+        caption
+    )
 
-        products = (
-            await get_website_prices()
-        )
+    # -----------------------------------------------------
+    # SAVE STATE
+    # -----------------------------------------------------
 
-        log.info(
-            "SHOT 995 / GRAM = %s",
-            products["shot_995"]
-        )
+    save_state(
+        {
 
-        log.info(
-            "NADER 999.9 / GRAM = %s",
-            products["nader_9999"]
-        )
+            "signature":
+                signature,
 
-        log.info(
-            "MITHQAL 995 = %s",
-            products["mithqal_995"]
-        )
+            "message_id":
+                message_id,
 
-        signature = json.dumps(
-            {
-                "ounce":
-                    rate["ounce"],
+            "source_channel":
+                SOURCE_CHANNEL,
 
-                "tehran":
-                    rate["tehran"],
+            "source_post":
+                source.get(
+                    "data_post",
+                    ""
+                ),
 
-                "shot_995":
-                    products["shot_995"],
+            "ounce":
+                rate["ounce"],
 
-                "nader_9999":
-                    products["nader_9999"],
+            "tehran":
+                rate["tehran"],
 
-                "mithqal_995":
-                    products["mithqal_995"]
-            },
+            "shot_995":
+                products["shot_995"],
 
-            sort_keys=True,
+            "nader_9999":
+                products["nader_9999"],
 
-            ensure_ascii=False
-        )
+            "mithqal_995":
+                products["mithqal_995"],
 
-        state = load_state()
+            "date":
+                iran_date_string(),
 
-        if (
-            state.get("signature")
-            == signature
-        ):
+            "time":
+                iran_time_string(),
 
-            log.info(
-                "NO PRICE CHANGE - NOTHING TO POST"
-            )
+            "updated_at":
+                iran_now().isoformat()
+        }
+    )
 
-            return
+    log.info(
+        "YAZDANDOUST BOARD UPDATED SUCCESSFULLY"
+    )
 
-        image = create_board(
-            rate,
-            products
-        )
-
-        caption = make_caption()
-
-        message_id = await send_or_edit(
-            bot_client,
-            target,
-            image,
-            caption
-        )
-
-        save_state(
-            {
-                "signature":
-                    signature,
-
-                "message_id":
-                    message_id,
-
-                "source_message_id":
-                    int(
-                        message.id
-                    ),
-
-                "ounce":
-                    rate["ounce"],
-
-                "tehran":
-                    rate["tehran"],
-
-                "shot_995":
-                    products["shot_995"],
-
-                "nader_9999":
-                    products["nader_9999"],
-
-                "mithqal_995":
-                    products["mithqal_995"],
-
-                "date":
-                    iran_date_string(),
-
-                "time":
-                    iran_time_string(),
-
-                "updated_at":
-                    iran_now().isoformat()
-            }
-        )
-
-        log.info(
-            "YAZDANDOUST BOARD UPDATED"
-        )
-
-        log.info(
-            "===================================="
-        )
-
-
-# =========================================================
-# FIND LATEST SOURCE MESSAGE
-# =========================================================
-
-async def find_latest_rate_source_message(
-    source_client,
-    source_entity
-):
-
-    async for message in source_client.iter_messages(
-        source_entity,
-        limit=100
-    ):
-
-        if parse_rate_message(
-            message.raw_text or ""
-        ):
-
-            return message
-
-    return None
+    log.info(
+        "===================================="
+    )
 
 
 # =========================================================
@@ -1498,6 +1662,12 @@ async def main():
             + ", ".join(missing)
         )
 
+    if not SOURCE_CHANNEL:
+
+        raise RuntimeError(
+            "SOURCE_CHANNEL خالی است."
+        )
+
     if not TEMPLATE.exists():
 
         raise RuntimeError(
@@ -1517,57 +1687,9 @@ async def main():
             "API_ID باید فقط عدد باشد."
         )
 
-    # =====================================================
-    # SOURCE CLIENT
-    # =====================================================
-
-    if SOURCE_SESSION:
-
-        source_client = TelegramClient(
-            StringSession(
-                SOURCE_SESSION
-            ),
-
-            api_id,
-
-            API_HASH,
-
-            sequential_updates=True,
-
-            auto_reconnect=True,
-
-            connection_retries=10,
-
-            retry_delay=5,
-
-            flood_sleep_threshold=60
-        )
-
-    else:
-
-        source_client = TelegramClient(
-            str(
-                BASE / "source"
-            ),
-
-            api_id,
-
-            API_HASH,
-
-            sequential_updates=True,
-
-            auto_reconnect=True,
-
-            connection_retries=10,
-
-            retry_delay=5,
-
-            flood_sleep_threshold=60
-        )
-
-    # =====================================================
-    # BOT CLIENT
-    # =====================================================
+    # -----------------------------------------------------
+    # BOT CLIENT ONLY
+    # -----------------------------------------------------
 
     bot_client = TelegramClient(
         str(
@@ -1578,208 +1700,77 @@ async def main():
 
         API_HASH,
 
-        sequential_updates=True,
+        sequential_updates=False,
 
         auto_reconnect=True,
 
-        connection_retries=10,
+        connection_retries=5,
 
         retry_delay=5,
 
         flood_sleep_threshold=60
     )
 
-    # =====================================================
-    # CONNECT SOURCE
-    # =====================================================
+    try:
 
-    log.info(
-        "Connecting source account..."
-    )
+        # -------------------------------------------------
+        # CONNECT BOT
+        # -------------------------------------------------
 
-    await source_client.start()
-
-    # =====================================================
-    # CONNECT BOT
-    # =====================================================
-
-    log.info(
-        "Connecting bot..."
-    )
-
-    await bot_client.start(
-        bot_token=BOT_TOKEN
-    )
-
-    # =====================================================
-    # SOURCE ENTITY
-    # =====================================================
-
-    source_entity = (
-        await source_client.get_entity(
-            SOURCE_CHANNEL
+        log.info(
+            "Connecting Telegram bot..."
         )
-    )
 
-    # =====================================================
-    # TARGET ENTITY
-    # =====================================================
+        await bot_client.start(
+            bot_token=BOT_TOKEN
+        )
 
-    target_entity = (
-        await bot_client.get_entity(
+        log.info(
+            "Telegram bot connected."
+        )
+
+        # -------------------------------------------------
+        # TARGET
+        # -------------------------------------------------
+
+        target_entity = (
+            await bot_client.get_entity(
+                TARGET_CHANNEL
+            )
+        )
+
+        log.info(
+            "TARGET CONNECTED = %s",
             TARGET_CHANNEL
         )
-    )
 
-    log.info(
-        "SOURCE CONNECTED: %s",
-        SOURCE_CHANNEL
-    )
+        # -------------------------------------------------
+        # PUBLIC SOURCE TEST
+        # -------------------------------------------------
 
-    log.info(
-        "TARGET CONNECTED: %s",
-        TARGET_CHANNEL
-    )
-
-    # =====================================================
-    # INITIAL UPDATE
-    # =====================================================
-
-    latest = await find_latest_rate_source_message(
-        source_client,
-        source_entity
-    )
-
-    if latest:
-
-        try:
-
-            await process_rate_message(
-                latest,
-                bot_client,
-                target_entity
-            )
-
-        except Exception:
-
-            log.exception(
-                "INITIAL UPDATE FAILED"
-            )
-
-    else:
-
-        log.warning(
-            "No valid rate message found in source."
+        log.info(
+            "PUBLIC SOURCE = https://t.me/s/%s",
+            SOURCE_CHANNEL
         )
 
-    # =====================================================
-    # NEW SOURCE MESSAGE
-    # =====================================================
+        # -------------------------------------------------
+        # PROCESS ONE UPDATE
+        # -------------------------------------------------
 
-    @source_client.on(
-        events.NewMessage(
-            chats=source_entity
+        await process_update(
+            bot_client,
+            target_entity
         )
-    )
-    async def new_rate(event):
 
-        try:
+    finally:
 
-            log.info(
-                "NEW SOURCE MESSAGE | id=%s",
-                event.message.id
-            )
+        if bot_client.is_connected():
 
-            await process_rate_message(
-                event.message,
-                bot_client,
-                target_entity
-            )
+            await bot_client.disconnect()
 
-        except Exception:
-
-            log.exception(
-                "NEW MESSAGE ERROR"
-            )
-
-    # =====================================================
-    # EDITED SOURCE MESSAGE
-    # =====================================================
-
-    @source_client.on(
-        events.MessageEdited(
-            chats=source_entity
+        log.info(
+            "Bot disconnected."
         )
-    )
-    async def edited_rate(event):
-
-        try:
-
-            log.info(
-                "EDITED SOURCE MESSAGE | id=%s",
-                event.message.id
-            )
-
-            await process_rate_message(
-                event.message,
-                bot_client,
-                target_entity
-            )
-
-        except Exception:
-
-            log.exception(
-                "EDITED MESSAGE ERROR"
-            )
-
-    # =====================================================
-    # LOGGING
-    # =====================================================
-
-    log.info(
-        "===================================="
-    )
-
-    log.info(
-        "YAZDANDOUST SILVER BOT IS RUNNING"
-    )
-
-    log.info(
-        "SOURCE = %s",
-        SOURCE_CHANNEL
-    )
-
-    log.info(
-        "TARGET = %s",
-        TARGET_CHANNEL
-    )
-
-    log.info(
-        "DOLLAR = TEHRAN ONLY"
-    )
-
-    log.info(
-        "TIMEZONE = Asia/Tehran"
-    )
-
-    log.info(
-        "WEBSITE = %s",
-        WEBSITE_URL
-    )
-
-    log.info(
-        "NO BOT HISTORY REQUESTS"
-    )
-
-    log.info(
-        "===================================="
-    )
-
-    # =====================================================
-    # RUN
-    # =====================================================
-
-    await source_client.run_until_disconnected()
 
 
 # =========================================================
@@ -1805,3 +1796,5 @@ if __name__ == "__main__":
         log.exception(
             "FATAL ERROR"
         )
+
+        raise
