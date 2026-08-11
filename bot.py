@@ -46,7 +46,7 @@ WEBSITE_URL = os.getenv(
 
 
 # =========================================================
-# GENERAL SETTINGS
+# SETTINGS
 # =========================================================
 
 PHONE = "09152449600"
@@ -69,7 +69,7 @@ NUMBER_BOXES = [
     # 1 - انس نقره
     (505, 585, 900, 665),
 
-    # 2 - دلار تهران
+    # 2 - دلار
     (505, 750, 900, 830),
 
     # 3 - ساچمه 995
@@ -98,7 +98,7 @@ NEWS_TOTAL_MAX_PER_DAY = 10
 
 NEWS_MIN_GAP_MINUTES = 120
 
-NEWS_HISTORY_LIMIT = 200
+NEWS_HISTORY_LIMIT = 300
 
 
 # =========================================================
@@ -410,7 +410,9 @@ def gregorian_to_jalali(
     ]
 
     gy2 = gy - 1600
+
     gm2 = gm - 1
+
     gd2 = gd - 1
 
     g_day_no = (
@@ -480,8 +482,7 @@ def gregorian_to_jalali(
     if j_day_no >= 366:
 
         jy += (
-            (j_day_no - 1)
-            // 365
+            (j_day_no - 1) // 365
         )
 
         j_day_no = (
@@ -495,7 +496,6 @@ def gregorian_to_jalali(
         i < 11
 
         and
-
         j_day_no
         >=
         j_days_in_month[i]
@@ -509,6 +509,7 @@ def gregorian_to_jalali(
         i += 1
 
     jm = i + 1
+
     jd = j_day_no + 1
 
     return jy, jm, jd
@@ -594,19 +595,36 @@ def http_get(
 # TELEGRAM PUBLIC SOURCE
 # =========================================================
 
-def public_source_url():
+def public_source_url(
+    before=None
+):
 
-    return (
+    url = (
         "https://t.me/s/"
         f"{SOURCE_CHANNEL}"
     )
 
+    if before:
 
-def fetch_public_page():
+        url += (
+            f"?before={int(before)}"
+        )
+
+    return url
+
+
+def fetch_public_page(
+    before=None
+):
 
     return http_get(
-        public_source_url(),
+
+        public_source_url(
+            before
+        ),
+
         timeout=30
+
     )
 
 
@@ -633,10 +651,12 @@ def parse_public_messages(
         try:
 
             message_id = int(
+
                 data_post.rsplit(
                     "/",
                     1
                 )[1]
+
             )
 
         except (
@@ -653,8 +673,11 @@ def parse_public_messages(
         if text_node:
 
             text = text_node.get_text(
+
                 "\n",
+
                 strip=True
+
             )
 
         else:
@@ -662,15 +685,20 @@ def parse_public_messages(
             text = ""
 
         result.append(
+
             (
                 message_id,
                 text
             )
+
         )
 
     result.sort(
+
         key=lambda x: x[0],
+
         reverse=True
+
     )
 
     return result
@@ -741,11 +769,15 @@ def parse_rate_message(
         return None
 
     ounce = decimal_value(
+
         ounce_match.group(1)
+
     )
 
     tehran = integer_value(
+
         dollar_match.group(1)
+
     )
 
     if (
@@ -767,66 +799,128 @@ def parse_rate_message(
         return None
 
     if not (
+
         50_000
-        <= tehran
-        <= 2_000_000
+        <=
+        tehran
+        <=
+        2_000_000
+
     ):
 
         return None
 
     return {
 
-        "ounce": ounce,
+        "ounce":
+            ounce,
 
-        "tehran": tehran
+        "tehran":
+            tehran
 
     }
 
 
 def find_latest_public_rate():
 
-    html = fetch_public_page()
+    before = None
 
-    messages = parse_public_messages(
-        html
-    )
+    seen = set()
 
-    if not messages:
+    for page_number in range(
+        1,
+        31
+    ):
 
-        raise RuntimeError(
-            "کانال عمومی منبع هیچ پیامی برنگرداند."
+        html = fetch_public_page(
+            before
         )
 
-    for message_id, text in messages:
-
-        rate = parse_rate_message(
-            text
+        messages = parse_public_messages(
+            html
         )
 
-        if rate:
+        if not messages:
 
-            log.info(
-                "SOURCE RATE FOUND | message=%s",
-                message_id
+            break
+
+        log.info(
+
+            "PUBLIC SOURCE | "
+            "page=%s | messages=%s",
+
+            page_number,
+
+            len(messages)
+
+        )
+
+        for message_id, text in messages:
+
+            rate = parse_rate_message(
+                text
             )
 
-            log.info(
-                "SOURCE OUNCE = %s",
-                rate["ounce"]
-            )
+            if rate:
 
-            log.info(
-                "SOURCE TEHRAN USD = %s",
-                rate["tehran"]
-            )
+                log.info(
 
-            return (
-                rate,
-                message_id
-            )
+                    "SOURCE RATE FOUND | "
+                    "%s/%s",
+
+                    SOURCE_CHANNEL,
+
+                    message_id
+
+                )
+
+                log.info(
+
+                    "SOURCE OUNCE = %s",
+
+                    rate["ounce"]
+
+                )
+
+                log.info(
+
+                    "SOURCE TEHRAN USD = %s",
+
+                    rate["tehran"]
+
+                )
+
+                return (
+
+                    rate,
+
+                    message_id
+
+                )
+
+        min_id = min(
+
+            x[0]
+
+            for x in messages
+
+        )
+
+        if min_id in seen:
+
+            break
+
+        seen.add(
+            min_id
+        )
+
+        before = min_id
 
     raise RuntimeError(
-        "هیچ نرخ معتبر شامل انس و دلار تهران پیدا نشد."
+
+        "هیچ نرخ معتبر شامل "
+        "انس و دلار تهران پیدا نشد."
+
     )
 
 
@@ -843,11 +937,13 @@ def normalize_product_name(
     )
 
     return (
+
         text
         .replace("ي", "ی")
         .replace("ى", "ی")
         .replace("ك", "ک")
         .strip()
+
     )
 
 
@@ -860,14 +956,19 @@ def parse_price_number(
     )
 
     text = (
+
         text
         .replace("٬", ",")
         .replace("٫", ".")
+
     )
 
     matches = re.findall(
+
         r"\d[\d,\.]*",
+
         text
+
     )
 
     values = []
@@ -899,8 +1000,10 @@ def parse_price_number(
         if (
 
             1_000_000
-            <= value
-            <= 20_000_000_000
+            <=
+            value
+            <=
+            20_000_000_000
 
         ):
 
@@ -936,12 +1039,16 @@ def find_product_card(
     for title in title_nodes:
 
         title_text = (
+
             normalize_product_name(
+
                 title.get_text(
                     " ",
                     strip=True
                 )
+
             )
+
         )
 
         if title_text != wanted:
@@ -953,6 +1060,7 @@ def find_product_card(
             "li",
 
             class_=lambda c:
+
                 c and
                 "product" in c
 
@@ -1011,15 +1119,13 @@ def get_current_price_from_card(
 
             return price
 
-    selectors = [
+    for selector in [
 
         ".woocommerce-Price-amount",
 
         ".price"
 
-    ]
-
-    for selector in selectors:
+    ]:
 
         nodes = card.select(
             selector
@@ -1048,13 +1154,19 @@ def get_current_price_from_card(
 def get_website_prices_sync():
 
     html = http_get(
+
         WEBSITE_URL,
+
         timeout=30
+
     )
 
     soup = BeautifulSoup(
+
         html,
+
         "html.parser"
+
     )
 
     # -----------------------------------------------------
@@ -1062,7 +1174,10 @@ def get_website_prices_sync():
     # -----------------------------------------------------
 
     shot_title = (
-        "نقره ساچمه 1000 گرمی با عیار 995"
+
+        "نقره ساچمه "
+        "1000 گرمی با عیار 995"
+
     )
 
     shot_card = find_product_card(
@@ -1076,19 +1191,31 @@ def get_website_prices_sync():
     if shot_card is None:
 
         raise RuntimeError(
-            "محصول دقیق ساچمه 1000 گرمی 995 پیدا نشد."
+
+            "محصول دقیق "
+            "ساچمه 1000 گرمی 995 "
+            "پیدا نشد."
+
         )
 
     shot_package = (
+
         get_current_price_from_card(
+
             shot_card
+
         )
+
     )
 
     if shot_package is None:
 
         raise RuntimeError(
-            "قیمت دقیق ساچمه 1000 گرمی 995 پیدا نشد."
+
+            "قیمت دقیق ساچمه "
+            "1000 گرمی 995 "
+            "پیدا نشد."
+
         )
 
     # -----------------------------------------------------
@@ -1096,7 +1223,10 @@ def get_website_prices_sync():
     # -----------------------------------------------------
 
     nader_title = (
-        "شمش 1000 گرمی 999.9 نادیر"
+
+        "شمش 1000 گرمی "
+        "999.9 نادیر"
+
     )
 
     nader_card = find_product_card(
@@ -1110,72 +1240,102 @@ def get_website_prices_sync():
     if nader_card is None:
 
         raise RuntimeError(
-            "محصول دقیق شمش 1000 گرمی 999.9 نادیر پیدا نشد."
+
+            "محصول دقیق شمش "
+            "1000 گرمی 999.9 نادیر "
+            "پیدا نشد."
+
         )
 
     nader_package = (
+
         get_current_price_from_card(
+
             nader_card
+
         )
+
     )
 
     if nader_package is None:
 
         raise RuntimeError(
-            "قیمت دقیق شمش نادیر پیدا نشد."
+
+            "قیمت دقیق شمش نادیر "
+            "1000 گرمی پیدا نشد."
+
         )
 
     # -----------------------------------------------------
     # CALCULATIONS
     # -----------------------------------------------------
 
-    shot_per_gram = (
+    shot_995_per_gram = (
+
         shot_package / 1000
+
     )
 
-    nader_per_gram = (
+    nader_9999_per_gram = (
+
         nader_package / 1000
+
     )
 
-    mithqal = (
-        shot_per_gram
-        * MITHQAL_GRAMS
+    mithqal_995 = (
+
+        shot_995_per_gram
+        *
+        MITHQAL_GRAMS
+
     )
 
-    mithqal = (
+    mithqal_995 = (
+
         round(
-            mithqal / 100
+            mithqal_995 / 100
         )
-        * 100
+        *
+        100
+
     )
 
     result = {
 
         "shot_995":
+
             int(
+
                 round(
-                    shot_per_gram
+                    shot_995_per_gram
                 )
+
             ),
 
         "nader_9999":
+
             int(
+
                 round(
-                    nader_per_gram
+                    nader_9999_per_gram
                 )
+
             ),
 
         "mithqal_995":
+
             int(
-                mithqal
+                mithqal_995
             ),
 
         "shot_package":
+
             int(
                 shot_package
             ),
 
         "nader_package":
+
             int(
                 nader_package
             )
@@ -1183,38 +1343,33 @@ def get_website_prices_sync():
     }
 
     log.info(
-        "WEBSITE SHOT 995 / 1KG = %s",
-        format_price(
-            result["shot_package"]
-        )
-    )
 
-    log.info(
-        "WEBSITE NADER 999.9 / 1KG = %s",
-        format_price(
-            result["nader_package"]
-        )
-    )
-
-    log.info(
         "SHOT 995 / GRAM = %s",
+
         format_price(
             result["shot_995"]
         )
+
     )
 
     log.info(
+
         "NADER 999.9 / GRAM = %s",
+
         format_price(
             result["nader_9999"]
         )
+
     )
 
     log.info(
+
         "MITHQAL 995 = %s",
+
         format_price(
             result["mithqal_995"]
         )
+
     )
 
     return result
@@ -1232,7 +1387,9 @@ async def get_website_prices():
         try:
 
             return await asyncio.to_thread(
+
                 get_website_prices_sync
+
             )
 
         except Exception as error:
@@ -1240,9 +1397,14 @@ async def get_website_prices():
             last_error = error
 
             log.warning(
-                "WEBSITE ATTEMPT %s/4 FAILED: %s",
+
+                "WEBSITE ATTEMPT "
+                "%s/4 FAILED: %s",
+
                 attempt,
+
                 error
+
             )
 
             if attempt < 4:
@@ -1252,63 +1414,9 @@ async def get_website_prices():
                 )
 
     raise RuntimeError(
-        f"خطا در دریافت قیمت سایت: {last_error}"
-    )
 
-
-# =========================================================
-# PRICE SIGNATURE
-#
-# This is kept for logging/history.
-# IMPORTANT:
-# Rate posting is NOT based on this signature.
-# It is based on the SOURCE MESSAGE ID.
-# =========================================================
-
-def make_price_signature(
-    rate,
-    products
-):
-
-    data = {
-
-        "ounce":
-            round(
-                float(
-                    rate["ounce"]
-                ),
-                4
-            ),
-
-        "tehran":
-            int(
-                rate["tehran"]
-            ),
-
-        "shot_995":
-            int(
-                products["shot_995"]
-            ),
-
-        "nader_9999":
-            int(
-                products["nader_9999"]
-            ),
-
-        "mithqal_995":
-            int(
-                products["mithqal_995"]
-            )
-
-    }
-
-    return json.dumps(
-
-        data,
-
-        sort_keys=True,
-
-        ensure_ascii=False
+        f"خطا در دریافت قیمت سایت: "
+        f"{last_error}"
 
     )
 
@@ -1317,7 +1425,9 @@ def make_price_signature(
 # FONT
 # =========================================================
 
-def get_font(size):
+def get_font(
+    size
+):
 
     font_paths = [
 
@@ -1337,8 +1447,11 @@ def get_font(size):
         if Path(path).exists():
 
             return ImageFont.truetype(
+
                 path,
+
                 size
+
             )
 
     return ImageFont.load_default()
@@ -1391,13 +1504,19 @@ def fit_font_to_box(
         )
 
         width = (
+
             bbox[2]
-            - bbox[0]
+            -
+            bbox[0]
+
         )
 
         height = (
+
             bbox[3]
-            - bbox[1]
+            -
+            bbox[1]
+
         )
 
         if (
@@ -1460,13 +1579,19 @@ def draw_centered(
     )
 
     text_width = (
+
         bbox[2]
-        - bbox[0]
+        -
+        bbox[0]
+
     )
 
     text_height = (
+
         bbox[3]
-        - bbox[1]
+        -
+        bbox[1]
+
     )
 
     x = (
@@ -1476,8 +1601,10 @@ def draw_centered(
         + (
 
             x2
-            - x1
-            - text_width
+            -
+            x1
+            -
+            text_width
 
         ) / 2
 
@@ -1492,8 +1619,10 @@ def draw_centered(
         + (
 
             y2
-            - y1
-            - text_height
+            -
+            y1
+            -
+            text_height
 
         ) / 2
 
@@ -1527,23 +1656,32 @@ def create_board(
     if not TEMPLATE.exists():
 
         raise RuntimeError(
-            "board_only_preview.png پیدا نشد."
+
+            "فایل "
+            "board_only_preview.png "
+            "کنار bot.py پیدا نشد."
+
         )
 
     image = Image.open(
+
         TEMPLATE
+
     ).convert(
         "RGB"
     )
 
     if image.size != (
+
         1086,
         1448
+
     ):
 
         raise RuntimeError(
 
-            "ابعاد board_only_preview.png "
+            "ابعاد فایل "
+            "board_only_preview.png "
             "باید 1086x1448 باشد. "
             f"ابعاد فعلی: {image.size}"
 
@@ -1717,8 +1855,11 @@ def load_state():
     except Exception as error:
 
         log.warning(
+
             "STATE READ ERROR: %s",
+
             error
+
         )
 
     return {}
@@ -1754,7 +1895,7 @@ def save_state(
 
 
 # =========================================================
-# NEWS TEXT EXTRACTION
+# NEWS HELPERS
 # =========================================================
 
 def remove_bad_nodes(
@@ -1800,8 +1941,6 @@ def extract_title(
     fallback=""
 ):
 
-    title = ""
-
     selectors = [
 
         "h1",
@@ -1834,8 +1973,11 @@ def extract_title(
         else:
 
             value = node.get_text(
+
                 " ",
+
                 strip=True
+
             )
 
         value = normalize_fa(
@@ -1844,17 +1986,11 @@ def extract_title(
 
         if len(value) >= 5:
 
-            title = value
+            return value
 
-            break
-
-    if not title:
-
-        title = normalize_fa(
-            fallback
-        )
-
-    return title
+    return normalize_fa(
+        fallback
+    )
 
 
 def clean_article_paragraph(
@@ -1873,8 +2009,6 @@ def clean_article_paragraph(
 
         "انتهای پیام",
 
-        "R101",
-
         "واژه های کاربردی",
 
         "واژه‌های کاربردی",
@@ -1886,6 +2020,8 @@ def clean_article_paragraph(
         "منبع :",
 
         "کد خبر:",
+
+        "R101",
 
     ]
 
@@ -1942,7 +2078,7 @@ def collect_paragraphs(
     return paragraphs
 
 
-def extract_tasnim_body(
+def extract_article_body(
     soup
 ):
 
@@ -1996,13 +2132,11 @@ def extract_tasnim_body(
 
             best = paragraphs
 
-    return best
+    if best:
 
+        return best
 
-def extract_generic_body(
-    soup
-):
-
+    # Generic fallback.
     candidates = []
 
     for node in soup.select(
@@ -2046,26 +2180,20 @@ def extract_generic_body(
 
         )
 
-    if not candidates:
+    if candidates:
 
-        return []
+        candidates.sort(
 
-    candidates.sort(
+            key=lambda x: x[0],
 
-        key=lambda x: x[0],
+            reverse=True
 
-        reverse=True
+        )
 
-    )
+        return candidates[0][1]
 
-    return candidates[0][1]
-
-
-def extract_meta_description(
-    soup
-):
-
-    selectors = [
+    # Metadata fallback.
+    for selector in [
 
         "meta[property='og:description']",
 
@@ -2073,9 +2201,7 @@ def extract_meta_description(
 
         "meta[name='twitter:description']"
 
-    ]
-
-    for selector in selectors:
+    ]:
 
         node = soup.select_one(
             selector
@@ -2094,82 +2220,11 @@ def extract_meta_description(
 
         )
 
-        if len(value) >= 100:
+        if len(value) >= 150:
 
-            return value
-
-    return ""
-
-
-def extract_news_body(
-    soup
-):
-
-    paragraphs = extract_tasnim_body(
-        soup
-    )
-
-    if paragraphs:
-
-        return paragraphs
-
-    paragraphs = extract_generic_body(
-        soup
-    )
-
-    if paragraphs:
-
-        return paragraphs
-
-    description = extract_meta_description(
-        soup
-    )
-
-    if description:
-
-        return [
-            description
-        ]
+            return [value]
 
     return []
-
-
-def is_valid_news_body(
-    paragraphs
-):
-
-    if not paragraphs:
-
-        return False
-
-    cleaned = []
-
-    for p in paragraphs:
-
-        p = clean_article_paragraph(
-            p
-        )
-
-        if p:
-
-            cleaned.append(
-                p
-            )
-
-    if not cleaned:
-
-        return False
-
-    total_length = sum(
-        len(x)
-        for x in cleaned
-    )
-
-    if total_length < 150:
-
-        return False
-
-    return True
 
 
 def build_news_text(
@@ -2220,6 +2275,21 @@ def build_news_text(
         )
 
     return text.strip()
+
+
+def is_valid_news_body(
+    body
+):
+
+    if not body:
+
+        return False
+
+    if len(body.strip()) < 150:
+
+        return False
+
+    return True
 
 
 # =========================================================
@@ -2287,8 +2357,8 @@ def parse_news_index(
                 "/category/",
                 "/tag/",
                 "/search",
-                "#",
-                "javascript:"
+                "javascript:",
+                "#"
 
             ]
 
@@ -2342,8 +2412,11 @@ def fetch_news_index(
         return []
 
     return parse_news_index(
+
         html,
+
         source_url
+
     )
 
 
@@ -2380,8 +2453,11 @@ def fetch_news_article(
         return None
 
     soup = BeautifulSoup(
+
         html,
+
         "html.parser"
+
     )
 
     title = extract_title(
@@ -2399,33 +2475,22 @@ def fetch_news_article(
         soup
     )
 
-    paragraphs = extract_news_body(
+    paragraphs = extract_article_body(
         soup
     )
-
-    if not is_valid_news_body(
-        paragraphs
-    ):
-
-        log.warning(
-
-            "NEWS SKIPPED - NO REAL BODY | %s",
-
-            item["url"]
-
-        )
-
-        return None
 
     body = build_news_text(
         paragraphs
     )
 
-    if len(body) < 150:
+    if not is_valid_news_body(
+        body
+    ):
 
         log.warning(
 
-            "NEWS SKIPPED - BODY TOO SHORT | %s",
+            "NEWS SKIPPED - "
+            "NO REAL BODY | %s",
 
             item["url"]
 
@@ -2455,7 +2520,7 @@ def fetch_news_article(
 
 
 # =========================================================
-# NEWS SEARCH
+# NEWS MATCHING
 # =========================================================
 
 def keyword_match(
@@ -2533,8 +2598,11 @@ def get_candidate_from_sources(
         )
 
         if not keyword_match(
+
             title,
+
             keywords
+
         ):
 
             continue
@@ -2558,8 +2626,11 @@ def get_candidate_from_sources(
         )
 
         if not keyword_match(
+
             combined,
+
             keywords
+
         ):
 
             continue
@@ -2571,8 +2642,11 @@ def get_candidate_from_sources(
             continue
 
         log.info(
+
             "VALID NEWS FOUND | %s",
+
             article["url"]
+
         )
 
         return article
@@ -2629,13 +2703,17 @@ def parse_saved_datetime(
     try:
 
         result = datetime.fromisoformat(
+
             str(value)
+
         )
 
         if result.tzinfo is None:
 
             result = result.replace(
+
                 tzinfo=IRAN_TZ
+
             )
 
         return result.astimezone(
@@ -2724,7 +2802,8 @@ def news_is_due(
     elapsed = (
 
         iran_now()
-        - last_post
+        -
+        last_post
 
     ).total_seconds() / 60
 
@@ -2785,10 +2864,12 @@ def make_news_caption(
         )
 
     title = normalize_fa(
+
         article.get(
             "title",
             ""
         )
+
     )
 
     body = article.get(
@@ -2822,10 +2903,10 @@ def make_news_caption(
 
 
 # =========================================================
-# TELEGRAM
+# TELEGRAM SEND
 # =========================================================
 
-async def send_rate_post(
+async def send_new_post(
     client,
     target,
     image,
@@ -2844,7 +2925,8 @@ async def send_rate_post(
 
     log.info(
 
-        "RATE POST CREATED | message_id=%s",
+        "RATE POST CREATED | "
+        "target_message_id=%s",
 
         sent.id
 
@@ -2873,7 +2955,10 @@ async def send_news_post(
     if len(body) < 150:
 
         log.warning(
-            "NEWS SEND BLOCKED - EMPTY BODY"
+
+            "NEWS SEND BLOCKED - "
+            "BODY TOO SHORT"
+
         )
 
         return None
@@ -2894,7 +2979,8 @@ async def send_news_post(
 
     log.info(
 
-        "NEWS POST CREATED | message_id=%s",
+        "NEWS POST CREATED | "
+        "message_id=%s",
 
         sent.id
 
@@ -2957,13 +3043,18 @@ async def main():
     except ValueError:
 
         raise RuntimeError(
+
             "API_ID باید عدد باشد."
+
         )
 
     if not TEMPLATE.exists():
 
         raise RuntimeError(
-            "board_only_preview.png پیدا نشد."
+
+            "board_only_preview.png "
+            "پیدا نشد."
+
         )
 
     # =====================================================
@@ -2977,7 +3068,7 @@ async def main():
     )
 
     # =====================================================
-    # FIND LATEST RATE MESSAGE
+    # FIND LATEST SOURCE RATE
     # =====================================================
 
     rate, source_message_id = (
@@ -2990,8 +3081,18 @@ async def main():
 
     )
 
-    last_source_message_id = state.get(
-        "source_message_id"
+    current_source_message_id = int(
+
+        source_message_id
+
+    )
+
+    last_source_message_id = (
+
+        state.get(
+            "source_message_id"
+        )
+
     )
 
     if last_source_message_id is not None:
@@ -2999,7 +3100,9 @@ async def main():
         try:
 
             last_source_message_id = int(
+
                 last_source_message_id
+
             )
 
         except (
@@ -3009,17 +3112,17 @@ async def main():
 
             last_source_message_id = None
 
-    current_source_message_id = int(
-        source_message_id
-    )
-
     # =====================================================
+    # NEW SOURCE MESSAGE = NEW RATE POST
+    #
     # IMPORTANT:
+    # We DO NOT compare the numbers.
     #
-    # A NEW SOURCE MESSAGE ALWAYS MEANS
-    # A NEW RATE POST.
+    # If Taqizadegan publishes a new rate message,
+    # its Telegram message ID changes.
     #
-    # EVEN IF THE NUMBERS ARE IDENTICAL.
+    # Therefore we publish a new post even when
+    # the actual numbers are identical.
     # =====================================================
 
     rate_post_needed = (
@@ -3035,24 +3138,31 @@ async def main():
     )
 
     log.info(
+
         "LAST SOURCE MESSAGE = %s",
+
         last_source_message_id
+
     )
 
     log.info(
+
         "CURRENT SOURCE MESSAGE = %s",
+
         current_source_message_id
+
     )
 
     log.info(
+
         "RATE POST NEEDED = %s",
+
         rate_post_needed
+
     )
 
     # =====================================================
     # WEBSITE PRICES
-    #
-    # Only needed when a new rate post is required.
     # =====================================================
 
     products = None
@@ -3066,10 +3176,13 @@ async def main():
     # =====================================================
     # NEWS
     #
-    # News works independently from the rate system.
+    # IMPORTANT:
+    # News is completely independent of price.
     # =====================================================
 
     news_article = None
+
+    news_category = None
 
     if news_is_due(
         state
@@ -3113,7 +3226,7 @@ async def main():
         )
 
         # -------------------------------------------------
-        # ECONOMIC NEWS: UP TO 7 PER DAY
+        # FIRST: 7 ECONOMIC NEWS PER DAY
         # -------------------------------------------------
 
         if (
@@ -3125,14 +3238,23 @@ async def main():
         ):
 
             news_article = (
+
                 await get_economic_news(
+
                     history
+
                 )
+
             )
 
+            if news_article:
+
+                news_category = (
+                    "economic"
+                )
+
         # -------------------------------------------------
-        # WORLD / WAR / TRUMP:
-        # UP TO 3 PER DAY
+        # THEN: 3 WORLD / WAR / TRUMP NEWS
         # -------------------------------------------------
 
         if (
@@ -3148,13 +3270,23 @@ async def main():
         ):
 
             news_article = (
+
                 await get_world_news(
+
                     history
+
                 )
+
             )
 
+            if news_article:
+
+                news_category = (
+                    "world"
+                )
+
     # =====================================================
-    # NOTHING TO DO
+    # NOTHING TO POST
     # =====================================================
 
     if (
@@ -3222,8 +3354,11 @@ async def main():
         )
 
         log.info(
+
             "TARGET CONNECTED = %s",
+
             TARGET_CHANNEL
+
         )
 
         # =================================================
@@ -3244,7 +3379,7 @@ async def main():
 
             target_message_id = (
 
-                await send_rate_post(
+                await send_new_post(
 
                     client,
 
@@ -3258,9 +3393,9 @@ async def main():
 
             )
 
-            # -------------------------------------------------
-            # SAVE RATE STATE IMMEDIATELY
-            # -------------------------------------------------
+            # ---------------------------------------------
+            # SAVE RATE STATE
+            # ---------------------------------------------
 
             state.update({
 
@@ -3292,12 +3427,6 @@ async def main():
 
                 "nader_package":
                     products["nader_package"],
-
-                "price_signature":
-                    make_price_signature(
-                        rate,
-                        products
-                    ),
 
                 "updated_at":
                     iran_now().isoformat()
@@ -3334,13 +3463,34 @@ async def main():
 
             if news_message_id:
 
-                # -------------------------------------------------
-                # DETERMINE NEWS CATEGORY
-                # -------------------------------------------------
+                # -----------------------------------------
+                # NEWS COUNT
+                # -----------------------------------------
 
-                if is_urgent_news(
-                    news_article
-                ):
+                state[
+                    "news_count"
+                ] = (
+
+                    int(
+
+                        state.get(
+                            "news_count",
+                            0
+                        )
+
+                        or 0
+
+                    )
+
+                    + 1
+
+                )
+
+                # -----------------------------------------
+                # CATEGORY COUNT
+                # -----------------------------------------
+
+                if news_category == "world":
 
                     state[
                         "world_news_count"
@@ -3382,40 +3532,21 @@ async def main():
 
                     )
 
-                # -------------------------------------------------
-                # TOTAL NEWS COUNT
-                # -------------------------------------------------
-
-                state[
-                    "news_count"
-                ] = (
-
-                    int(
-
-                        state.get(
-                            "news_count",
-                            0
-                        )
-
-                        or 0
-
-                    )
-
-                    + 1
-
-                )
-
-                # -------------------------------------------------
+                # -----------------------------------------
                 # LAST NEWS TIME
-                # -------------------------------------------------
+                # -----------------------------------------
 
                 state[
                     "news_last_posted_at"
-                ] = iran_now().isoformat()
+                ] = (
 
-                # -------------------------------------------------
-                # NEWS HISTORY
-                # -------------------------------------------------
+                    iran_now().isoformat()
+
+                )
+
+                # -----------------------------------------
+                # HISTORY
+                # -----------------------------------------
 
                 history = state.get(
 
@@ -3458,9 +3589,19 @@ async def main():
 
                 state[
                     "last_news_title"
-                ] = news_article.get(
-                    "title",
-                    ""
+                ] = (
+
+                    news_article.get(
+                        "title",
+                        ""
+                    )
+
+                )
+
+                state[
+                    "last_news_category"
+                ] = (
+                    news_category
                 )
 
                 save_state(
