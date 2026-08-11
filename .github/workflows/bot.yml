@@ -1,29 +1,42 @@
-name: Yazdandoust Silver Bot
+name: Run Silver Bot
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: silver-bot
+  cancel-in-progress: true
 
 jobs:
   run-bot:
+
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+
+    timeout-minutes: 10
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install requests beautifulsoup4 pillow telethon
 
       - name: Run bot
         env:
@@ -31,5 +44,21 @@ jobs:
           API_HASH: ${{ secrets.API_HASH }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           TARGET_CHANNEL: ${{ secrets.TARGET_CHANNEL }}
+          SOURCE_CHANNEL: tghsilver
+          WEBSITE_URL: https://taghizadegan.com
         run: |
           python bot.py
+
+      - name: Save state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add state.json
+
+          if git diff --cached --quiet; then
+            echo "No state changes."
+          else
+            git commit -m "Update bot state"
+            git push
+          fi
