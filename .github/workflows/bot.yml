@@ -1,6 +1,13 @@
 name: Run Silver Bot
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "bot.py"
+      - ".github/workflows/bot.yml"
+
   workflow_dispatch:
 
   schedule:
@@ -46,6 +53,7 @@ jobs:
           TARGET_CHANNEL: ${{ secrets.TARGET_CHANNEL }}
           SOURCE_CHANNEL: tghsilver
           WEBSITE_URL: https://taghizadegan.com
+          PYTHONUNBUFFERED: "1"
         run: |
           python bot.py
 
