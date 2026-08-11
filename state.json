@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/20",
-  "economic_news_count": 2,
+  "economic_news_count": 3,
   "world_news_count": 0,
-  "news_count": 2,
-  "news_last_posted_at": "2026-08-11T20:11:09.958813+03:30",
+  "news_count": 3,
+  "news_last_posted_at": "2026-08-11T23:53:49.939549+03:30",
   "source_message_id": 34348,
   "target_message_id": 275,
   "ounce": 64.78,
@@ -16,9 +16,10 @@
   "updated_at": "2026-08-11T20:20:45.481397+03:30",
   "news_history": [
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
-    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20"
+    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
+    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668659/%D8%AF%D9%84%D8%A7%D8%B1-%D8%AD%D9%88%D8%A7%D9%84%D9%87-155-%D9%87%D8%B2%D8%A7%D8%B1-%D8%AA%D9%88%D9%85%D8%A7%D9%86%DB%8C-%D8%B4%D8%AF"
   ],
-  "last_news_message_id": 274,
+  "last_news_message_id": 279,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1797200, \"nader_9999\": 403000, \"ounce\": 64.78, \"shot_995\": 390000, \"tehran\": 187000}",
