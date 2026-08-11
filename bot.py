@@ -68,9 +68,21 @@ IRAN_TZ = ZoneInfo("Asia/Tehran")
 MITHQAL_GRAMS = 4.6083
 
 COIN_IMAMI_WEIGHT = 8.133
+
 COIN_FINENESS = 0.900
 
 COIN_MINTING_FEE = 0
+
+
+# =========================================================
+# PRICE TIME
+# =========================================================
+
+PRICE_START_HOUR = 10
+PRICE_START_MINUTE = 0
+
+PRICE_END_HOUR = 20
+PRICE_END_MINUTE = 45
 
 
 # =========================================================
@@ -80,7 +92,9 @@ COIN_MINTING_FEE = 0
 NEWS_ENABLED = True
 
 NEWS_ECONOMIC_MAX_PER_DAY = 7
+
 NEWS_WORLD_MAX_PER_DAY = 3
+
 NEWS_TOTAL_MAX_PER_DAY = 10
 
 NEWS_MIN_GAP_MINUTES = 120
@@ -131,15 +145,6 @@ ECONOMIC_KEYWORDS = [
     "بازار جهانی",
     "اقتصاد",
     "نفت",
-    "تحریم",
-    "تجارت",
-    "صادرات",
-    "واردات",
-    "بورس",
-    "مالیات",
-    "بودجه",
-    "ارزش پول",
-    "سیاست ارزی",
 
 ]
 
@@ -184,91 +189,11 @@ URGENT_KEYWORDS = [
     "آتش بس",
     "ترامپ",
     "Trump",
+    "Trump says",
     "breaking",
     "urgent",
     "strike",
     "strikes",
-
-]
-
-
-# =========================================================
-# PRICE-ONLY NEWS FILTER
-# =========================================================
-
-PRICE_NEWS_KEYWORDS = [
-
-    "قیمت",
-    "نرخ",
-    "آخرین قیمت",
-    "قیمت امروز",
-    "نرخ امروز",
-    "قیمت لحظه‌ای",
-    "قیمت لحظه ای",
-    "نرخ لحظه‌ای",
-    "نرخ لحظه ای",
-    "خرید و فروش",
-    "قیمت فروش",
-    "قیمت خرید",
-    "گرم طلای",
-    "طلای ۱۸ عیار",
-    "طلای 18 عیار",
-    "سکه امامی",
-    "نیم سکه",
-    "ربع سکه",
-    "دلار آزاد",
-    "یورو",
-    "مثقال طلا",
-    "بازار طلا و ارز",
-
-]
-
-
-PRICE_MARKET_WORDS = [
-
-    "طلا",
-    "سکه",
-    "دلار",
-    "یورو",
-    "ارز",
-    "نقره",
-    "مثقال",
-    "اونس",
-
-]
-
-
-REAL_NEWS_ACTION_WORDS = [
-
-    "تصمیم",
-    "اعلام کرد",
-    "اعلام شد",
-    "تغییر",
-    "تصویب",
-    "مصوبه",
-    "سیاست",
-    "تحریم",
-    "مذاکره",
-    "مذاکرات",
-    "نشست",
-    "اظهارات",
-    "سخنرانی",
-    "فدرال رزرو",
-    "بانک مرکزی",
-    "مجلس",
-    "دولت",
-    "وزارت",
-    "صادرات",
-    "واردات",
-    "جنگ",
-    "حمله",
-    "آتش بس",
-    "توافق",
-    "توافقنامه",
-    "بازار جهانی",
-    "اقتصاد جهانی",
-    "تورم",
-    "نرخ بهره",
 
 ]
 
@@ -279,14 +204,19 @@ REAL_NEWS_ACTION_WORDS = [
 
 NUMBER_BOXES = [
 
+    # 1 - انس نقره
     (505, 585, 900, 665),
 
+    # 2 - دلار تهران
     (505, 750, 900, 830),
 
+    # 3 - ساچمه 995
     (505, 915, 900, 995),
 
+    # 4 - شمش نادیر 999.9
     (505, 1075, 900, 1155),
 
+    # 5 - مثقال نقره 995
     (505, 1235, 900, 1315),
 
 ]
@@ -297,18 +227,15 @@ NUMBER_BOXES = [
 # =========================================================
 
 logging.basicConfig(
-
     level=logging.INFO,
-
     format="%(asctime)s | %(levelname)s | %(message)s"
-
 )
 
 log = logging.getLogger("YAZDANDOUST")
 
 
 # =========================================================
-# DIGIT HELPERS
+# DIGITS
 # =========================================================
 
 PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
@@ -316,11 +243,8 @@ ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
 ENGLISH_DIGITS = "0123456789"
 
 DIGIT_TABLE = str.maketrans(
-
     PERSIAN_DIGITS + ARABIC_DIGITS,
-
     ENGLISH_DIGITS + ENGLISH_DIGITS
-
 )
 
 
@@ -334,17 +258,11 @@ def clean_text(text):
     text = normalize_digits(text)
 
     text = (
-
         text
-
         .replace("٬", ",")
-
         .replace("٫", ".")
-
         .replace("\u200c", " ")
-
         .replace("\ufeff", " ")
-
     )
 
     return re.sub(
@@ -359,17 +277,11 @@ def normalize_fa(text):
     text = clean_text(text)
 
     return (
-
         text
-
         .replace("ي", "ی")
-
         .replace("ى", "ی")
-
         .replace("ك", "ک")
-
         .strip()
-
     )
 
 
@@ -378,15 +290,10 @@ def integer_value(text):
     text = normalize_digits(text or "")
 
     text = (
-
         text
-
         .replace(",", "")
-
         .replace("٬", "")
-
         .replace(" ", "")
-
     )
 
     text = re.sub(
@@ -407,15 +314,10 @@ def decimal_value(text):
     text = normalize_digits(text or "")
 
     text = (
-
         text
-
         .replace(",", "")
-
         .replace("٬", "")
-
         .replace("٫", ".")
-
     )
 
     text = re.sub(
@@ -448,10 +350,16 @@ def format_price(value):
 
 def iran_now():
 
-    return datetime.now(IRAN_TZ)
+    return datetime.now(
+        IRAN_TZ
+    )
 
 
-def gregorian_to_jalali(gy, gm, gd):
+def gregorian_to_jalali(
+    gy,
+    gm,
+    gd
+):
 
     g_days_in_month = [
 
@@ -487,23 +395,15 @@ def gregorian_to_jalali(gy, gm, gd):
     if (
 
         gm2 > 1
-
         and
-
         (
-
             gy % 4 == 0
-
             and
-
             (
-
                 gy % 100 != 0
                 or
                 gy % 400 == 0
-
             )
-
         )
 
     ):
@@ -553,6 +453,7 @@ def gregorian_to_jalali(gy, gm, gd):
         i += 1
 
     jm = i + 1
+
     jd = j_day_no + 1
 
     return jy, jm, jd
@@ -570,19 +471,70 @@ def iran_date_string():
 
     )
 
-    return f"{jy:04d}/{jm:02d}/{jd:02d}"
+    return (
+        f"{jy:04d}/"
+        f"{jm:02d}/"
+        f"{jd:02d}"
+    )
 
 
 def iran_time_string():
 
-    return iran_now().strftime("%H:%M")
+    return iran_now().strftime(
+        "%H:%M"
+    )
+
+
+def current_minutes():
+
+    now = iran_now()
+
+    return (
+        now.hour * 60
+        + now.minute
+    )
+
+
+def is_price_time():
+
+    now_minutes = current_minutes()
+
+    start = (
+        PRICE_START_HOUR * 60
+        + PRICE_START_MINUTE
+    )
+
+    end = (
+        PRICE_END_HOUR * 60
+        + PRICE_END_MINUTE
+    )
+
+    return (
+        start
+        <=
+        now_minutes
+        <=
+        end
+    )
+
+
+def is_before_midnight():
+
+    return (
+        current_minutes()
+        <
+        24 * 60
+    )
 
 
 # =========================================================
 # HTTP
 # =========================================================
 
-def http_get(url, timeout=30):
+def http_get(
+    url,
+    timeout=30
+):
 
     response = requests.get(
 
@@ -609,6 +561,9 @@ def http_get(url, timeout=30):
                 "en-US;q=0.8,en;q=0.7",
 
             "Cache-Control":
+                "no-cache",
+
+            "Pragma":
                 "no-cache"
 
         },
@@ -626,18 +581,29 @@ def http_get(url, timeout=30):
 # TELEGRAM PUBLIC SOURCE
 # =========================================================
 
-def public_source_url(channel, before=None):
+def public_source_url(
+    channel,
+    before=None
+):
 
-    url = f"https://t.me/s/{channel}"
+    url = (
+        "https://t.me/s/"
+        f"{channel}"
+    )
 
     if before:
 
-        url += f"?before={int(before)}"
+        url += (
+            f"?before={int(before)}"
+        )
 
     return url
 
 
-def fetch_public_page(channel, before=None):
+def fetch_public_page(
+    channel,
+    before=None
+):
 
     return http_get(
 
@@ -651,7 +617,9 @@ def fetch_public_page(channel, before=None):
     )
 
 
-def parse_public_messages(html):
+def parse_public_messages(
+    html
+):
 
     soup = BeautifulSoup(
         html,
@@ -672,7 +640,12 @@ def parse_public_messages(html):
         try:
 
             message_id = int(
-                data_post.rsplit("/", 1)[1]
+
+                data_post.rsplit(
+                    "/",
+                    1
+                )[1]
+
             )
 
         except (
@@ -716,11 +689,16 @@ def parse_public_messages(html):
 # SILVER RATE
 # =========================================================
 
-def parse_rate_message(text):
+def parse_rate_message(
+    text
+):
 
     text = clean_text(text)
 
-    compact = text.replace(" ", "")
+    compact = text.replace(
+        " ",
+        ""
+    )
 
     if (
         "انس:" not in text
@@ -777,19 +755,25 @@ def parse_rate_message(text):
 
         return None
 
-    if not 20 <= ounce <= 150:
+    if not (
+        20 <= ounce <= 150
+    ):
 
         return None
 
-    if not 50_000 <= tehran <= 2_000_000:
+    if not (
+        50_000 <= tehran <= 2_000_000
+    ):
 
         return None
 
     return {
 
-        "ounce": ounce,
+        "ounce":
+            ounce,
 
-        "tehran": tehran
+        "tehran":
+            tehran
 
     }
 
@@ -797,13 +781,20 @@ def parse_rate_message(text):
 def find_latest_public_rate():
 
     before = None
+
     seen = set()
 
-    for page_number in range(1, 31):
+    for page_number in range(
+        1,
+        31
+    ):
 
         html = fetch_public_page(
+
             SOURCE_CHANNEL,
+
             before
+
         )
 
         messages = parse_public_messages(
@@ -819,23 +810,43 @@ def find_latest_public_rate():
             "PUBLIC SOURCE | page=%s | messages=%s",
 
             page_number,
+
             len(messages)
 
         )
 
         for message_id, text in messages:
 
-            rate = parse_rate_message(text)
+            rate = parse_rate_message(
+                text
+            )
 
             if rate:
 
                 log.info(
+
                     "SOURCE RATE FOUND | %s/%s",
+
                     SOURCE_CHANNEL,
+
                     message_id
+
                 )
 
-                return rate, message_id
+                log.info(
+                    "SOURCE OUNCE = %s",
+                    rate["ounce"]
+                )
+
+                log.info(
+                    "SOURCE TEHRAN USD = %s",
+                    rate["tehran"]
+                )
+
+                return (
+                    rate,
+                    message_id
+                )
 
         min_id = min(
             x[0]
@@ -846,7 +857,9 @@ def find_latest_public_rate():
 
             break
 
-        seen.add(min_id)
+        seen.add(
+            min_id
+        )
 
         before = min_id
 
@@ -859,37 +872,35 @@ def find_latest_public_rate():
 # WEBSITE PRICES
 # =========================================================
 
-def normalize_product_name(text):
+def normalize_product_name(
+    text
+):
 
-    text = clean_text(text)
+    text = clean_text(
+        text
+    )
 
     return (
-
         text
-
         .replace("ي", "ی")
-
         .replace("ى", "ی")
-
         .replace("ك", "ک")
-
         .strip()
-
     )
 
 
-def parse_price_number(text):
+def parse_price_number(
+    text
+):
 
-    text = normalize_digits(text or "")
+    text = normalize_digits(
+        text or ""
+    )
 
     text = (
-
         text
-
         .replace("٬", ",")
-
         .replace("٫", ".")
-
     )
 
     matches = re.findall(
@@ -901,8 +912,15 @@ def parse_price_number(text):
 
     for item in matches:
 
-        raw = item.replace(",", "")
-        raw = raw.replace(".", "")
+        raw = item.replace(
+            ",",
+            ""
+        )
+
+        raw = raw.replace(
+            ".",
+            ""
+        )
 
         if not raw:
 
@@ -916,9 +934,15 @@ def parse_price_number(text):
 
             continue
 
-        if 1_000_000 <= value <= 20_000_000_000:
+        if (
+            1_000_000
+            <= value
+            <= 20_000_000_000
+        ):
 
-            values.append(value)
+            values.append(
+                value
+            )
 
     if not values:
 
@@ -927,7 +951,10 @@ def parse_price_number(text):
     return values[-1]
 
 
-def find_product_card(soup, exact_title):
+def find_product_card(
+    soup,
+    exact_title
+):
 
     wanted = normalize_product_name(
         exact_title
@@ -982,7 +1009,12 @@ def find_product_card(soup, exact_title):
                 break
 
             classes = " ".join(
-                parent.get("class", [])
+
+                parent.get(
+                    "class",
+                    []
+                )
+
             )
 
             if "product" in classes:
@@ -992,17 +1024,23 @@ def find_product_card(soup, exact_title):
     return None
 
 
-def get_current_price_from_card(card):
+def get_current_price_from_card(
+    card
+):
 
-    ins = card.select_one(".price ins")
+    ins = card.select_one(
+        ".price ins"
+    )
 
     if ins:
 
         price = parse_price_number(
+
             ins.get_text(
                 " ",
                 strip=True
             )
+
         )
 
         if price:
@@ -1012,11 +1050,14 @@ def get_current_price_from_card(card):
     for selector in [
 
         ".woocommerce-Price-amount",
+
         ".price"
 
     ]:
 
-        nodes = card.select(selector)
+        nodes = card.select(
+            selector
+        )
 
         for node in reversed(nodes):
 
@@ -1060,11 +1101,13 @@ def get_website_prices_sync():
     if shot_card is None:
 
         raise RuntimeError(
-            "محصول دقیق ساچمه 995 پیدا نشد."
+            "محصول دقیق «نقره ساچمه 1000 گرمی با عیار 995» پیدا نشد."
         )
 
-    shot_package = get_current_price_from_card(
-        shot_card
+    shot_package = (
+        get_current_price_from_card(
+            shot_card
+        )
     )
 
     if shot_package is None:
@@ -1085,11 +1128,13 @@ def get_website_prices_sync():
     if nader_card is None:
 
         raise RuntimeError(
-            "محصول دقیق شمش نادیر پیدا نشد."
+            "محصول دقیق «شمش 1000 گرمی 999.9 نادیر» پیدا نشد."
         )
 
-    nader_package = get_current_price_from_card(
-        nader_card
+    nader_package = (
+        get_current_price_from_card(
+            nader_card
+        )
     )
 
     if nader_package is None:
@@ -1107,33 +1152,74 @@ def get_website_prices_sync():
     )
 
     mithqal_995 = (
+
         shot_995_per_gram
         * MITHQAL_GRAMS
+
     )
 
     mithqal_995 = (
-        round(mithqal_995 / 100)
+
+        round(
+            mithqal_995 / 100
+        )
         * 100
+
     )
 
     result = {
 
         "shot_995":
-            int(round(shot_995_per_gram)),
+            int(
+                round(
+                    shot_995_per_gram
+                )
+            ),
 
         "nader_9999":
-            int(round(nader_9999_per_gram)),
+            int(
+                round(
+                    nader_9999_per_gram
+                )
+            ),
 
         "mithqal_995":
-            int(mithqal_995),
+            int(
+                mithqal_995
+            ),
 
         "shot_package":
-            int(shot_package),
+            int(
+                shot_package
+            ),
 
         "nader_package":
-            int(nader_package)
+            int(
+                nader_package
+            )
 
     }
+
+    log.info(
+        "SHOT 995 / GRAM = %s",
+        format_price(
+            result["shot_995"]
+        )
+    )
+
+    log.info(
+        "NADER 999.9 / GRAM = %s",
+        format_price(
+            result["nader_9999"]
+        )
+    )
+
+    log.info(
+        "MITHQAL 995 = %s",
+        format_price(
+            result["mithqal_995"]
+        )
+    )
 
     return result
 
@@ -1142,7 +1228,10 @@ async def get_website_prices():
 
     last_error = None
 
-    for attempt in range(1, 5):
+    for attempt in range(
+        1,
+        5
+    ):
 
         try:
 
@@ -1157,14 +1246,18 @@ async def get_website_prices():
             log.warning(
 
                 "WEBSITE ATTEMPT %s/4 FAILED: %s",
+
                 attempt,
+
                 error
 
             )
 
             if attempt < 4:
 
-                await asyncio.sleep(5)
+                await asyncio.sleep(
+                    5
+                )
 
     raise RuntimeError(
         f"خطا در دریافت قیمت سایت: {last_error}"
@@ -1175,13 +1268,17 @@ async def get_website_prices():
 # MASHHAD GOLD / COIN
 # =========================================================
 
-def parse_mashhad_market_message(text):
+def parse_mashhad_market_message(
+    text
+):
 
     if not text:
 
         return None
 
-    text = clean_text(text)
+    text = clean_text(
+        text
+    )
 
     gold_patterns = [
 
@@ -1253,11 +1350,19 @@ def parse_mashhad_market_message(text):
 
         coin *= 10
 
-    if not 1_000_000 <= gold <= 1_000_000_000:
+    if not (
+        1_000_000
+        <= gold
+        <= 1_000_000_000
+    ):
 
         return None
 
-    if not 100_000_000 <= coin <= 10_000_000_000:
+    if not (
+        100_000_000
+        <= coin
+        <= 10_000_000_000
+    ):
 
         return None
 
@@ -1275,15 +1380,20 @@ def parse_mashhad_market_message(text):
 def find_latest_mashhad_market():
 
     before = None
+
     seen = set()
 
-    for page_number in range(1, 16):
+    for page_number in range(
+        1,
+        16
+    ):
 
         try:
 
             html = fetch_public_page(
 
                 MASHHAD_SOURCE_CHANNEL,
+
                 before
 
             )
@@ -1291,8 +1401,11 @@ def find_latest_mashhad_market():
         except Exception as error:
 
             log.warning(
+
                 "MASHHAD SOURCE ERROR: %s",
+
                 error
+
             )
 
             return None
@@ -1317,6 +1430,20 @@ def find_latest_mashhad_market():
                     "source_message_id"
                 ] = message_id
 
+                log.info(
+
+                    "MASHHAD MARKET FOUND | gold=%s | coin=%s",
+
+                    market[
+                        "gold_18_mashhad"
+                    ],
+
+                    market[
+                        "coin_imami"
+                    ]
+
+                )
+
                 return market
 
         min_id = min(
@@ -1328,14 +1455,23 @@ def find_latest_mashhad_market():
 
             break
 
-        seen.add(min_id)
+        seen.add(
+            min_id
+        )
 
         before = min_id
+
+    log.warning(
+        "NO MASHHAD MARKET DATA FOUND"
+    )
 
     return None
 
 
-def calculate_coin_bubble(rate, coin_price):
+def calculate_coin_bubble(
+    rate,
+    coin_price
+):
 
     intrinsic = (
 
@@ -1349,15 +1485,26 @@ def calculate_coin_bubble(rate, coin_price):
 
     intrinsic += COIN_MINTING_FEE
 
-    bubble = coin_price - intrinsic
+    bubble = (
+        coin_price
+        - intrinsic
+    )
 
     return {
 
         "intrinsic":
-            int(round(intrinsic)),
+            int(
+                round(
+                    intrinsic
+                )
+            ),
 
         "bubble":
-            int(round(bubble))
+            int(
+                round(
+                    bubble
+                )
+            )
 
     }
 
@@ -1373,34 +1520,49 @@ async def get_mashhad_market():
 # PRICE SIGNATURE
 # =========================================================
 
-def make_price_signature(rate, products):
+def make_price_signature(
+    rate,
+    products
+):
 
     data = {
 
         "ounce":
             round(
-                float(rate["ounce"]),
+                float(
+                    rate["ounce"]
+                ),
                 4
             ),
 
         "tehran":
-            int(rate["tehran"]),
+            int(
+                rate["tehran"]
+            ),
 
         "shot_995":
-            int(products["shot_995"]),
+            int(
+                products["shot_995"]
+            ),
 
         "nader_9999":
-            int(products["nader_9999"]),
+            int(
+                products["nader_9999"]
+            ),
 
         "mithqal_995":
-            int(products["mithqal_995"])
+            int(
+                products["mithqal_995"]
+            )
 
     }
 
     return json.dumps(
 
         data,
+
         sort_keys=True,
+
         ensure_ascii=False
 
     )
@@ -1410,7 +1572,9 @@ def make_price_signature(rate, products):
 # FONT
 # =========================================================
 
-def get_font(size):
+def get_font(
+    size
+):
 
     font_paths = [
 
@@ -1451,25 +1615,43 @@ def fit_font_to_box(
 
     x1, y1, x2, y2 = box
 
-    available_width = x2 - x1 - 30
-    available_height = y2 - y1 - 10
+    available_width = (
+        x2 - x1 - 30
+    )
+
+    available_height = (
+        y2 - y1 - 10
+    )
 
     for size in range(
+
         max_size,
         min_size - 1,
         -1
+
     ):
 
-        font = get_font(size)
+        font = get_font(
+            size
+        )
 
         bbox = draw.textbbox(
+
             (0, 0),
             text,
             font=font
+
         )
 
-        width = bbox[2] - bbox[0]
-        height = bbox[3] - bbox[1]
+        width = (
+            bbox[2]
+            - bbox[0]
+        )
+
+        height = (
+            bbox[3]
+            - bbox[1]
+        )
 
         if (
 
@@ -1481,10 +1663,15 @@ def fit_font_to_box(
 
             return font
 
-    return get_font(min_size)
+    return get_font(
+        min_size
+    )
 
 
-def clear_number_box(draw, box):
+def clear_number_box(
+    draw,
+    box
+):
 
     x1, y1, x2, y2 = box
 
@@ -1502,23 +1689,41 @@ def clear_number_box(draw, box):
     )
 
 
-def draw_centered(draw, box, text, font):
+def draw_centered(
+    draw,
+    box,
+    text,
+    font
+):
 
     x1, y1, x2, y2 = box
 
     bbox = draw.textbbox(
+
         (0, 0),
         text,
         font=font
+
     )
 
-    text_width = bbox[2] - bbox[0]
-    text_height = bbox[3] - bbox[1]
+    text_width = (
+        bbox[2]
+        - bbox[0]
+    )
+
+    text_height = (
+        bbox[3]
+        - bbox[1]
+    )
 
     x = (
 
         x1
-        + (x2 - x1 - text_width) / 2
+        + (
+            x2
+            - x1
+            - text_width
+        ) / 2
         - bbox[0]
 
     )
@@ -1526,7 +1731,11 @@ def draw_centered(draw, box, text, font):
     y = (
 
         y1
-        + (y2 - y1 - text_height) / 2
+        + (
+            y2
+            - y1
+            - text_height
+        ) / 2
         - bbox[1]
 
     )
@@ -1547,7 +1756,10 @@ def draw_centered(draw, box, text, font):
     )
 
 
-def create_board(rate, products):
+def create_board(
+    rate,
+    products
+):
 
     if not TEMPLATE.exists():
 
@@ -1557,15 +1769,25 @@ def create_board(rate, products):
 
     image = Image.open(
         TEMPLATE
-    ).convert("RGB")
+    ).convert(
+        "RGB"
+    )
 
-    if image.size != (1086, 1448):
+    if image.size != (
+        1086,
+        1448
+    ):
 
         raise RuntimeError(
-            "ابعاد board_only_preview.png باید 1086x1448 باشد."
+
+            "ابعاد board_only_preview.png "
+            "باید 1086x1448 باشد."
+
         )
 
-    draw = ImageDraw.Draw(image)
+    draw = ImageDraw.Draw(
+        image
+    )
 
     values = [
 
@@ -1590,8 +1812,10 @@ def create_board(rate, products):
     ]
 
     for box, value in zip(
+
         NUMBER_BOXES,
         values
+
     ):
 
         clear_number_box(
@@ -1622,19 +1846,26 @@ def create_board(rate, products):
         )
 
         draw_centered(
+
             draw,
             box,
             value,
             font
+
         )
 
     image.save(
 
         OUTPUT,
+
         "JPEG",
+
         quality=98,
+
         optimize=True,
+
         progressive=True,
+
         subsampling=0
 
     )
@@ -1662,8 +1893,11 @@ def make_caption():
 
     return (
 
-        f"📅 تاریخ: {iran_date_string()}\n"
-        f"🕐 ساعت: {iran_time_string()}\n\n"
+        f"📅 تاریخ: "
+        f"{iran_date_string()}\n"
+
+        f"🕐 ساعت: "
+        f"{iran_time_string()}\n\n"
 
         f"📞 {PHONE}\n\n"
 
@@ -1691,7 +1925,9 @@ def make_caption():
 # NEWS HELPERS
 # =========================================================
 
-def remove_bad_nodes(soup):
+def remove_bad_nodes(
+    soup
+):
 
     for selector in [
 
@@ -1716,28 +1952,32 @@ def remove_bad_nodes(soup):
 
     ]:
 
-        for node in soup.select(selector):
+        for node in soup.select(
+            selector
+        ):
 
             node.decompose()
 
 
-def extract_title(soup, fallback=""):
+def extract_title(
+    soup,
+    fallback=""
+):
 
     selectors = [
 
         "h1",
-
         "meta[property='og:title']",
-
         "meta[name='twitter:title']",
-
         "title"
 
     ]
 
     for selector in selectors:
 
-        node = soup.select_one(selector)
+        node = soup.select_one(
+            selector
+        )
 
         if not node:
 
@@ -1757,18 +1997,26 @@ def extract_title(soup, fallback=""):
                 strip=True
             )
 
-        value = normalize_fa(value)
+        value = normalize_fa(
+            value
+        )
 
         if len(value) >= 5:
 
             return value
 
-    return normalize_fa(fallback)
+    return normalize_fa(
+        fallback
+    )
 
 
-def clean_article_paragraph(text):
+def clean_article_paragraph(
+    text
+):
 
-    text = normalize_fa(text)
+    text = normalize_fa(
+        text
+    )
 
     if not text:
 
@@ -1799,7 +2047,9 @@ def clean_article_paragraph(text):
     return text
 
 
-def collect_paragraphs(node):
+def collect_paragraphs(
+    node
+):
 
     paragraphs = []
 
@@ -1807,7 +2057,9 @@ def collect_paragraphs(node):
 
         return paragraphs
 
-    for p in node.select("p"):
+    for p in node.select(
+        "p"
+    ):
 
         text = clean_article_paragraph(
 
@@ -1826,12 +2078,16 @@ def collect_paragraphs(node):
 
             continue
 
-        paragraphs.append(text)
+        paragraphs.append(
+            text
+        )
 
     return paragraphs
 
 
-def extract_news_body(soup):
+def extract_news_body(
+    soup
+):
 
     selectors = [
 
@@ -1854,15 +2110,21 @@ def extract_news_body(soup):
 
     for selector in selectors:
 
-        node = soup.select_one(selector)
+        node = soup.select_one(
+            selector
+        )
 
         if not node:
 
             continue
 
-        paragraphs = collect_paragraphs(node)
+        paragraphs = collect_paragraphs(
+            node
+        )
 
-        if len(paragraphs) > len(best):
+        if len(paragraphs) > len(
+            best
+        ):
 
             best = paragraphs
 
@@ -1876,7 +2138,9 @@ def extract_news_body(soup):
         "article, main, section, div"
     ):
 
-        paragraphs = collect_paragraphs(node)
+        paragraphs = collect_paragraphs(
+            node
+        )
 
         if len(paragraphs) < 2:
 
@@ -1892,8 +2156,10 @@ def extract_news_body(soup):
             continue
 
         score = (
+
             len(paragraphs) * 100
             + total_length
+
         )
 
         candidates.append(
@@ -1915,14 +2181,14 @@ def extract_news_body(soup):
     for selector in [
 
         "meta[property='og:description']",
-
         "meta[name='description']",
-
         "meta[name='twitter:description']"
 
     ]:
 
-        node = soup.select_one(selector)
+        node = soup.select_one(
+            selector
+        )
 
         if node:
 
@@ -1937,141 +2203,16 @@ def extract_news_body(soup):
 
             if len(value) >= 100:
 
-                return [value]
+                return [
+                    value
+                ]
 
     return []
 
 
-# =========================================================
-# NEW: DETECT PRICE-ONLY NEWS
-# =========================================================
-
-def is_price_only_news(title, text):
-
-    combined = normalize_fa(
-
-        f"{title} {text}"
-
-    ).lower()
-
-    price_hits = sum(
-
-        1
-
-        for keyword in PRICE_NEWS_KEYWORDS
-
-        if keyword.lower() in combined
-
-    )
-
-    market_hits = sum(
-
-        1
-
-        for keyword in PRICE_MARKET_WORDS
-
-        if keyword.lower() in combined
-
-    )
-
-    action_hits = sum(
-
-        1
-
-        for keyword in REAL_NEWS_ACTION_WORDS
-
-        if keyword.lower() in combined
-
-    )
-
-    # اگر تیتر مستقیماً گزارش قیمت باشد
-    title_normal = normalize_fa(title).lower()
-
-    title_is_price = (
-
-        (
-            "قیمت" in title_normal
-            or
-            "نرخ" in title_normal
-        )
-
-        and
-
-        any(
-            word in title_normal
-            for word in PRICE_MARKET_WORDS
-        )
-
-    )
-
-    if title_is_price:
-
-        # فقط اگر واقعاً خبر مهمی پشت آن باشد اجازه بده
-        if action_hits == 0:
-
-            return True
-
-    # گزارش‌هایی که حجم زیادی از آن فقط قیمت‌هاست
-    if (
-
-        price_hits >= 3
-        and
-        market_hits >= 2
-        and
-        action_hits == 0
-
-    ):
-
-        return True
-
-    # الگوی رایج گزارش قیمت روزانه
-    price_report_patterns = [
-
-        "قیمت طلا",
-        "قیمت سکه",
-        "قیمت دلار",
-        "قیمت ارز",
-        "قیمت یورو",
-        "قیمت طلای",
-        "نرخ طلا",
-        "نرخ سکه",
-        "نرخ دلار",
-        "نرخ ارز",
-        "بازار طلا و ارز",
-
-    ]
-
-    for pattern in price_report_patterns:
-
-        if pattern in title_normal:
-
-            if action_hits == 0:
-
-                return True
-
-    return False
-
-
-def is_valid_news_body(paragraphs):
-
-    if not paragraphs:
-
-        return False
-
-    total_length = sum(
-
-        len(
-            clean_article_paragraph(p)
-        )
-
-        for p in paragraphs
-
-    )
-
-    return total_length >= 150
-
-
-def build_news_summary(paragraphs):
+def build_news_text(
+    paragraphs
+):
 
     clean = []
 
@@ -2089,116 +2230,61 @@ def build_news_summary(paragraphs):
 
             continue
 
-        clean.append(paragraph)
+        clean.append(
+            paragraph
+        )
 
     if not clean:
 
         return ""
 
-    # فقط چند پاراگراف مهم
-    selected = clean[:3]
+    text = "\n\n".join(
+        clean
+    )
 
-    text = "\n\n".join(selected)
-
-    if len(text) > 900:
+    if len(text) > 1100:
 
         text = (
 
-            text[:900]
-
-            .rsplit(" ", 1)[0]
-
-            + "..."
+            text[:1100]
+            .rsplit(
+                " ",
+                1
+            )[0]
+            + "…"
 
         )
 
     return text.strip()
 
 
-def get_market_impact(article):
+def is_valid_news_body(
+    paragraphs
+):
 
-    combined = normalize_fa(
+    if not paragraphs:
 
-        article.get("title", "")
-        + " "
-        + article.get("text", "")
+        return False
 
-    ).lower()
+    total_length = sum(
 
-    if any(
-        x in combined
-        for x in [
-            "فدرال رزرو",
-            "نرخ بهره",
-            "تورم آمریکا",
-            "دلار آمریکا"
-        ]
-    ):
-
-        return (
-            "این خبر می‌تواند از مسیر دلار و "
-            "بازار جهانی روی طلا و نقره اثر بگذارد."
+        len(
+            clean_article_paragraph(p)
         )
 
-    if any(
-        x in combined
-        for x in [
-            "تحریم",
-            "جنگ",
-            "حمله",
-            "آتش بس",
-            "خاورمیانه",
-            "تنگه هرمز"
-        ]
-    ):
+        for p in paragraphs
 
-        return (
-            "با توجه به ارتباط این خبر با ریسک‌های "
-            "سیاسی و منطقه‌ای، می‌تواند بر دلار، "
-            "طلا و نقره اثرگذار باشد."
-        )
-
-    if any(
-        x in combined
-        for x in [
-            "بانک مرکزی",
-            "مرکز مبادله",
-            "سیاست ارزی",
-            "ارز",
-            "دلار"
-        ]
-    ):
-
-        return (
-            "این خبر می‌تواند در کوتاه‌مدت بر "
-            "بازار ارز و به‌دنبال آن بر طلا و نقره اثر بگذارد."
-        )
-
-    if any(
-        x in combined
-        for x in [
-            "نقره",
-            "اونس نقره",
-            "بازار جهانی"
-        ]
-    ):
-
-        return (
-            "این خبر از عوامل اثرگذار بر روند "
-            "بازار جهانی فلزات گرانبهاست."
-        )
+    )
 
     return (
-        "اثر مستقیم این خبر بر قیمت‌ها هنوز "
-        "مشخص نیست و باید واکنش بازار را دنبال کرد."
+        total_length >= 150
     )
 
 
-# =========================================================
-# NEWS INDEX / ARTICLE
-# =========================================================
-
-def parse_news_index(html, base_url):
+def parse_news_index(
+    html,
+    base_url
+):
 
     soup = BeautifulSoup(
         html,
@@ -2206,9 +2292,12 @@ def parse_news_index(html, base_url):
     )
 
     result = []
+
     seen = set()
 
-    for anchor in soup.select("a[href]"):
+    for anchor in soup.select(
+        "a[href]"
+    ):
 
         href = anchor.get(
             "href",
@@ -2259,20 +2348,26 @@ def parse_news_index(html, base_url):
 
             continue
 
-        seen.add(url)
+        seen.add(
+            url
+        )
 
         result.append({
 
-            "url": url,
+            "url":
+                url,
 
-            "title": title
+            "title":
+                title
 
         })
 
     return result
 
 
-def fetch_news_index(source_url):
+def fetch_news_index(
+    source_url
+):
 
     try:
 
@@ -2284,9 +2379,13 @@ def fetch_news_index(source_url):
     except Exception as error:
 
         log.warning(
+
             "NEWS INDEX ERROR | %s | %s",
+
             source_url,
+
             error
+
         )
 
         return []
@@ -2297,7 +2396,9 @@ def fetch_news_index(source_url):
     )
 
 
-def fetch_news_article(item):
+def fetch_news_article(
+    item
+):
 
     try:
 
@@ -2309,9 +2410,13 @@ def fetch_news_article(item):
     except Exception as error:
 
         log.warning(
+
             "NEWS ARTICLE ERROR | %s | %s",
+
             item["url"],
+
             error
+
         )
 
         return None
@@ -2324,28 +2429,17 @@ def fetch_news_article(item):
     title = extract_title(
 
         soup,
-        item.get("title", "")
+
+        item.get(
+            "title",
+            ""
+        )
 
     )
 
-    # -----------------------------------------------------
-    # قبل از استخراج کامل متن:
-    # اگر تیتر خودش گزارش قیمت است، رد شود
-    # -----------------------------------------------------
-
-    if is_price_only_news(
-        title,
-        item.get("title", "")
-    ):
-
-        log.info(
-            "NEWS SKIPPED - PRICE ONLY TITLE | %s",
-            title
-        )
-
-        return None
-
-    remove_bad_nodes(soup)
+    remove_bad_nodes(
+        soup
+    )
 
     paragraphs = extract_news_body(
         soup
@@ -2355,14 +2449,9 @@ def fetch_news_article(item):
         paragraphs
     ):
 
-        log.warning(
-            "NEWS SKIPPED - NO REAL BODY | %s",
-            item["url"]
-        )
-
         return None
 
-    body = build_news_summary(
+    body = build_news_text(
         paragraphs
     )
 
@@ -2370,36 +2459,28 @@ def fetch_news_article(item):
 
         return None
 
-    # -----------------------------------------------------
-    # فیلتر دوم با متن کامل
-    # -----------------------------------------------------
-
-    if is_price_only_news(
-        title,
-        body
-    ):
-
-        log.info(
-            "NEWS SKIPPED - PRICE ONLY BODY | %s",
-            title
-        )
-
-        return None
-
     return {
 
-        "url": item["url"],
+        "url":
+            item["url"],
 
-        "title": title,
+        "title":
+            title,
 
-        "text": body
+        "text":
+            body
 
     }
 
 
-def keyword_match(text, keywords):
+def keyword_match(
+    text,
+    keywords
+):
 
-    text = normalize_fa(text).lower()
+    text = normalize_fa(
+        text
+    ).lower()
 
     return any(
 
@@ -2417,8 +2498,11 @@ def get_candidate_from_sources(
 ):
 
     history = set(
+
         str(x)
+
         for x in history
+
     )
 
     all_items = []
@@ -2429,7 +2513,9 @@ def get_candidate_from_sources(
             source
         )
 
-        all_items.extend(items)
+        all_items.extend(
+            items
+        )
 
     seen_urls = set()
 
@@ -2448,7 +2534,9 @@ def get_candidate_from_sources(
 
             continue
 
-        seen_urls.add(url)
+        seen_urls.add(
+            url
+        )
 
         if url in history:
 
@@ -2463,19 +2551,6 @@ def get_candidate_from_sources(
             title,
             keywords
         ):
-
-            continue
-
-        # فیلتر سریع قیمت قبل از دانلود مقاله
-        if is_price_only_news(
-            title,
-            title
-        ):
-
-            log.info(
-                "PRICE NEWS BLOCKED | %s",
-                title
-            )
 
             continue
 
@@ -2502,14 +2577,9 @@ def get_candidate_from_sources(
 
             continue
 
-        if is_price_only_news(
-            article["title"],
+        if len(
             article["text"]
-        ):
-
-            continue
-
-        if len(article["text"]) < 150:
+        ) < 150:
 
             continue
 
@@ -2518,7 +2588,9 @@ def get_candidate_from_sources(
     return None
 
 
-async def get_economic_news(history):
+async def get_economic_news(
+    history
+):
 
     return await asyncio.to_thread(
 
@@ -2533,7 +2605,9 @@ async def get_economic_news(history):
     )
 
 
-async def get_world_news(history):
+async def get_world_news(
+    history
+):
 
     return await asyncio.to_thread(
 
@@ -2548,13 +2622,23 @@ async def get_world_news(history):
     )
 
 
-def is_urgent_news(article):
+def is_urgent_news(
+    article
+):
 
     combined = (
 
-        article.get("title", "")
+        article.get(
+            "title",
+            ""
+        )
+
         + " "
-        + article.get("text", "")
+
+        + article.get(
+            "text",
+            ""
+        )
 
     )
 
@@ -2564,58 +2648,216 @@ def is_urgent_news(article):
     )
 
 
-# =========================================================
-# PROFESSIONAL NEWS CAPTION
-# =========================================================
+def make_news_caption(
+    article
+):
 
-def make_news_caption(article):
-
-    urgent = is_urgent_news(article)
-
-    if urgent:
-
-        header = "🚨 خبر فوری بازار"
-
-    else:
-
-        header = "📰 خبر مهم بازار"
-
-    title = normalize_fa(
-        article.get(
-            "title",
-            ""
-        )
-    )
-
-    body = normalize_fa(
-        article.get(
-            "text",
-            ""
-        )
-    )
-
-    impact = get_market_impact(
+    urgent = is_urgent_news(
         article
     )
 
+    if urgent:
+
+        header = (
+            "🚨 خبر فوری بازار"
+        )
+
+    else:
+
+        header = (
+            "📰 مهم‌ترین خبر بازار"
+        )
+
     return (
 
-        f"{header}\n\n"
+        f"{header}\n"
+        "━━━━━━━━━━━━━━\n\n"
 
-        f"🔹 {title}\n\n"
+        f"🔸 {article['title']}\n\n"
 
-        f"{body}\n\n"
+        f"{article['text']}\n\n"
 
         "━━━━━━━━━━━━━━\n"
-
-        "📊 اثر احتمالی بر بازار:\n"
-
-        f"{impact}\n\n"
-
-        f"🕐 {iran_time_string()}\n"
+        f"🕐 {iran_time_string()}"
 
         + channel_footer()
 
+    )
+
+
+# =========================================================
+# MORNING MESSAGE
+# =========================================================
+
+def make_morning_message():
+
+    return (
+
+        "🌅 یک روز تازه، یک فرصت تازه\n\n"
+
+        "امروز با آرامش، تمرکز و انرژی خوب "
+        "قدم‌به‌قدم جلو برو.\n\n"
+
+        "✨ امیدواریم امروز برای شما "
+        "پر از خبرهای خوب و اتفاق‌های ارزشمند باشد.\n\n"
+
+        f"📅 {iran_date_string()}"
+
+        + channel_footer()
+
+    )
+
+
+# =========================================================
+# MASHHAD REPORT
+# =========================================================
+
+def make_mashhad_report(
+    market,
+    rate
+):
+
+    bubble = calculate_coin_bubble(
+
+        rate,
+
+        market[
+            "coin_imami"
+        ]
+
+    )
+
+    bubble_text = format_price(
+        abs(
+            bubble["bubble"]
+        )
+    )
+
+    if bubble["bubble"] > 0:
+
+        bubble_label = (
+            f"🔴 حباب مثبت: {bubble_text} تومان"
+        )
+
+    elif bubble["bubble"] < 0:
+
+        bubble_label = (
+            f"🟢 حباب منفی: {bubble_text} تومان"
+        )
+
+    else:
+
+        bubble_label = (
+            "⚪ حباب: بدون حباب"
+        )
+
+    return (
+
+        "🪙 گزارش بازار طلا و سکه مشهد\n"
+        "━━━━━━━━━━━━━━\n"
+
+        f"📅 {iran_date_string()}\n"
+        f"🕐 {iran_time_string()}\n\n"
+
+        "🥇 طلای ۱۸ عیار مشهد\n"
+        f"💰 {format_price(market['gold_18_mashhad'])} تومان\n\n"
+
+        "🪙 سکه امامی\n"
+        f"💰 {format_price(market['coin_imami'])} تومان\n\n"
+
+        f"{bubble_label}\n\n"
+
+        "📌 ارزش ذاتی محاسبه‌شده سکه\n"
+        f"{format_price(bubble['intrinsic'])} تومان"
+
+        + channel_footer()
+
+    )
+
+
+# =========================================================
+# 24 HOUR REPORT
+# =========================================================
+
+def make_24h_report(
+    rate,
+    products,
+    market
+):
+
+    bubble = calculate_coin_bubble(
+
+        rate,
+
+        market[
+            "coin_imami"
+        ]
+
+    )
+
+    if bubble["bubble"] > 0:
+
+        bubble_text = (
+            f"🔴 +{format_price(bubble['bubble'])} تومان"
+        )
+
+    elif bubble["bubble"] < 0:
+
+        bubble_text = (
+            f"🟢 -{format_price(abs(bubble['bubble']))} تومان"
+        )
+
+    else:
+
+        bubble_text = (
+            "⚪ بدون حباب"
+        )
+
+    lines = [
+
+        "📊 گزارش ۲۴ ساعته بازار",
+        "━━━━━━━━━━━━━━",
+
+        f"📅 {iran_date_string()}",
+        f"🕐 {iran_time_string()}",
+        "",
+
+        "🥇 طلای ۱۸ عیار مشهد",
+        f"💰 {format_price(market['gold_18_mashhad'])} تومان",
+        "",
+
+        "🪙 سکه امامی",
+        f"💰 {format_price(market['coin_imami'])} تومان",
+        f"🎈 حباب سکه: {bubble_text}",
+        "",
+
+        "🥈 ساچمه نقره ۹۹۵",
+        f"💰 {format_price(products['shot_995'])} تومان",
+        "",
+
+        "🧱 شمش نادیر ۹۹۹.۹",
+        f"💰 {format_price(products['nader_9999'])} تومان",
+        "",
+
+        "⚖️ مثقال نقره ۹۹۵",
+        f"💰 {format_price(products['mithqal_995'])} تومان",
+        "",
+
+        "🌍 انس نقره",
+        f"{rate['ounce']:.2f}",
+        "",
+
+        "💵 دلار تهران",
+        f"{format_price(rate['tehran'])} تومان",
+
+    ]
+
+    lines.append(
+        channel_footer()
+    )
+
+    return "\n".join(
+        lines
     )
 
 
@@ -2639,7 +2881,10 @@ def load_state():
 
         )
 
-        if isinstance(data, dict):
+        if isinstance(
+            data,
+            dict
+        ):
 
             return data
 
@@ -2653,9 +2898,13 @@ def load_state():
     return {}
 
 
-def save_state(state):
+def save_state(
+    state
+):
 
-    temp = STATE.with_suffix(".tmp")
+    temp = STATE.with_suffix(
+        ".tmp"
+    )
 
     temp.write_text(
 
@@ -2673,7 +2922,9 @@ def save_state(state):
 
     )
 
-    temp.replace(STATE)
+    temp.replace(
+        STATE
+    )
 
 
 def today_key():
@@ -2681,64 +2932,103 @@ def today_key():
     return iran_date_string()
 
 
-def daily_key(name):
-
-    return f"{today_key()}_{name}"
-
-
-def should_send_daily(state, name):
+def daily_key(
+    name
+):
 
     return (
+        f"{today_key()}_{name}"
+    )
 
+
+def should_send_daily(
+    state,
+    name
+):
+
+    return (
         state.get(
             daily_key(name)
         )
         !=
         True
-
     )
 
 
-def mark_daily_sent(state, name):
+def mark_daily_sent(
+    state,
+    name
+):
 
-    state[daily_key(name)] = True
+    state[
+        daily_key(name)
+    ] = True
 
 
 # =========================================================
 # NEWS DAILY CONTROL
 # =========================================================
 
-def reset_news_day_if_needed(state):
+def reset_news_day_if_needed(
+    state
+):
 
     today = today_key()
 
-    if state.get("news_date") != today:
+    if state.get(
+        "news_date"
+    ) != today:
 
-        state["news_date"] = today
+        state[
+            "news_date"
+        ] = today
 
-        state["economic_news_count"] = 0
-        state["world_news_count"] = 0
-        state["news_count"] = 0
+        state[
+            "economic_news_count"
+        ] = 0
 
-        state["news_last_posted_at"] = None
+        state[
+            "world_news_count"
+        ] = 0
 
-        save_state(state)
+        state[
+            "news_count"
+        ] = 0
+
+        state[
+            "news_last_posted_at"
+        ] = None
+
+        save_state(
+            state
+        )
 
 
-def news_is_due(state):
+def news_is_due(
+    state
+):
 
     if not NEWS_ENABLED:
 
         return False
 
-    reset_news_day_if_needed(state)
+    reset_news_day_if_needed(
+        state
+    )
+
+    # خبر بعد از نیمه‌شب منتشر نشود.
+    if current_minutes() >= 24 * 60:
+
+        return False
 
     total = int(
+
         state.get(
             "news_count",
             0
         )
         or 0
+
     )
 
     if total >= NEWS_TOTAL_MAX_PER_DAY:
@@ -2768,17 +3058,111 @@ def news_is_due(state):
         elapsed = (
 
             iran_now()
-            - last_dt.astimezone(IRAN_TZ)
+            - last_dt.astimezone(
+                IRAN_TZ
+            )
 
         ).total_seconds() / 60
 
         return (
-            elapsed >= NEWS_MIN_GAP_MINUTES
+            elapsed
+            >=
+            NEWS_MIN_GAP_MINUTES
         )
 
     except Exception:
 
         return True
+
+
+def update_news_state(
+    state,
+    article,
+    message_id
+):
+
+    if is_urgent_news(
+        article
+    ):
+
+        state[
+            "world_news_count"
+        ] = (
+
+            int(
+                state.get(
+                    "world_news_count",
+                    0
+                )
+                or 0
+            )
+            + 1
+
+        )
+
+    else:
+
+        state[
+            "economic_news_count"
+        ] = (
+
+            int(
+                state.get(
+                    "economic_news_count",
+                    0
+                )
+                or 0
+            )
+            + 1
+
+        )
+
+    state[
+        "news_count"
+    ] = (
+
+        int(
+            state.get(
+                "news_count",
+                0
+            )
+            or 0
+        )
+        + 1
+
+    )
+
+    state[
+        "news_last_posted_at"
+    ] = iran_now().isoformat()
+
+    history = state.get(
+        "news_history",
+        []
+    )
+
+    if not isinstance(
+        history,
+        list
+    ):
+
+        history = []
+
+    history.append(
+        article["url"]
+    )
+
+    state[
+        "news_history"
+    ] = history[
+        -NEWS_HISTORY_LIMIT:
+    ]
+
+    state[
+        "last_news_message_id"
+    ] = int(
+        message_id
+    )
 
 
 # =========================================================
@@ -2795,7 +3179,9 @@ async def send_rate_post(
     sent = await client.send_file(
 
         target,
+
         str(image),
+
         caption=caption
 
     )
@@ -2805,7 +3191,9 @@ async def send_rate_post(
         sent.id
     )
 
-    return int(sent.id)
+    return int(
+        sent.id
+    )
 
 
 async def send_text_post(
@@ -2817,7 +3205,9 @@ async def send_text_post(
     sent = await client.send_message(
 
         target,
+
         text,
+
         link_preview=False
 
     )
@@ -2827,7 +3217,9 @@ async def send_text_post(
         sent.id
     )
 
-    return int(sent.id)
+    return int(
+        sent.id
+    )
 
 
 async def send_news_post(
@@ -2840,14 +3232,12 @@ async def send_news_post(
 
         return None
 
-    if is_price_only_news(
-        article.get("title", ""),
-        article.get("text", "")
-    ):
-
-        log.info(
-            "NEWS SEND BLOCKED - PRICE ONLY"
-        )
+    if len(
+        article.get(
+            "text",
+            ""
+        ).strip()
+    ) < 150:
 
         return None
 
@@ -2856,11 +3246,9 @@ async def send_news_post(
     )
 
     return await send_text_post(
-
         client,
         target,
         caption
-
     )
 
 
@@ -2882,7 +3270,9 @@ async def send_sticker(
     sent = await client.send_file(
 
         target,
+
         str(sticker_path),
+
         force_document=False
 
     )
@@ -2892,257 +3282,8 @@ async def send_sticker(
         sent.id
     )
 
-    return int(sent.id)
-
-
-# =========================================================
-# MORNING MESSAGE
-# =========================================================
-
-def make_morning_message():
-
-    return (
-
-        "☀️ یک روز تازه، یک فرصت تازه\n\n"
-
-        "امروز رو با آرامش، تمرکز و انرژی خوب شروع کن.\n"
-
-        "قدم‌های کوچک امروز می‌تونن "
-        "نتیجه‌های بزرگ فردا رو بسازن ✨\n\n"
-
-        f"📅 {iran_date_string()}"
-
-        + channel_footer()
-
-    )
-
-
-# =========================================================
-# MASHHAD REPORT
-# =========================================================
-
-def make_mashhad_report(
-    market,
-    rate
-):
-
-    bubble = calculate_coin_bubble(
-
-        rate,
-        market["coin_imami"]
-
-    )
-
-    bubble_text = format_price(
-        abs(bubble["bubble"])
-    )
-
-    if bubble["bubble"] > 0:
-
-        bubble_label = (
-            f"🔴 حباب مثبت: {bubble_text} تومان"
-        )
-
-    elif bubble["bubble"] < 0:
-
-        bubble_label = (
-            f"🟢 حباب منفی: {bubble_text} تومان"
-        )
-
-    else:
-
-        bubble_label = (
-            "⚪ حباب: بدون حباب"
-        )
-
-    return (
-
-        "🪙 گزارش بازار طلا و سکه مشهد\n\n"
-
-        f"📅 {iran_date_string()}\n"
-        f"🕐 {iran_time_string()}\n\n"
-
-        "🥇 طلای ۱۸ عیار مشهد:\n"
-        f"💰 {format_price(market['gold_18_mashhad'])} تومان\n\n"
-
-        "🪙 سکه امامی:\n"
-        f"💰 {format_price(market['coin_imami'])} تومان\n\n"
-
-        f"{bubble_label}\n\n"
-
-        "📌 ارزش ذاتی محاسبه‌شده سکه:\n"
-        f"{format_price(bubble['intrinsic'])} تومان"
-
-        + channel_footer()
-
-    )
-
-
-# =========================================================
-# 24 HOUR REPORT
-# =========================================================
-
-def make_24h_report(
-    rate,
-    products,
-    market
-):
-
-    lines = [
-
-        "📊 گزارش ۲۴ ساعته بازار",
-
-        f"📅 {iran_date_string()}",
-        f"🕐 {iran_time_string()}",
-        "",
-
-        "🥇 طلای ۱۸ عیار مشهد:",
-        f"{format_price(market['gold_18_mashhad'])} تومان",
-
-        "",
-
-        "🪙 سکه امامی:",
-        f"{format_price(market['coin_imami'])} تومان",
-
-        "",
-
-        "🥈 ساچمه نقره ۹۹۵:",
-        f"{format_price(products['shot_995'])} تومان",
-
-        "🧱 شمش نادیر ۹۹۹.۹:",
-        f"{format_price(products['nader_9999'])} تومان",
-
-        "⚖️ مثقال نقره ۹۹۵:",
-        f"{format_price(products['mithqal_995'])} تومان",
-
-        "",
-
-        "🌍 انس نقره:",
-        f"{rate['ounce']:.2f}",
-
-        "💵 دلار تهران:",
-        f"{format_price(rate['tehran'])} تومان",
-
-    ]
-
-    bubble = calculate_coin_bubble(
-
-        rate,
-        market["coin_imami"]
-
-    )
-
-    if bubble["bubble"] > 0:
-
-        bubble_status = "(مثبت)"
-
-    elif bubble["bubble"] < 0:
-
-        bubble_status = "(منفی)"
-
-    else:
-
-        bubble_status = "(بدون حباب)"
-
-    lines.extend([
-
-        "",
-
-        "🎈 حباب سکه امامی:",
-
-        (
-            f"{format_price(abs(bubble['bubble']))} تومان "
-            f"{bubble_status}"
-        )
-
-    ])
-
-    lines.append(
-        channel_footer()
-    )
-
-    return "\n".join(lines)
-
-
-# =========================================================
-# NEWS STATE
-# =========================================================
-
-def update_news_state(
-    state,
-    article,
-    message_id
-):
-
-    if is_urgent_news(article):
-
-        state["world_news_count"] = (
-
-            int(
-                state.get(
-                    "world_news_count",
-                    0
-                )
-                or 0
-            )
-            + 1
-
-        )
-
-    else:
-
-        state["economic_news_count"] = (
-
-            int(
-                state.get(
-                    "economic_news_count",
-                    0
-                )
-                or 0
-            )
-            + 1
-
-        )
-
-    state["news_count"] = (
-
-        int(
-            state.get(
-                "news_count",
-                0
-            )
-            or 0
-        )
-        + 1
-
-    )
-
-    state["news_last_posted_at"] = (
-        iran_now().isoformat()
-    )
-
-    history = state.get(
-        "news_history",
-        []
-    )
-
-    if not isinstance(
-        history,
-        list
-    ):
-
-        history = []
-
-    history.append(
-        article["url"]
-    )
-
-    state["news_history"] = history[
-        -NEWS_HISTORY_LIMIT:
-    ]
-
-    state["last_news_message_id"] = int(
-        message_id
+    return int(
+        sent.id
     )
 
 
@@ -3177,7 +3318,9 @@ async def main():
 
     try:
 
-        api_id = int(API_ID)
+        api_id = int(
+            API_ID
+        )
 
     except ValueError:
 
@@ -3209,38 +3352,51 @@ async def main():
     )
 
     # =====================================================
-    # FETCH SILVER RATE
+    # FETCH RATE
+    # فقط برای بررسی قیمت در ساعات معاملات
     # =====================================================
 
     rate = None
     source_message_id = None
 
-    try:
+    if is_price_time():
 
-        rate, source_message_id = (
-            await asyncio.to_thread(
-                find_latest_public_rate
+        try:
+
+            rate, source_message_id = (
+
+                await asyncio.to_thread(
+                    find_latest_public_rate
+                )
+
             )
-        )
 
-    except Exception as error:
+        except Exception as error:
 
-        log.exception(
-            "RATE FETCH FAILED: %s",
-            error
+            log.exception(
+                "RATE FETCH FAILED: %s",
+                error
+            )
+
+    else:
+
+        log.info(
+            "OUTSIDE PRICE HOURS -> RATE CHECK SKIPPED"
         )
 
     # =====================================================
-    # WEBSITE PRODUCTS
+    # FETCH WEBSITE PRICES
     # =====================================================
 
     products = None
 
-    if rate is not None:
+    if is_price_time():
 
         try:
 
-            products = await get_website_prices()
+            products = (
+                await get_website_prices()
+            )
 
         except Exception as error:
 
@@ -3250,49 +3406,14 @@ async def main():
             )
 
     # =====================================================
-    # MASHHAD
-    # =====================================================
-
-    mashhad_market = None
-
-    if (
-
-        current_time in [
-            "11:00",
-            "15:00",
-            "18:00",
-            "21:15"
-        ]
-
-        or
-
-        should_send_daily(
-            state,
-            "mashhad_report_" + current_time
-        )
-
-    ):
-
-        try:
-
-            mashhad_market = (
-                await get_mashhad_market()
-            )
-
-        except Exception as error:
-
-            log.exception(
-                "MASHHAD MARKET FAILED: %s",
-                error
-            )
-
-    # =====================================================
-    # TELEGRAM
+    # TELEGRAM CONNECTION
     # =====================================================
 
     client = TelegramClient(
 
-        str(BASE / "bot"),
+        str(
+            BASE / "bot"
+        ),
 
         api_id,
 
@@ -3316,83 +3437,152 @@ async def main():
             bot_token=BOT_TOKEN
         )
 
-        target = await client.get_entity(
+        target = (
+            await client.get_entity(
+                TARGET_CHANNEL
+            )
+        )
+
+        log.info(
+            "TARGET CONNECTED = %s",
             TARGET_CHANNEL
         )
 
         # =================================================
-        # PRICE POST
+        # PRICE UPDATE
+        # فقط در صورت تغییر واقعی قیمت
         # =================================================
 
         if (
 
-            rate is not None
+            is_price_time()
+
             and
+
+            rate is not None
+
+            and
+
             products is not None
 
         ):
 
-            image = create_board(
-                rate,
-                products
+            current_signature = (
+                make_price_signature(
+                    rate,
+                    products
+                )
             )
 
-            caption = make_caption()
+            previous_signature = state.get(
+                "price_signature"
+            )
 
-            target_message_id = (
+            log.info(
+                "CURRENT PRICE SIGNATURE = %s",
+                current_signature
+            )
 
-                await send_rate_post(
+            log.info(
+                "PREVIOUS PRICE SIGNATURE = %s",
+                previous_signature
+            )
 
-                    client,
-                    target,
-                    image,
-                    caption
+            # ---------------------------------------------
+            # فقط اگر قیمت تغییر کرده باشد
+            # ---------------------------------------------
+
+            if (
+                current_signature
+                !=
+                previous_signature
+            ):
+
+                log.info(
+                    "PRICE CHANGED -> SENDING NEW PRICE"
+                )
+
+                image = create_board(
+
+                    rate,
+                    products
 
                 )
 
+                caption = make_caption()
+
+                target_message_id = (
+
+                    await send_rate_post(
+
+                        client,
+
+                        target,
+
+                        image,
+
+                        caption
+
+                    )
+
+                )
+
+                state.update({
+
+                    "source_message_id":
+                        int(
+                            source_message_id
+                        ),
+
+                    "target_message_id":
+                        int(
+                            target_message_id
+                        ),
+
+                    "ounce":
+                        rate["ounce"],
+
+                    "tehran":
+                        rate["tehran"],
+
+                    "shot_995":
+                        products["shot_995"],
+
+                    "nader_9999":
+                        products["nader_9999"],
+
+                    "mithqal_995":
+                        products["mithqal_995"],
+
+                    "shot_package":
+                        products["shot_package"],
+
+                    "nader_package":
+                        products["nader_package"],
+
+                    "price_signature":
+                        current_signature,
+
+                    "updated_at":
+                        iran_now().isoformat()
+
+                })
+
+                save_state(
+                    state
+                )
+
+            else:
+
+                log.info(
+                    "PRICE NOT CHANGED -> NO POST"
+                )
+
+        else:
+
+            log.info(
+                "PRICE POST SKIPPED"
             )
-
-            state.update({
-
-                "source_message_id":
-                    int(source_message_id),
-
-                "target_message_id":
-                    int(target_message_id),
-
-                "ounce":
-                    rate["ounce"],
-
-                "tehran":
-                    rate["tehran"],
-
-                "shot_995":
-                    products["shot_995"],
-
-                "nader_9999":
-                    products["nader_9999"],
-
-                "mithqal_995":
-                    products["mithqal_995"],
-
-                "shot_package":
-                    products["shot_package"],
-
-                "nader_package":
-                    products["nader_package"],
-
-                "price_signature":
-                    make_price_signature(
-                        rate,
-                        products
-                    ),
-
-                "updated_at":
-                    iran_now().isoformat()
-
-            })
-
-            save_state(state)
 
         # =================================================
         # 08:00 MORNING
@@ -3400,7 +3590,11 @@ async def main():
 
         if (
 
-            current_time == "08:00"
+            8 * 60
+            <=
+            current_minutes()
+            <
+            8 * 60 + 5
 
             and
 
@@ -3414,7 +3608,9 @@ async def main():
             await send_text_post(
 
                 client,
+
                 target,
+
                 make_morning_message()
 
             )
@@ -3424,15 +3620,21 @@ async def main():
                 "morning"
             )
 
-            save_state(state)
+            save_state(
+                state
+            )
 
         # =================================================
-        # 10:30 START
+        # 10:30 START TRADES
         # =================================================
 
         if (
 
-            current_time == "10:30"
+            10 * 60 + 30
+            <=
+            current_minutes()
+            <
+            10 * 60 + 35
 
             and
 
@@ -3446,7 +3648,9 @@ async def main():
             message_id = await send_sticker(
 
                 client,
+
                 target,
+
                 START_STICKER
 
             )
@@ -3458,71 +3662,138 @@ async def main():
                     "start_trades"
                 )
 
-                save_state(state)
+                save_state(
+                    state
+                )
 
         # =================================================
         # MASHHAD REPORTS
+        # 11:00 / 15:00 / 18:00
         # =================================================
 
-        if current_time in [
+        report_times = [
 
-            "11:00",
-            "15:00",
-            "18:00"
+            (
+                "11:00",
+                "mashhad_11"
+            ),
 
-        ]:
+            (
+                "15:00",
+                "mashhad_15"
+            ),
 
-            report_key = (
-                "mashhad_" + current_time
+            (
+                "18:00",
+                "mashhad_18"
+            )
+
+        ]
+
+        for report_time, report_key in report_times:
+
+            hour, minute = map(
+                int,
+                report_time.split(":")
+            )
+
+            start_minute = (
+                hour * 60
+                + minute
             )
 
             if (
 
-                should_send_daily(
-                    state,
-                    report_key
-                )
-
-                and
-
-                mashhad_market is not None
-
-                and
-
-                rate is not None
+                start_minute
+                <=
+                current_minutes()
+                <
+                start_minute + 5
 
             ):
 
-                await send_text_post(
-
-                    client,
-                    target,
-
-                    make_mashhad_report(
-
-                        mashhad_market,
-                        rate
-
-                    )
-
-                )
-
-                mark_daily_sent(
+                if should_send_daily(
                     state,
                     report_key
-                )
+                ):
 
-                save_state(state)
+                    try:
+
+                        mashhad_market = (
+                            await get_mashhad_market()
+                        )
+
+                    except Exception as error:
+
+                        log.exception(
+                            "MASHHAD MARKET FAILED: %s",
+                            error
+                        )
+
+                        mashhad_market = None
+
+                    if (
+
+                        mashhad_market is not None
+
+                        and
+
+                        rate is not None
+
+                    ):
+
+                        await send_text_post(
+
+                            client,
+
+                            target,
+
+                            make_mashhad_report(
+
+                                mashhad_market,
+
+                                rate
+
+                            )
+
+                        )
+
+                        mark_daily_sent(
+                            state,
+                            report_key
+                        )
+
+                        save_state(
+                            state
+                        )
 
         # =================================================
         # NEWS
+        #
+        # خبرها تا قبل از نیمه‌شب مجاز هستند.
+        # بعد از 21:00 قیمت متوقف است ولی خبر ادامه دارد.
         # =================================================
 
-        if news_is_due(state):
+        if (
+
+            current_minutes()
+            <
+            24 * 60
+
+            and
+
+            news_is_due(
+                state
+            )
+
+        ):
 
             history = state.get(
+
                 "news_history",
+
                 []
+
             )
 
             if not isinstance(
@@ -3554,7 +3825,17 @@ async def main():
 
             news_article = None
 
-            if economic_count < NEWS_ECONOMIC_MAX_PER_DAY:
+            # -------------------------------------------------
+            # اقتصادی
+            # -------------------------------------------------
+
+            if (
+
+                economic_count
+                <
+                NEWS_ECONOMIC_MAX_PER_DAY
+
+            ):
 
                 try:
 
@@ -3571,13 +3852,19 @@ async def main():
                         error
                     )
 
+            # -------------------------------------------------
+            # اخبار جهان / جنگ / ترامپ
+            # -------------------------------------------------
+
             if (
 
                 news_article is None
 
                 and
 
-                world_count < NEWS_WORLD_MAX_PER_DAY
+                world_count
+                <
+                NEWS_WORLD_MAX_PER_DAY
 
             ):
 
@@ -3603,7 +3890,9 @@ async def main():
                     await send_news_post(
 
                         client,
+
                         target,
+
                         news_article
 
                     )
@@ -3615,20 +3904,28 @@ async def main():
                     update_news_state(
 
                         state,
+
                         news_article,
+
                         news_message_id
 
                     )
 
-                    save_state(state)
+                    save_state(
+                        state
+                    )
 
         # =================================================
-        # 21:00 END
+        # 21:00 END TRADES
         # =================================================
 
         if (
 
-            current_time == "21:00"
+            21 * 60
+            <=
+            current_minutes()
+            <
+            21 * 60 + 5
 
             and
 
@@ -3642,7 +3939,9 @@ async def main():
             message_id = await send_sticker(
 
                 client,
+
                 target,
+
                 END_STICKER
 
             )
@@ -3654,7 +3953,9 @@ async def main():
                     "end_trades"
                 )
 
-                save_state(state)
+                save_state(
+                    state
+                )
 
         # =================================================
         # 21:15 24H REPORT
@@ -3662,7 +3963,11 @@ async def main():
 
         if (
 
-            current_time == "21:15"
+            21 * 60 + 15
+            <=
+            current_minutes()
+            <
+            21 * 60 + 20
 
             and
 
@@ -3671,41 +3976,79 @@ async def main():
                 "24h_report"
             )
 
-            and
-
-            rate is not None
-
-            and
-
-            products is not None
-
-            and
-
-            mashhad_market is not None
-
         ):
 
-            await send_text_post(
+            try:
 
-                client,
-                target,
+                report_rate = rate
 
-                make_24h_report(
+                if report_rate is None:
 
-                    rate,
-                    products,
-                    mashhad_market
+                    report_rate, _ = (
+                        await asyncio.to_thread(
+                            find_latest_public_rate
+                        )
+                    )
 
+                report_products = products
+
+                if report_products is None:
+
+                    report_products = (
+                        await get_website_prices()
+                    )
+
+                mashhad_market = (
+                    await get_mashhad_market()
                 )
 
-            )
+                if (
 
-            mark_daily_sent(
-                state,
-                "24h_report"
-            )
+                    report_rate is not None
 
-            save_state(state)
+                    and
+
+                    report_products is not None
+
+                    and
+
+                    mashhad_market is not None
+
+                ):
+
+                    await send_text_post(
+
+                        client,
+
+                        target,
+
+                        make_24h_report(
+
+                            report_rate,
+
+                            report_products,
+
+                            mashhad_market
+
+                        )
+
+                    )
+
+                    mark_daily_sent(
+                        state,
+                        "24h_report"
+                    )
+
+                    save_state(
+                        state
+                    )
+
+            except Exception as error:
+
+                log.exception(
+                    "24H REPORT FAILED: %s",
+                    error
+                )
 
     finally:
 
@@ -3724,11 +4067,15 @@ if __name__ == "__main__":
 
     try:
 
-        asyncio.run(main())
+        asyncio.run(
+            main()
+        )
 
     except KeyboardInterrupt:
 
-        log.info("STOPPED")
+        log.info(
+            "STOPPED"
+        )
 
     except Exception:
 
