@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/21",
-  "economic_news_count": 4,
+  "economic_news_count": 5,
   "world_news_count": 1,
-  "news_count": 5,
-  "news_last_posted_at": "2026-08-12T17:11:51.683644+03:30",
+  "news_count": 6,
+  "news_last_posted_at": "2026-08-12T23:49:23.827622+03:30",
   "source_message_id": 34348,
   "target_message_id": 275,
   "ounce": 64.78,
@@ -22,9 +22,10 @@
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668450/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%82%DB%8C%D9%85%D8%AA-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%A8%D9%87-%D8%A8%D8%A7%D9%84%D8%A7%D8%AA%D8%B1%DB%8C%D9%86-%D8%B1%D9%82%D9%85-%D8%AF%D8%B1-2-%D9%85%D8%A7%D9%87-%DA%AF%D8%B0%D8%B4%D8%AA%D9%87",
     "https://www.tasnimnews.ir/fa/news/1405/05/19/3668048/%D8%AA%D8%B1%D9%85%D8%B2-%D9%85%D9%82%D8%AF%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D8%A7%DB%8C%D8%B3%D8%AA%DA%AF%D8%A7%D9%87-%D9%86%D8%A7%D8%AA%D8%B1%D8%A7%D8%B2%DB%8C-%D8%A8%D8%A7%D9%86%DA%A9%DB%8C-%D8%B3%D9%BE%D8%B1%D8%AF%D9%87-%D9%82%D8%A7%D9%86%D9%88%D9%86%DB%8C-%D8%AD%D8%B1%DB%8C%D9%81-%D8%AA%D9%88%D8%B1%D9%85-%D9%85%DB%8C-%D8%B4%D9%88%D8%AF",
     "https://www.tasnimnews.ir/fa/news/1405/05/19/3667862/%D8%A2%DB%8C%D8%A7-%D8%B7%D9%84%D8%A7%DB%8C-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%AC%D9%87%D8%B4-%D8%A8%D8%B2%D8%B1%DA%AF-%D8%A2%D9%85%D8%A7%D8%AF%D9%87-%D9%85%DB%8C-%D8%B4%D9%88%D8%AF",
-    "https://www.tasnimnews.ir/fa/news/1405/05/19/3667831/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%86%D8%B1%D8%AE-%D8%AD%D9%88%D8%A7%D9%84%D9%87-%D8%AF%D9%84%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87-%DB%8C%D9%88%D8%B1%D9%88-%D8%A7%D8%B1%D8%B2%D8%A7%D9%86-%D8%B4%D8%AF"
+    "https://www.tasnimnews.ir/fa/news/1405/05/19/3667831/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%86%D8%B1%D8%AE-%D8%AD%D9%88%D8%A7%D9%84%D9%87-%D8%AF%D9%84%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87-%DB%8C%D9%88%D8%B1%D9%88-%D8%A7%D8%B1%D8%B2%D8%A7%D9%86-%D8%B4%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/21/3669497/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%82%DB%8C%D9%85%D8%AA-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%A8%D9%87-4414-%D8%AF%D9%84%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%87%D8%B1-%D8%A7%D9%88%D9%86%D8%B3"
   ],
-  "last_news_message_id": 287,
+  "last_news_message_id": 289,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1797200, \"nader_9999\": 403000, \"ounce\": 64.78, \"shot_995\": 390000, \"tehran\": 187000}",
