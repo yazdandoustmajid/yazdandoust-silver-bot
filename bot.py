@@ -3697,7 +3697,8 @@ def ai_summarize_news_sync(
         return None
 
     client = OpenAI(
-        api_key=OPENAI_API_KEY
+        api_key=OPENAI_API_KEY,
+        base_url="https://1xai.ir/v1"
     )
 
     prompt = f"""
@@ -4171,7 +4172,8 @@ def ai_economy_lesson_sync():
         return None
 
     client = OpenAI(
-        api_key=OPENAI_API_KEY
+        api_key=OPENAI_API_KEY,
+        base_url="https://1xai.ir/v1"
     )
 
     prompt = """
@@ -4234,7 +4236,8 @@ def ai_market_recap_sync(
         return None
 
     client = OpenAI(
-        api_key=OPENAI_API_KEY
+        api_key=OPENAI_API_KEY,
+        base_url="https://1xai.ir/v1"
     )
 
     prompt = f"""
@@ -4318,7 +4321,8 @@ def ai_tomorrow_message_sync():
         return None
 
     client = OpenAI(
-        api_key=OPENAI_API_KEY
+        api_key=OPENAI_API_KEY,
+        base_url="https://1xai.ir/v1"
     )
 
     prompt = """
@@ -5765,18 +5769,6 @@ async def main():
         # =================================================
         # NEWS
         # =================================================
-        #
-        # بسیار مهم:
-        # این بخش عمداً هیچ شرطی برای
-        # is_market_holiday() ندارد.
-        #
-        # بنابراین:
-        # جمعه = خبر ارسال می‌شود
-        # تعطیل رسمی = خبر ارسال می‌شود
-        # روز کاری = خبر ارسال می‌شود
-        #
-        # تعطیلی فقط برای معاملات و قیمت‌هاست.
-        # =================================================
 
         if news_is_due(
             state
@@ -5817,10 +5809,6 @@ async def main():
             news_article = None
             news_category = "economic"
 
-            # -------------------------------------------------
-            # ECONOMIC NEWS
-            # -------------------------------------------------
-
             if (
                 economic_count
                 <
@@ -5841,10 +5829,6 @@ async def main():
                         "ECONOMIC NEWS FAILED: %s",
                         error
                     )
-
-            # -------------------------------------------------
-            # WORLD NEWS FALLBACK
-            # -------------------------------------------------
 
             if (
 
@@ -5874,10 +5858,6 @@ async def main():
                         "WORLD NEWS FAILED: %s",
                         error
                     )
-
-            # -------------------------------------------------
-            # AI PROCESSING
-            # -------------------------------------------------
 
             if news_article:
 
@@ -5950,10 +5930,6 @@ async def main():
                     )
 
                     news_article = None
-
-            # -------------------------------------------------
-            # SEND AI NEWS
-            # -------------------------------------------------
 
             if news_article:
 
