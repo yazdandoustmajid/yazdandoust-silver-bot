@@ -39,10 +39,25 @@ END_STICKER = BASE / "end_trades.webp"
 # ENVIRONMENT
 # =========================================================
 
-API_ID = os.getenv("API_ID", "").strip()
-API_HASH = os.getenv("API_HASH", "").strip()
-BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
-TARGET_CHANNEL = os.getenv("TARGET_CHANNEL", "").strip()
+API_ID = os.getenv(
+    "API_ID",
+    ""
+).strip()
+
+API_HASH = os.getenv(
+    "API_HASH",
+    ""
+).strip()
+
+BOT_TOKEN = os.getenv(
+    "BOT_TOKEN",
+    ""
+).strip()
+
+TARGET_CHANNEL = os.getenv(
+    "TARGET_CHANNEL",
+    ""
+).strip()
 
 SOURCE_CHANNEL = os.getenv(
     "SOURCE_CHANNEL",
@@ -77,6 +92,8 @@ OPENAI_MODEL = os.getenv(
 AI_NEWS_ENABLED = True
 
 AI_NEWS_MAX_WORDS = 140
+
+AI_NEWS_RETRIES = 3
 
 
 # =========================================================
@@ -166,6 +183,10 @@ NEWS_HISTORY_LIMIT = 300
 
 NEWS_MIN_IMPORTANCE = 6
 
+NEWS_MAX_CANDIDATES_PER_SOURCE = 20
+
+NEWS_AI_RETRY_DELAY_SECONDS = 4
+
 
 # =========================================================
 # NEWS SOURCES
@@ -179,6 +200,14 @@ ECONOMIC_SOURCES = [
     "https://www.tasnimnews.ir/fa/service/1408/"
     "%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D8%B3%DA%A9%D9%87-%D9%88-%D8%A7%D8%B1%D8%B2",
 
+    "https://www.tasnimnews.ir/fa/service/1407/",
+
+    (
+        "https://news.google.com/rss/search?"
+        "q=%D8%B7%D9%84%D8%A7+%D9%86%D9%82%D8%B1%D9%87+%D8%AF%D9%84%D8%A7%D8%B1+%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF"
+        "&hl=fa&gl=IR&ceid=IR:fa"
+    ),
+
 ]
 
 
@@ -187,6 +216,14 @@ WORLD_SOURCES = [
     "https://www.reuters.com/world/middle-east/",
 
     "https://www.reuters.com/world/us/",
+
+    "https://www.bbc.com/persian",
+
+    (
+        "https://news.google.com/rss/search?"
+        "q=%D8%A7%DB%8C%D8%B1%D8%A7%D9%86+%D8%A2%D9%85%D8%B1%DB%8C%DA%A9%D8%A7+%D8%A7%D8%B3%D8%B1%D8%A7%D8%A6%DB%8C%D9%84+%D8%AC%D9%86%DA%AF"
+        "&hl=fa&gl=IR&ceid=IR:fa"
+    ),
 
 ]
 
@@ -210,6 +247,16 @@ ECONOMIC_KEYWORDS = [
     "بازار جهانی",
     "اقتصاد",
     "نفت",
+    "بورس",
+    "بورس کالا",
+    "نقدینگی",
+    "تحریم",
+    "صادرات",
+    "واردات",
+    "سرمایه‌گذاری",
+    "سرمایه گذاری",
+    "فلزات گرانبها",
+    "فلزات گران بها",
 
 ]
 
@@ -240,6 +287,12 @@ WORLD_KEYWORDS = [
     "Hormuz",
     "خاورمیانه",
     "Middle East",
+    "کاخ سفید",
+    "White House",
+    "روسیه",
+    "Russia",
+    "اوکراین",
+    "Ukraine",
 
 ]
 
@@ -262,6 +315,10 @@ URGENT_KEYWORDS = [
     "مذاکرات مهم",
     "تصمیم مهم",
     "تحریم جدید",
+    "حمله هوایی",
+    "حمله موشکی",
+    "درگیری",
+    "تنش",
 
 ]
 
@@ -281,6 +338,10 @@ PRICE_ONLY_NEWS_KEYWORDS = [
     "قیمت امروز طلا",
     "قیمت امروز سکه",
     "قیمت امروز دلار",
+    "قیمت لحظه ای طلا",
+    "قیمت لحظه‌ای طلا",
+    "قیمت لحظه ای دلار",
+    "قیمت لحظه‌ای دلار",
 
 ]
 
@@ -732,6 +793,7 @@ def http_get(
                 "text/html,"
                 "application/xhtml+xml,"
                 "application/xml;q=0.9,"
+                "application/rss+xml;q=0.9,"
                 "*/*;q=0.8",
 
             "Accept-Language":
@@ -2020,6 +2082,7 @@ def make_caption():
 
     )
 
+
 # =========================================================
 # MORNING MESSAGES
 # =========================================================
@@ -2328,6 +2391,9 @@ def clean_article_paragraph(
         "منبع:",
         "منبع :",
         "کد خبر:",
+        "کدخبر:",
+        "©",
+        "Copyright",
 
     ]
 
@@ -2563,6 +2629,92 @@ def is_valid_news_body(
     )
 
 
+def parse_news_rss(
+    soup,
+    base_url
+):
+
+    result = []
+
+    for item in soup.select(
+        "item"
+    ):
+
+        title_node = item.select_one(
+            "title"
+        )
+
+        link_node = item.select_one(
+            "link"
+        )
+
+        description_node = item.select_one(
+            "description"
+        )
+
+        if not title_node or not link_node:
+
+            continue
+
+        title = normalize_fa(
+            title_node.get_text(
+                " ",
+                strip=True
+            )
+        )
+
+        url = (
+            link_node.get_text(
+                " ",
+                strip=True
+            )
+            or
+            link_node.get(
+                "href",
+                ""
+            )
+        )
+
+        url = urljoin(
+            base_url,
+            url.strip()
+        )
+
+        description = ""
+
+        if description_node:
+
+            description = normalize_fa(
+                description_node.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+
+        if (
+            len(title) < 10
+            or
+            not url
+        ):
+
+            continue
+
+        result.append({
+
+            "url":
+                url,
+
+            "title":
+                title,
+
+            "description":
+                description
+
+        })
+
+    return result
+
+
 def parse_news_index(
     html,
     base_url
@@ -2576,6 +2728,25 @@ def parse_news_index(
     result = []
 
     seen = set()
+
+    rss_items = parse_news_rss(
+        soup,
+        base_url
+    )
+
+    for item in rss_items:
+
+        if item["url"] in seen:
+
+            continue
+
+        seen.add(
+            item["url"]
+        )
+
+        result.append(
+            item
+        )
 
     for anchor in soup.select(
         "a[href]"
@@ -2622,7 +2793,8 @@ def parse_news_index(
                 "/category/",
                 "/tag/",
                 "/search",
-                "#"
+                "#",
+                "javascript:"
 
             ]
 
@@ -2640,9 +2812,18 @@ def parse_news_index(
                 url,
 
             "title":
-                title
+                title,
+
+            "description":
+                ""
 
         })
+
+        if len(result) >= (
+            NEWS_MAX_CANDIDATES_PER_SOURCE
+        ):
+
+            break
 
     return result
 
@@ -2688,69 +2869,100 @@ def fetch_news_article(
             timeout=30
         )
 
+        soup = BeautifulSoup(
+            html,
+            "html.parser"
+        )
+
+        title = extract_title(
+
+            soup,
+
+            item.get(
+                "title",
+                ""
+            )
+
+        )
+
+        remove_bad_nodes(
+            soup
+        )
+
+        paragraphs = extract_news_body(
+            soup
+        )
+
+        if is_valid_news_body(
+            paragraphs
+        ):
+
+            body = build_news_text(
+                paragraphs
+            )
+
+            if len(body) >= 150:
+
+                return {
+
+                    "url":
+                        item["url"],
+
+                    "title":
+                        title,
+
+                    "text":
+                        body
+
+                }
+
     except Exception as error:
 
         log.warning(
 
             "NEWS ARTICLE ERROR | %s | %s",
 
-            item["url"],
+            item.get(
+                "url",
+                ""
+            ),
+
             error
 
         )
 
-        return None
-
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
-    )
-
-    title = extract_title(
-
-        soup,
+    fallback_description = normalize_fa(
 
         item.get(
-            "title",
+            "description",
             ""
         )
 
     )
 
-    remove_bad_nodes(
-        soup
-    )
+    if len(
+        fallback_description
+    ) >= 150:
 
-    paragraphs = extract_news_body(
-        soup
-    )
+        return {
 
-    if not is_valid_news_body(
-        paragraphs
-    ):
+            "url":
+                item["url"],
 
-        return None
+            "title":
+                normalize_fa(
+                    item.get(
+                        "title",
+                        ""
+                    )
+                ),
 
-    body = build_news_text(
-        paragraphs
-    )
+            "text":
+                fallback_description
 
-    if len(body) < 150:
+        }
 
-        return None
-
-    return {
-
-        "url":
-            item["url"],
-
-        "title":
-            title,
-
-        "text":
-            body
-
-    }
+    return None
 
 
 def keyword_match(
@@ -2769,6 +2981,26 @@ def keyword_match(
         for keyword in keywords
 
     )
+
+
+def keyword_hits(
+    text,
+    keywords
+):
+
+    text = normalize_fa(
+        text
+    ).lower()
+
+    hits = 0
+
+    for keyword in keywords:
+
+        if keyword.lower() in text:
+
+            hits += 1
+
+    return hits
 
 
 def is_price_only_news(
@@ -2792,13 +3024,151 @@ def is_price_only_news(
     combined = (
         title
         + " "
-        + text[:400]
+        + text[:500]
     )
+
+    title_price_only = keyword_match(
+        title,
+        PRICE_ONLY_NEWS_KEYWORDS
+    )
+
+    body_has_real_context = keyword_match(
+
+        text,
+
+        [
+
+            "بانک مرکزی",
+            "فدرال رزرو",
+            "نرخ بهره",
+            "تورم",
+            "تحریم",
+            "جنگ",
+            "مذاکرات",
+            "بازار جهانی",
+            "تصمیم",
+            "عرضه",
+            "تقاضا",
+            "صادرات",
+            "واردات",
+            "بورس",
+            "اقتصاد",
+            "سیاست",
+            "تنش",
+
+        ]
+
+    )
+
+    if (
+        title_price_only
+        and
+        not body_has_real_context
+    ):
+
+        return True
 
     return keyword_match(
         combined,
         PRICE_ONLY_NEWS_KEYWORDS
+    ) and len(text) < 500
+
+
+def calculate_news_importance(
+    article,
+    keywords
+):
+
+    title = normalize_fa(
+        article.get(
+            "title",
+            ""
+        )
     )
+
+    text = normalize_fa(
+        article.get(
+            "text",
+            ""
+        )
+    )
+
+    combined = (
+        title
+        + " "
+        + text
+    )
+
+    score = 0
+
+    title_hits = keyword_hits(
+        title,
+        keywords
+    )
+
+    body_hits = keyword_hits(
+        text[:2500],
+        keywords
+    )
+
+    score += min(
+        title_hits * 3,
+        9
+    )
+
+    score += min(
+        body_hits * 2,
+        8
+    )
+
+    if keyword_match(
+        combined,
+        URGENT_KEYWORDS
+    ):
+
+        score += 4
+
+    important_terms = [
+
+        "بانک مرکزی",
+        "فدرال رزرو",
+        "نرخ بهره",
+        "تورم",
+        "تحریم جدید",
+        "آتش بس",
+        "مذاکرات",
+        "حمله",
+        "جنگ",
+        "درگیری",
+        "تنگه هرمز",
+        "Trump",
+        "ترامپ",
+        "دلار",
+        "نقره",
+        "طلا",
+        "اونس",
+
+    ]
+
+    important_hits = keyword_hits(
+        combined,
+        important_terms
+    )
+
+    score += min(
+        important_hits,
+        6
+    )
+
+    if len(text) >= 700:
+
+        score += 1
+
+    if len(text) >= 1200:
+
+        score += 1
+
+    return score
 
 
 def get_candidate_from_sources(
@@ -2815,7 +3185,9 @@ def get_candidate_from_sources(
 
     )
 
-    all_items = []
+    candidates = []
+
+    seen_urls = set()
 
     for source in sources:
 
@@ -2823,90 +3195,203 @@ def get_candidate_from_sources(
             source
         )
 
-        all_items.extend(
-            items
-        )
-
-    seen_urls = set()
-
-    for item in all_items:
-
-        url = item.get(
-            "url",
-            ""
-        )
-
-        if not url:
+        if not items:
 
             continue
 
-        if url in seen_urls:
-
-            continue
-
-        seen_urls.add(
-            url
+        log.info(
+            "NEWS SOURCE FOUND %s ITEMS | %s",
+            len(items),
+            source
         )
 
-        if url in history:
+        checked = 0
 
-            continue
+        for item in items:
 
-        title = item.get(
+            if checked >= NEWS_MAX_CANDIDATES_PER_SOURCE:
+
+                break
+
+            checked += 1
+
+            url = item.get(
+                "url",
+                ""
+            )
+
+            if not url:
+
+                continue
+
+            if url in seen_urls:
+
+                continue
+
+            seen_urls.add(
+                url
+            )
+
+            if url in history:
+
+                continue
+
+            title = item.get(
+                "title",
+                ""
+            )
+
+            description = item.get(
+                "description",
+                ""
+            )
+
+            preliminary_text = (
+                title
+                + " "
+                + description
+            )
+
+            title_relevant = keyword_match(
+                title,
+                keywords
+            )
+
+            description_relevant = keyword_match(
+                description,
+                keywords
+            )
+
+            if not (
+                title_relevant
+                or
+                description_relevant
+            ):
+
+                continue
+
+            article = fetch_news_article(
+                item
+            )
+
+            if not article:
+
+                continue
+
+            if is_price_only_news(
+                article
+            ):
+
+                log.info(
+                    "PRICE-ONLY NEWS SKIPPED | %s",
+                    article["title"]
+                )
+
+                continue
+
+            combined = (
+
+                article["title"]
+                + " "
+                + article["text"]
+
+            )
+
+            if not keyword_match(
+                combined,
+                keywords
+            ):
+
+                continue
+
+            importance = calculate_news_importance(
+                article,
+                keywords
+            )
+
+            log.info(
+
+                "NEWS CANDIDATE | score=%s | %s",
+
+                importance,
+
+                article["title"]
+
+            )
+
+            if (
+                importance
+                <
+                NEWS_MIN_IMPORTANCE
+            ):
+
+                log.info(
+
+                    "NEWS LOW IMPORTANCE SKIPPED | score=%s | %s",
+
+                    importance,
+
+                    article["title"]
+
+                )
+
+                continue
+
+            article[
+                "importance"
+            ] = importance
+
+            candidates.append(
+                article
+            )
+
+    if not candidates:
+
+        return None
+
+    candidates.sort(
+
+        key=lambda x:
+            (
+                int(
+                    x.get(
+                        "importance",
+                        0
+                    )
+                ),
+
+                len(
+                    x.get(
+                        "text",
+                        ""
+                    )
+                )
+
+            ),
+
+        reverse=True
+
+    )
+
+    selected = candidates[0]
+
+    log.info(
+
+        "BEST NEWS SELECTED | score=%s | %s",
+
+        selected.get(
+            "importance",
+            0
+        ),
+
+        selected.get(
             "title",
             ""
         )
 
-        if not keyword_match(
-            title,
-            keywords
-        ):
+    )
 
-            continue
-
-        article = fetch_news_article(
-            item
-        )
-
-        if not article:
-
-            continue
-
-        if is_price_only_news(
-            article
-        ):
-
-            log.info(
-                "PRICE-ONLY NEWS SKIPPED | %s",
-                article["title"]
-            )
-
-            continue
-
-        combined = (
-
-            article["title"]
-            + " "
-            + article["text"]
-
-        )
-
-        if not keyword_match(
-            combined,
-            keywords
-        ):
-
-            continue
-
-        if len(
-            article["text"]
-        ) < 150:
-
-            continue
-
-        return article
-
-    return None
+    return selected
 
 
 async def get_economic_news(
@@ -3039,6 +3524,29 @@ def parse_ai_news_result(
 
             continue
 
+        if re.match(
+            r"^متن\s*[:：]",
+            normalized,
+            re.IGNORECASE
+        ):
+
+            current = "text"
+
+            remainder = re.sub(
+                r"^متن\s*[:：]\s*",
+                "",
+                normalized,
+                flags=re.IGNORECASE
+            ).strip()
+
+            if remainder:
+
+                text_lines.append(
+                    remainder
+                )
+
+            continue
+
         if (
             "چرا مهم است" in normalized
             or
@@ -3065,6 +3573,8 @@ def parse_ai_news_result(
             "نظر شما" in normalized
             or
             "سؤال" in normalized
+            or
+            "سوال" in normalized
             or
             "تعامل" in normalized
         ):
@@ -3186,13 +3696,11 @@ def ai_summarize_news_sync(
 
         return None
 
-    try:
+    client = OpenAI(
+        api_key=OPENAI_API_KEY
+    )
 
-        client = OpenAI(
-            api_key=OPENAI_API_KEY
-        )
-
-        prompt = f"""
+    prompt = f"""
 تو سردبیر حرفه‌ای کانال تلگرامی «یزدان‌دوست» هستی.
 
 متن کامل یک خبر واقعی را دریافت می‌کنی.
@@ -3253,34 +3761,71 @@ def ai_summarize_news_sync(
 {text}
 """
 
-        response = client.responses.create(
+    last_error = None
 
-            model=OPENAI_MODEL,
+    for attempt in range(
+        1,
+        AI_NEWS_RETRIES + 1
+    ):
 
-            instructions=(
-                "تو سردبیر دقیق و بی‌طرف اخبار فارسی هستی. "
-                "هیچ اطلاعاتی خارج از منبع اضافه نکن."
-            ),
+        try:
 
-            input=prompt
+            response = client.responses.create(
 
-        )
+                model=OPENAI_MODEL,
 
-        result = response.output_text.strip()
+                instructions=(
+                    "تو سردبیر دقیق و بی‌طرف اخبار فارسی هستی. "
+                    "هیچ اطلاعاتی خارج از منبع اضافه نکن."
+                ),
 
-        return parse_ai_news_result(
-            result,
-            title
-        )
+                input=prompt
 
-    except Exception as error:
+            )
 
-        log.exception(
-            "AI NEWS SUMMARY FAILED: %s",
-            error
-        )
+            result = response.output_text.strip()
 
-        raise
+            parsed = parse_ai_news_result(
+                result,
+                title
+            )
+
+            if parsed:
+
+                return parsed
+
+            raise RuntimeError(
+                "خروجی AI قابل استفاده نبود."
+            )
+
+        except Exception as error:
+
+            last_error = error
+
+            log.warning(
+
+                "AI NEWS ATTEMPT %s/%s FAILED: %s",
+
+                attempt,
+
+                AI_NEWS_RETRIES,
+
+                error
+
+            )
+
+            if attempt < AI_NEWS_RETRIES:
+
+                import time
+
+                time.sleep(
+                    NEWS_AI_RETRY_DELAY_SECONDS
+                    * attempt
+                )
+
+    raise RuntimeError(
+        f"AI NEWS FAILED AFTER RETRIES: {last_error}"
+    )
 
 
 async def ai_summarize_news(
@@ -3964,6 +4509,12 @@ def news_is_due(
     state
 ):
 
+    """
+    نکته مهم:
+    این تابع عمداً هیچ بررسی برای تعطیلی یا جمعه ندارد.
+    اخبار حتی در روزهای تعطیل نیز باید بررسی و منتشر شوند.
+    """
+
     if not NEWS_ENABLED:
 
         return False
@@ -4119,10 +4670,6 @@ def update_news_state(
 # TELEGRAM SENDERS
 # =========================================================
 
-# =========================================================
-# DAILY MARKET POLL
-# =========================================================
-
 async def send_market_poll(
     client,
     target
@@ -4177,6 +4724,8 @@ async def send_market_poll(
     return int(
         sent.id
     )
+
+
 async def send_rate_post(
     client,
     target,
@@ -4490,6 +5039,10 @@ async def main():
         market_status_text()
     )
 
+    log.info(
+        "NEWS STATUS = ENABLED | HOLIDAY INDEPENDENT"
+    )
+
     client = TelegramClient(
 
         str(
@@ -4696,6 +5249,7 @@ async def main():
                     "DAILY MARKET POLL FAILED: %s",
                     error
                 )
+
         # =================================================
         # FETCH CURRENT PRICE
         # =================================================
@@ -5211,6 +5765,18 @@ async def main():
         # =================================================
         # NEWS
         # =================================================
+        #
+        # بسیار مهم:
+        # این بخش عمداً هیچ شرطی برای
+        # is_market_holiday() ندارد.
+        #
+        # بنابراین:
+        # جمعه = خبر ارسال می‌شود
+        # تعطیل رسمی = خبر ارسال می‌شود
+        # روز کاری = خبر ارسال می‌شود
+        #
+        # تعطیلی فقط برای معاملات و قیمت‌هاست.
+        # =================================================
 
         if news_is_due(
             state
@@ -5251,6 +5817,10 @@ async def main():
             news_article = None
             news_category = "economic"
 
+            # -------------------------------------------------
+            # ECONOMIC NEWS
+            # -------------------------------------------------
+
             if (
                 economic_count
                 <
@@ -5272,6 +5842,10 @@ async def main():
                         error
                     )
 
+            # -------------------------------------------------
+            # WORLD NEWS FALLBACK
+            # -------------------------------------------------
+
             if (
 
                 news_article is None
@@ -5290,7 +5864,6 @@ async def main():
                         await get_world_news(
                             history
                         )
-
                     )
 
                     news_category = "world"
@@ -5301,6 +5874,10 @@ async def main():
                         "WORLD NEWS FAILED: %s",
                         error
                     )
+
+            # -------------------------------------------------
+            # AI PROCESSING
+            # -------------------------------------------------
 
             if news_article:
 
@@ -5326,6 +5903,11 @@ async def main():
                         original_length
                     )
 
+                    log.info(
+                        "AI PROCESSING NEWS = %s",
+                        original_title
+                    )
+
                     ai_article = (
                         await ai_summarize_news(
                             news_article
@@ -5337,6 +5919,17 @@ async def main():
                         ai_article["url"] = (
                             original_url
                         )
+
+                        if (
+                            "importance"
+                            in news_article
+                        ):
+
+                            ai_article[
+                                "importance"
+                            ] = news_article[
+                                "importance"
+                            ]
 
                         news_article = ai_article
 
@@ -5357,6 +5950,10 @@ async def main():
                     )
 
                     news_article = None
+
+            # -------------------------------------------------
+            # SEND AI NEWS
+            # -------------------------------------------------
 
             if news_article:
 
@@ -5390,7 +5987,8 @@ async def main():
                         )
 
                         log.info(
-                            "AI NEWS SENT SUCCESSFULLY"
+                            "AI NEWS SENT SUCCESSFULLY | CATEGORY=%s",
+                            news_category
                         )
 
                 except Exception as error:
@@ -5399,6 +5997,12 @@ async def main():
                         "NEWS SEND FAILED: %s",
                         error
                     )
+
+            else:
+
+                log.info(
+                    "NO SUITABLE NEWS FOUND THIS RUN"
+                )
 
         # =================================================
         # MARKET RECAP
