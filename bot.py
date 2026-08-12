@@ -12,6 +12,12 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 from telethon import TelegramClient
+from telethon.tl.functions.messages import SendMediaRequest
+from telethon.tl.types import (
+    InputMediaPoll,
+    Poll,
+    PollAnswer
+)
 from openai import OpenAI
 
 
