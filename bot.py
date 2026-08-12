@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 from telethon import TelegramClient
+from openai import OpenAI
 
 
 # =========================================================
@@ -55,6 +56,25 @@ MASHHAD_UNION_URL = os.getenv(
     "MASHHAD_UNION_URL",
     "https://etjmir.ir"
 ).strip()
+
+
+# =========================================================
+# OPENAI AI NEWS
+# =========================================================
+
+OPENAI_API_KEY = os.getenv(
+    "OPENAI_API_KEY",
+    ""
+).strip()
+
+OPENAI_MODEL = os.getenv(
+    "OPENAI_MODEL",
+    "gpt-5-mini"
+).strip()
+
+AI_NEWS_ENABLED = True
+
+AI_NEWS_MAX_WORDS = 120
 
 
 # =========================================================
@@ -225,9 +245,6 @@ URGENT_KEYWORDS = [
 # =========================================================
 # EXCLUDED NEWS
 # =========================================================
-
-# خبرهایی که صرفاً قیمت طلا را اعلام می‌کنند
-# نباید به عنوان خبر طولانی در کانال منتشر شوند.
 
 PRICE_ONLY_NEWS_KEYWORDS = [
 
@@ -558,13 +575,6 @@ def jalali_date_key():
 # HOLIDAY CONTROL
 # =========================================================
 
-# تعطیلات رسمی ۱۴۰۵ ایران
-# جمعه‌ها نیز به صورت جداگانه تعطیل محسوب می‌شوند.
-#
-# این لیست شامل تعطیلات رسمی ثبت‌شده برای ۱۴۰۵ است.
-# در صورت اعلام تعطیلی فوق‌العاده جدید، می‌توان تاریخ را
-# به این مجموعه اضافه کرد.
-
 OFFICIAL_HOLIDAYS_1405 = {
 
     "1405-01-01",
@@ -612,8 +622,6 @@ OFFICIAL_HOLIDAYS_1405 = {
 
 def is_friday():
 
-    # Python Monday=0 ... Sunday=6
-    # Friday = 4
     return iran_now().weekday() == 4
 
 
@@ -2102,7 +2110,6 @@ def make_morning_message(
             )
         )
 
-    # انتخاب بر اساس روز تا ترتیب قابل پیش‌بینی
     index = available[
         len(used)
         %
@@ -2487,6 +2494,12 @@ def extract_news_body(
     return []
 
 
+# =========================================================
+# IMPORTANT:
+# دیگر خبر را به 1100 کاراکتر قطع نمی‌کنیم.
+# متن کامل به هوش مصنوعی داده می‌شود.
+# =========================================================
+
 def build_news_text(
     paragraphs
 ):
@@ -2515,24 +2528,9 @@ def build_news_text(
 
         return ""
 
-    text = "\n\n".join(
+    return "\n\n".join(
         clean
-    )
-
-    if len(text) > 1100:
-
-        text = (
-
-            text[:1100]
-            .rsplit(
-                " ",
-                1
-            )[0]
-            + "…"
-
-        )
-
-    return text.strip()
+    ).strip()
 
 
 def is_valid_news_body(
@@ -2725,6 +2723,10 @@ def fetch_news_article(
     ):
 
         return None
+
+    # -----------------------------------------------------
+    # متن کامل خبر
+    # -----------------------------------------------------
 
     body = build_news_text(
         paragraphs
@@ -2939,6 +2941,297 @@ async def get_world_news(
     )
 
 
+# =========================================================
+# AI NEWS EDITOR
+# =========================================================
+
+def clean_ai_output(
+    text
+):
+
+    text = (text or "").strip()
+
+    if not text:
+
+        return ""
+
+    # حذف سه نقطه فارسی/انگلیسی در انتها
+    text = re.sub(
+        r"(…|\.)+$",
+        "",
+        text
+    ).strip()
+
+    # حذف Markdown اضافی احتمالی
+    text = re.sub(
+        r"^```(?:text|markdown|plaintext)?\s*",
+        "",
+        text,
+        flags=re.IGNORECASE
+    )
+
+    text = re.sub(
+        r"\s*```$",
+        "",
+        text
+    )
+
+    return text.strip()
+
+
+def parse_ai_news_result(
+    result,
+    original_title
+):
+
+    result = clean_ai_output(
+        result
+    )
+
+    if not result:
+
+        return None
+
+    lines = [
+
+        line.strip()
+
+        for line in result.splitlines()
+
+        if line.strip()
+
+    ]
+
+    if not lines:
+
+        return None
+
+    ai_title = ""
+
+    ai_text = ""
+
+    # -----------------------------------------------------
+    # حالت استاندارد:
+    # خط اول عنوان
+    # بقیه متن خبر
+    # -----------------------------------------------------
+
+    if len(lines) >= 2:
+
+        first_line = lines[0]
+
+        first_line = re.sub(
+            r"^(عنوان|تیتر)\s*[:：]\s*",
+            "",
+            first_line,
+            flags=re.IGNORECASE
+        ).strip()
+
+        first_line = re.sub(
+            r"^[#*\-\s]+",
+            "",
+            first_line
+        ).strip()
+
+        ai_title = first_line
+
+        ai_text = "\n\n".join(
+            lines[1:]
+        ).strip()
+
+    else:
+
+        ai_title = original_title
+
+        ai_text = lines[0]
+
+    if not ai_title:
+
+        ai_title = original_title
+
+    if not ai_text:
+
+        return None
+
+    ai_title = clean_ai_output(
+        ai_title
+    )
+
+    ai_text = clean_ai_output(
+        ai_text
+    )
+
+    if len(ai_title) > 220:
+
+        ai_title = (
+            ai_title[:220]
+            .rsplit(" ", 1)[0]
+            .strip()
+        )
+
+    if len(ai_text) < 50:
+
+        return None
+
+    return {
+
+        "title":
+            ai_title,
+
+        "text":
+            ai_text
+
+    }
+
+
+def ai_summarize_news_sync(
+    title,
+    text
+):
+
+    if not AI_NEWS_ENABLED:
+
+        return {
+
+            "title":
+                title,
+
+            "text":
+                text
+
+        }
+
+    if not OPENAI_API_KEY:
+
+        raise RuntimeError(
+            "OPENAI_API_KEY تنظیم نشده است."
+        )
+
+    if not text:
+
+        return None
+
+    try:
+
+        client = OpenAI(
+            api_key=OPENAI_API_KEY
+        )
+
+        prompt = f"""
+تو ویراستار حرفه‌ای اخبار اقتصادی و سیاسی
+برای یک کانال تلگرامی معتبر به نام «یزدان‌دوست» هستی.
+
+متن کامل خبر را می‌دهم و تو باید آن را برای انتشار
+در تلگرام کوتاه، حرفه‌ای، روان و دقیق کنی.
+
+قوانین بسیار مهم:
+
+1. اصل خبر و مفهوم اصلی آن کاملاً حفظ شود.
+2. هیچ اطلاعات جدیدی از خودت اضافه نکن.
+3. هیچ حدس، تحلیل یا پیش‌بینی شخصی اضافه نکن.
+4. عددها، قیمت‌ها، درصدها، تاریخ‌ها، ساعت‌ها،
+   نام افراد، کشورها و ارقام اقتصادی را تغییر نده.
+5. اگر عددی در خبر وجود دارد، همان عدد منبع را حفظ کن.
+6. خبر را تبلیغاتی یا هیجانی نکن.
+7. متن نهایی ترجیحاً حدود 70 تا 120 کلمه باشد.
+8. اگر خبر خیلی مهم است، برای حفظ مفهوم اصلی
+   می‌توانی کمی بیشتر بنویسی، اما از طولانی شدن جلوگیری کن.
+9. متن را در 2 تا 4 پاراگراف کوتاه بنویس.
+10. جمله‌های تکراری، توضیحات حاشیه‌ای، سوابق غیرضروری
+    و عبارت‌های زائد را حذف کن.
+11. اگر خبر درباره طلا، نقره، دلار، ارز یا بازار است،
+    مهم‌ترین اتفاق و علت اعلام‌شده در خبر را حفظ کن.
+12. اگر خبر سیاسی یا بین‌المللی است، اصل اتفاق،
+    طرف‌های درگیر و نتیجه یا اثر اعلام‌شده را حفظ کن.
+13. اگر متن منبع ناقص است، چیزی از خودت تکمیل نکن.
+14. از عبارت‌هایی مثل «در ادامه می‌خوانید» استفاده نکن.
+15. از عبارت «به گزارش...» فقط در صورتی استفاده کن
+    که برای فهم خبر ضروری باشد.
+16. هیچ سه‌نقطه‌ای در انتهای خبر نگذار.
+17. هیچ جمله‌ای را ناقص رها نکن.
+18. خروجی فقط شامل عنوان و متن نهایی باشد.
+19. هیچ توضیحی درباره کاری که انجام دادی ننویس.
+20. خط اول خروجی فقط عنوان کوتاه و حرفه‌ای باشد.
+21. از علامت # و Markdown استفاده نکن.
+22. لحن رسمی، خبری و مناسب کانال تلگرام باشد.
+
+عنوان اصلی:
+{title}
+
+متن کامل خبر:
+{text}
+"""
+
+        response = client.responses.create(
+
+            model=OPENAI_MODEL,
+
+            instructions=(
+                "تو یک ویراستار دقیق اخبار فارسی هستی. "
+                "فقط بر اساس متن منبع بازنویسی کن و "
+                "هرگز اطلاعات جدید اضافه نکن."
+            ),
+
+            input=prompt
+
+        )
+
+        result = response.output_text.strip()
+
+        if not result:
+
+            return None
+
+        parsed = parse_ai_news_result(
+            result,
+            title
+        )
+
+        if not parsed:
+
+            return None
+
+        return parsed
+
+    except Exception as error:
+
+        log.exception(
+            "AI NEWS SUMMARY FAILED: %s",
+            error
+        )
+
+        raise
+
+
+async def ai_summarize_news(
+    article
+):
+
+    if not article:
+
+        return None
+
+    return await asyncio.to_thread(
+
+        ai_summarize_news_sync,
+
+        article.get(
+            "title",
+            ""
+        ),
+
+        article.get(
+            "text",
+            ""
+        )
+
+    )
+
+
+# =========================================================
+# URGENT NEWS
+# =========================================================
+
 def is_urgent_news(
     article
 ):
@@ -2964,6 +3257,10 @@ def is_urgent_news(
         URGENT_KEYWORDS
     )
 
+
+# =========================================================
+# NEWS CAPTION
+# =========================================================
 
 def make_news_caption(
     article
@@ -3522,13 +3819,26 @@ async def send_news_post(
             "text",
             ""
         ).strip()
-    ) < 150:
+    ) < 50:
 
         return None
 
     caption = make_news_caption(
         article
     )
+
+    # -----------------------------------------------------
+    # جلوگیری از عبور از محدودیت تلگرام
+    # در حالت عادی AI متن را بسیار کوتاه‌تر از این می‌کند.
+    # -----------------------------------------------------
+
+    if len(caption) >= 4000:
+
+        log.error(
+            "NEWS CAPTION TOO LONG -> NOT SENT"
+        )
+
+        return None
 
     return await send_text_post(
         client,
@@ -3722,6 +4032,21 @@ async def main():
 
         )
 
+    # -----------------------------------------------------
+    # API KEY هوش مصنوعی
+    # -----------------------------------------------------
+
+    if NEWS_ENABLED and AI_NEWS_ENABLED:
+
+        if not OPENAI_API_KEY:
+
+            raise RuntimeError(
+                "OPENAI_API_KEY تنظیم نشده است. "
+                "برای انتشار اخبار با هوش مصنوعی، "
+                "کلید OpenAI را در Environment Variables "
+                "قرار بده."
+            )
+
     try:
 
         api_id = int(
@@ -3807,11 +4132,6 @@ async def main():
 
         # =================================================
         # 08:00 MORNING MESSAGE
-        #
-        # مهم:
-        # دیگر وابسته به پنجره 5 دقیقه‌ای نیست.
-        # اگر ربات 08:02، 08:10 یا حتی کمی دیرتر اجرا شود،
-        # پیام همان روز را از دست نمی‌دهد.
         # =================================================
 
         if (
@@ -3919,8 +4239,6 @@ async def main():
 
         # =================================================
         # FETCH CURRENT PRICE
-        #
-        # فقط در روز کاری و ساعات قیمت
         # =================================================
 
         rate = None
@@ -3968,7 +4286,6 @@ async def main():
 
         # =================================================
         # PRICE UPDATE
-        # فقط در صورت تغییر واقعی
         # =================================================
 
         if (
@@ -4081,8 +4398,6 @@ async def main():
 
         # =================================================
         # 10:30 START TRADES
-        #
-        # فقط روز کاری
         # =================================================
 
         if (
@@ -4176,7 +4491,6 @@ async def main():
                 + minute
             )
 
-            # بازه 20 دقیقه‌ای برای جلوگیری از از دست رفتن گزارش
             if (
 
                 start_minute
@@ -4213,7 +4527,6 @@ async def main():
 
                     if mashhad_market:
 
-                        # ذخیره آخرین داده اتحادیه
                         state[
                             "gold_18_mashhad"
                         ] = mashhad_market[
@@ -4279,8 +4592,7 @@ async def main():
         # =================================================
         # NEWS
         #
-        # تا نیمه‌شب ادامه دارد
-        # حتی بعد از ساعت 21
+        # خبر کامل -> AI -> خبر کوتاه -> کانال
         # =================================================
 
         if (
@@ -4331,6 +4643,10 @@ async def main():
 
             news_article = None
 
+            # -------------------------------------------------
+            # خبر اقتصادی
+            # -------------------------------------------------
+
             if (
                 economic_count
                 <
@@ -4351,6 +4667,10 @@ async def main():
                         "ECONOMIC NEWS FAILED: %s",
                         error
                     )
+
+            # -------------------------------------------------
+            # خبر جهانی
+            # -------------------------------------------------
 
             if (
 
@@ -4378,6 +4698,88 @@ async def main():
                         "WORLD NEWS FAILED: %s",
                         error
                     )
+
+            # -------------------------------------------------
+            # AI EDITOR
+            # -------------------------------------------------
+
+            if news_article:
+
+                log.info(
+                    "NEWS FOUND -> SENDING FULL ARTICLE TO AI"
+                )
+
+                try:
+
+                    original_url = (
+                        news_article["url"]
+                    )
+
+                    original_title = (
+                        news_article["title"]
+                    )
+
+                    original_length = len(
+                        news_article.get(
+                            "text",
+                            ""
+                        )
+                    )
+
+                    log.info(
+                        "ORIGINAL NEWS LENGTH = %s CHARACTERS",
+                        original_length
+                    )
+
+                    ai_article = (
+                        await ai_summarize_news(
+                            news_article
+                        )
+                    )
+
+                    if ai_article:
+
+                        ai_article["url"] = (
+                            original_url
+                        )
+
+                        news_article = ai_article
+
+                        log.info(
+                            "AI NEWS SUMMARY CREATED | TITLE=%s",
+                            news_article["title"]
+                        )
+
+                        log.info(
+                            "AI NEWS LENGTH = %s CHARACTERS",
+                            len(
+                                news_article.get(
+                                    "text",
+                                    ""
+                                )
+                            )
+                        )
+
+                    else:
+
+                        log.error(
+                            "AI RETURNED EMPTY RESULT -> NEWS NOT SENT"
+                        )
+
+                        news_article = None
+
+                except Exception as error:
+
+                    log.exception(
+                        "AI NEWS EDITOR FAILED -> NEWS NOT SENT: %s",
+                        error
+                    )
+
+                    news_article = None
+
+            # -------------------------------------------------
+            # ارسال خبر
+            # -------------------------------------------------
 
             if news_article:
 
@@ -4409,6 +4811,16 @@ async def main():
                             state
                         )
 
+                        log.info(
+                            "AI EDITED NEWS SENT SUCCESSFULLY"
+                        )
+
+                    else:
+
+                        log.warning(
+                            "NEWS WAS NOT SENT"
+                        )
+
                 except Exception as error:
 
                     log.exception(
@@ -4418,8 +4830,6 @@ async def main():
 
         # =================================================
         # 21:00 END TRADES
-        #
-        # فقط روز کاری
         # =================================================
 
         if (
@@ -4479,9 +4889,6 @@ async def main():
 
         # =================================================
         # 21:15 24H REPORT
-        #
-        # اول تلاش برای دریافت داده جدید
-        # در صورت خطا استفاده از آخرین داده ذخیره‌شده
         # =================================================
 
         if (
@@ -4565,7 +4972,7 @@ async def main():
                     )
 
                 # -----------------------------
-                # طلای مشهد از اتحادیه
+                # طلای مشهد
                 # -----------------------------
 
                 try:
@@ -4651,7 +5058,6 @@ async def main():
 
                     save_state(
                         state
-
                     )
 
                     log.info(
