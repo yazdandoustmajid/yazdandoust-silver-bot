@@ -48,10 +48,6 @@ WEBSITE_URL = os.getenv(
     "https://taghizadegan.com"
 ).strip()
 
-# ---------------------------------------------------------
-# اتحادیه طلا، جواهر، نقره و سکه مشهد
-# ---------------------------------------------------------
-
 MASHHAD_UNION_URL = os.getenv(
     "MASHHAD_UNION_URL",
     "https://etjmir.ir"
@@ -59,7 +55,7 @@ MASHHAD_UNION_URL = os.getenv(
 
 
 # =========================================================
-# OPENAI AI NEWS
+# OPENAI AI
 # =========================================================
 
 OPENAI_API_KEY = os.getenv(
@@ -74,7 +70,7 @@ OPENAI_MODEL = os.getenv(
 
 AI_NEWS_ENABLED = True
 
-AI_NEWS_MAX_WORDS = 120
+AI_NEWS_MAX_WORDS = 140
 
 
 # =========================================================
@@ -130,20 +126,39 @@ REPORT_24H_MINUTE = 15
 
 
 # =========================================================
+# NEW CONTENT TIMES
+# =========================================================
+
+MARKET_PULSE_HOUR = 12
+MARKET_PULSE_MINUTE = 30
+
+ECONOMY_MINUTE_HOUR = 14
+ECONOMY_MINUTE_MINUTE = 0
+
+MARKET_RECAP_HOUR = 19
+MARKET_RECAP_MINUTE = 45
+
+TOMORROW_LOOK_HOUR = 20
+TOMORROW_LOOK_MINUTE = 15
+
+
+# =========================================================
 # NEWS SETTINGS
 # =========================================================
 
 NEWS_ENABLED = True
 
-NEWS_ECONOMIC_MAX_PER_DAY = 7
+NEWS_ECONOMIC_MAX_PER_DAY = 5
 
-NEWS_WORLD_MAX_PER_DAY = 3
+NEWS_WORLD_MAX_PER_DAY = 2
 
-NEWS_TOTAL_MAX_PER_DAY = 10
+NEWS_TOTAL_MAX_PER_DAY = 7
 
 NEWS_MIN_GAP_MINUTES = 120
 
-NEWS_HISTORY_LIMIT = 200
+NEWS_HISTORY_LIMIT = 300
+
+NEWS_MIN_IMPORTANCE = 6
 
 
 # =========================================================
@@ -238,13 +253,12 @@ URGENT_KEYWORDS = [
     "urgent",
     "strike",
     "strikes",
+    "مذاکرات مهم",
+    "تصمیم مهم",
+    "تحریم جدید",
 
 ]
 
-
-# =========================================================
-# EXCLUDED NEWS
-# =========================================================
 
 PRICE_ONLY_NEWS_KEYWORDS = [
 
@@ -258,6 +272,9 @@ PRICE_ONLY_NEWS_KEYWORDS = [
     "نرخ طلا",
     "نرخ سکه",
     "آخرین قیمت طلا",
+    "قیمت امروز طلا",
+    "قیمت امروز سکه",
+    "قیمت امروز دلار",
 
 ]
 
@@ -268,19 +285,14 @@ PRICE_ONLY_NEWS_KEYWORDS = [
 
 NUMBER_BOXES = [
 
-    # 1 - انس نقره
     (505, 585, 900, 665),
 
-    # 2 - دلار تهران
     (505, 750, 900, 830),
 
-    # 3 - ساچمه 995
     (505, 915, 900, 995),
 
-    # 4 - شمش نادیر 999.9
     (505, 1075, 900, 1155),
 
-    # 5 - مثقال نقره 995
     (505, 1235, 900, 1315),
 
 ]
@@ -1407,10 +1419,6 @@ def parse_mashhad_union_prices(
         )
     )
 
-    # -----------------------------
-    # طلای ۱۸ عیار
-    # -----------------------------
-
     gold_patterns = [
 
         r"طلای\s*18\s*(?:عیار)?"
@@ -1457,10 +1465,6 @@ def parse_mashhad_union_prices(
 
                     gold = candidate
                     break
-
-    # -----------------------------
-    # سکه امامی
-    # -----------------------------
 
     coin_patterns = [
 
@@ -1963,7 +1967,7 @@ def create_board(
 
 
 # =========================================================
-# CAPTIONS
+# CHANNEL FOOTER
 # =========================================================
 
 def channel_footer():
@@ -1972,34 +1976,39 @@ def channel_footer():
 
         "\n\n"
         "━━━━━━━━━━━━━━\n"
-        "📲 عضویت در کانال یزدان‌دوست:\n"
+        "📲 عضویت در کانال قیمت نقره یزدان‌دوست:\n"
         f"{CHANNEL_LINK}"
 
     )
 
+
+# =========================================================
+# PRICE CAPTION
+# =========================================================
 
 def make_caption():
 
     return (
 
         f"📅 تاریخ: {iran_date_string()}\n"
-        f"🕐 ساعت: {iran_time_string()}\n\n"
+        f"🕐 آخرین بروزرسانی: {iran_time_string()}\n\n"
 
+        "🥈 قیمت و معاملات نقره یزدان‌دوست\n\n"
+
+        "▫️ ساچمه نقره ۹۹۵\n"
+        "▫️ شمش نقره ۹۹۹.۹\n"
+        "▫️ خرید و فروش نقره\n"
+        "▫️ خرید نقره مستعمل\n"
+        "▫️ خرید شمش‌های معتبر و قانونی\n\n"
+
+        "💰 نرخ خرید فاکتورهای مجموعه "
+        "طبق روال همیشگی محاسبه می‌شود.\n\n"
+
+        "📦 معاملات بالای ۲ کیلو\n"
+        "جهت استعلام نرخ، تماس بگیرید:\n"
         f"📞 {PHONE}\n\n"
 
-        "✅ خرید بالای ۲ کیلو "
-        "تماس تلفنی جهت استعلام نرخ\n\n"
-
-        "🔹 خرید و فروش انواع "
-        "شمش‌های معتبر (قانونی)\n"
-
-        "🔹 خرید مستعمل نقره\n"
-
-        "🔹 نرخ خرید فاکتورهای مجموعه "
-        "همانند همیشه هست\n\n"
-
-        "💬 برای خرید یا هرگونه سؤال:\n"
-
+        "💬 سفارش، خرید و استعلام:\n"
         f"{TELEGRAM_ID}"
 
         + channel_footer()
@@ -2494,12 +2503,6 @@ def extract_news_body(
     return []
 
 
-# =========================================================
-# IMPORTANT:
-# دیگر خبر را به 1100 کاراکتر قطع نمی‌کنیم.
-# متن کامل به هوش مصنوعی داده می‌شود.
-# =========================================================
-
 def build_news_text(
     paragraphs
 ):
@@ -2724,10 +2727,6 @@ def fetch_news_article(
 
         return None
 
-    # -----------------------------------------------------
-    # متن کامل خبر
-    # -----------------------------------------------------
-
     body = build_news_text(
         paragraphs
     )
@@ -2869,7 +2868,6 @@ def get_candidate_from_sources(
 
             continue
 
-        # خبر صرفاً قیمت طلا/سکه/دلار نباشد
         if is_price_only_news(
             article
         ):
@@ -2955,14 +2953,12 @@ def clean_ai_output(
 
         return ""
 
-    # حذف سه نقطه فارسی/انگلیسی در انتها
     text = re.sub(
         r"(…|\.)+$",
         "",
         text
     ).strip()
 
-    # حذف Markdown اضافی احتمالی
     text = re.sub(
         r"^```(?:text|markdown|plaintext)?\s*",
         "",
@@ -3002,86 +2998,152 @@ def parse_ai_news_result(
 
     ]
 
-    if not lines:
+    if len(lines) < 3:
 
         return None
 
-    ai_title = ""
+    sections = {
 
-    ai_text = ""
+        "title": "",
+        "text": "",
+        "why": "",
+        "silver": "",
+        "question": ""
 
-    # -----------------------------------------------------
-    # حالت استاندارد:
-    # خط اول عنوان
-    # بقیه متن خبر
-    # -----------------------------------------------------
+    }
 
-    if len(lines) >= 2:
+    current = "text"
 
-        first_line = lines[0]
+    text_lines = []
 
-        first_line = re.sub(
-            r"^(عنوان|تیتر)\s*[:：]\s*",
-            "",
-            first_line,
-            flags=re.IGNORECASE
-        ).strip()
+    for line in lines:
 
-        first_line = re.sub(
-            r"^[#*\-\s]+",
-            "",
-            first_line
-        ).strip()
+        normalized = line.strip()
 
-        ai_title = first_line
+        if re.match(
+            r"^(عنوان|تیتر)\s*[:：]",
+            normalized,
+            re.IGNORECASE
+        ):
 
-        ai_text = "\n\n".join(
-            lines[1:]
-        ).strip()
+            sections["title"] = re.sub(
+                r"^(عنوان|تیتر)\s*[:：]\s*",
+                "",
+                normalized,
+                flags=re.IGNORECASE
+            ).strip()
 
-    else:
+            continue
 
-        ai_title = original_title
+        if (
+            "چرا مهم است" in normalized
+            or
+            "اهمیت خبر" in normalized
+        ):
 
-        ai_text = lines[0]
+            current = "why"
 
-    if not ai_title:
+            continue
 
-        ai_title = original_title
+        if (
+            "ارتباط با بازار نقره" in normalized
+            or
+            "اثر بر نقره" in normalized
+            or
+            "بازار نقره" in normalized
+        ):
 
-    if not ai_text:
+            current = "silver"
 
-        return None
+            continue
 
-    ai_title = clean_ai_output(
-        ai_title
+        if (
+            "نظر شما" in normalized
+            or
+            "سؤال" in normalized
+            or
+            "تعامل" in normalized
+        ):
+
+            current = "question"
+
+            continue
+
+        if current == "text":
+
+            text_lines.append(
+                normalized
+            )
+
+        else:
+
+            sections[current] += (
+                normalized
+                + "\n"
+            )
+
+    if not sections["title"]:
+
+        sections["title"] = original_title
+
+    sections["text"] = "\n\n".join(
+        text_lines
+    ).strip()
+
+    for key in [
+        "why",
+        "silver",
+        "question"
+    ]:
+
+        sections[key] = clean_ai_output(
+            sections[key]
+        )
+
+    sections["title"] = clean_ai_output(
+        sections["title"]
     )
 
-    ai_text = clean_ai_output(
-        ai_text
+    sections["text"] = clean_ai_output(
+        sections["text"]
     )
 
-    if len(ai_title) > 220:
+    if len(sections["title"]) > 220:
 
-        ai_title = (
-            ai_title[:220]
+        sections["title"] = (
+            sections["title"][:220]
             .rsplit(" ", 1)[0]
             .strip()
         )
 
-    if len(ai_text) < 50:
+    if len(sections["text"]) < 50:
 
         return None
 
-    return {
+    if not sections["why"]:
 
-        "title":
-            ai_title,
+        sections["why"] = (
+            "این خبر از آن جهت اهمیت دارد "
+            "که می‌تواند بر فضای کلی بازار "
+            "طلا، نقره، ارز یا اقتصاد اثرگذار باشد."
+        )
 
-        "text":
-            ai_text
+    if not sections["silver"]:
 
-    }
+        sections["silver"] = (
+            "اهمیت این خبر برای بازار نقره "
+            "به مسیر دلار و شرایط بازار جهانی "
+            "فلزات گرانبها بستگی دارد."
+        )
+
+    if not sections["question"]:
+
+        sections["question"] = (
+            "به نظر شما این خبر برای بازار نقره "
+            "چه اثری خواهد داشت؟"
+        )
+
+    return sections
 
 
 def ai_summarize_news_sync(
@@ -3097,7 +3159,16 @@ def ai_summarize_news_sync(
                 title,
 
             "text":
-                text
+                text,
+
+            "why":
+                "این خبر برای بازار اهمیت دارد.",
+
+            "silver":
+                "این خبر می‌تواند برای بازار نقره مهم باشد.",
+
+            "question":
+                "نظر شما درباره این خبر چیست؟"
 
         }
 
@@ -3118,47 +3189,63 @@ def ai_summarize_news_sync(
         )
 
         prompt = f"""
-تو ویراستار حرفه‌ای اخبار اقتصادی و سیاسی
-برای یک کانال تلگرامی معتبر به نام «یزدان‌دوست» هستی.
+تو سردبیر حرفه‌ای کانال تلگرامی «یزدان‌دوست» هستی.
 
-متن کامل خبر را می‌دهم و تو باید آن را برای انتشار
-در تلگرام کوتاه، حرفه‌ای، روان و دقیق کنی.
+متن کامل یک خبر واقعی را دریافت می‌کنی.
+وظیفه تو این است که آن را به یک پست کوتاه،
+جذاب، معتبر و قابل فوروارد برای تلگرام تبدیل کنی.
+
+هدف:
+مخاطب باید در چند ثانیه بفهمد چه اتفاقی افتاده،
+چرا خبر مهم است و چه ارتباطی با بازار طلا،
+نقره، دلار یا اقتصاد دارد.
 
 قوانین بسیار مهم:
 
-1. اصل خبر و مفهوم اصلی آن کاملاً حفظ شود.
-2. هیچ اطلاعات جدیدی از خودت اضافه نکن.
-3. هیچ حدس، تحلیل یا پیش‌بینی شخصی اضافه نکن.
-4. عددها، قیمت‌ها، درصدها، تاریخ‌ها، ساعت‌ها،
-   نام افراد، کشورها و ارقام اقتصادی را تغییر نده.
-5. اگر عددی در خبر وجود دارد، همان عدد منبع را حفظ کن.
-6. خبر را تبلیغاتی یا هیجانی نکن.
-7. متن نهایی ترجیحاً حدود 70 تا 120 کلمه باشد.
-8. اگر خبر خیلی مهم است، برای حفظ مفهوم اصلی
-   می‌توانی کمی بیشتر بنویسی، اما از طولانی شدن جلوگیری کن.
-9. متن را در 2 تا 4 پاراگراف کوتاه بنویس.
-10. جمله‌های تکراری، توضیحات حاشیه‌ای، سوابق غیرضروری
-    و عبارت‌های زائد را حذف کن.
-11. اگر خبر درباره طلا، نقره، دلار، ارز یا بازار است،
-    مهم‌ترین اتفاق و علت اعلام‌شده در خبر را حفظ کن.
-12. اگر خبر سیاسی یا بین‌المللی است، اصل اتفاق،
-    طرف‌های درگیر و نتیجه یا اثر اعلام‌شده را حفظ کن.
-13. اگر متن منبع ناقص است، چیزی از خودت تکمیل نکن.
-14. از عبارت‌هایی مثل «در ادامه می‌خوانید» استفاده نکن.
-15. از عبارت «به گزارش...» فقط در صورتی استفاده کن
-    که برای فهم خبر ضروری باشد.
-16. هیچ سه‌نقطه‌ای در انتهای خبر نگذار.
-17. هیچ جمله‌ای را ناقص رها نکن.
-18. خروجی فقط شامل عنوان و متن نهایی باشد.
-19. هیچ توضیحی درباره کاری که انجام دادی ننویس.
-20. خط اول خروجی فقط عنوان کوتاه و حرفه‌ای باشد.
-21. از علامت # و Markdown استفاده نکن.
-22. لحن رسمی، خبری و مناسب کانال تلگرام باشد.
+1. فقط از اطلاعات موجود در متن منبع استفاده کن.
+2. هیچ عدد، قیمت، درصد، تاریخ، ساعت، نام یا واقعیت جدیدی اضافه نکن.
+3. هیچ پیش‌بینی قطعی درباره آینده قیمت نده.
+4. اگر منبع درباره اثر خبر بر نقره صحبت نکرده،
+   از خودت اثر قطعی نساز.
+5. خبر را تبلیغاتی یا زرد نکن.
+6. تیتر باید کوتاه، جذاب و خبری باشد.
+7. متن خبر حدود 70 تا 140 کلمه باشد.
+8. متن در 2 تا 4 پاراگراف کوتاه باشد.
+9. مهم‌ترین اتفاق را در ابتدای متن بیاور.
+10. اطلاعات حاشیه‌ای و تکراری را حذف کن.
+11. اگر خبر اقتصادی است، علت و نتیجه اعلام‌شده را حفظ کن.
+12. اگر خبر سیاسی یا بین‌المللی است،
+    طرف‌های اصلی و اصل اتفاق را دقیق نگه دار.
+13. بخش «چرا مهم است؟» حداکثر 2 جمله باشد.
+14. بخش «ارتباط با بازار نقره» نباید پیش‌بینی قطعی باشد.
+15. اگر ارتباط مستقیم با نقره وجود ندارد،
+    صادقانه بگو ارتباط آن غیرمستقیم است.
+16. در بخش سؤال، مخاطب را به اظهار نظر تشویق کن.
+17. از عبارت‌های زرد مثل «انفجار قیمت»،
+    «فرصت طلایی قطعی»، «حتماً گران می‌شود»
+    و مشابه آن استفاده نکن.
+18. هیچ Markdown، # یا سه‌نقطه استفاده نکن.
+19. هیچ جمله ناقصی ایجاد نکن.
+20. خروجی دقیقاً با این ساختار باشد:
+
+عنوان: ...
+
+متن:
+...
+
+چرا مهم است:
+...
+
+ارتباط با بازار نقره:
+...
+
+نظر شما:
+...
 
 عنوان اصلی:
 {title}
 
-متن کامل خبر:
+متن کامل منبع:
 {text}
 """
 
@@ -3167,9 +3254,8 @@ def ai_summarize_news_sync(
             model=OPENAI_MODEL,
 
             instructions=(
-                "تو یک ویراستار دقیق اخبار فارسی هستی. "
-                "فقط بر اساس متن منبع بازنویسی کن و "
-                "هرگز اطلاعات جدید اضافه نکن."
+                "تو سردبیر دقیق و بی‌طرف اخبار فارسی هستی. "
+                "هیچ اطلاعاتی خارج از منبع اضافه نکن."
             ),
 
             input=prompt
@@ -3178,20 +3264,10 @@ def ai_summarize_news_sync(
 
         result = response.output_text.strip()
 
-        if not result:
-
-            return None
-
-        parsed = parse_ai_news_result(
+        return parse_ai_news_result(
             result,
             title
         )
-
-        if not parsed:
-
-            return None
-
-        return parsed
 
     except Exception as error:
 
@@ -3279,7 +3355,7 @@ def make_news_caption(
     else:
 
         header = (
-            "📰 مهم‌ترین خبر بازار"
+            "📰 خبر مهم بازار"
         )
 
     return (
@@ -3290,6 +3366,17 @@ def make_news_caption(
         f"🔸 {article['title']}\n\n"
 
         f"{article['text']}\n\n"
+
+        "📌 چرا مهم است؟\n"
+        f"{article.get('why', '')}\n\n"
+
+        "🥈 ارتباط با بازار نقره\n"
+        f"{article.get('silver', '')}\n\n"
+
+        "💬 نظر شما؟\n"
+        f"{article.get('question', '')}\n\n"
+
+        "🟢 مثبت   🟡 خنثی   🔴 منفی\n\n"
 
         "━━━━━━━━━━━━━━\n"
         f"🕐 {iran_time_string()}"
@@ -3406,7 +3493,7 @@ def make_24h_report(
 
     lines = [
 
-        "📊 گزارش ۲۴ ساعته بازار",
+        "🌙 جمع‌بندی بازار امروز",
         "━━━━━━━━━━━━━━",
 
         f"📅 {iran_date_string()}",
@@ -3440,6 +3527,12 @@ def make_24h_report(
 
         "💵 دلار تهران",
         f"{format_price(rate['tehran'])} تومان",
+        "",
+        "📌 جمع‌بندی:",
+        "بازار نقره، طلا و ارز را با توجه به "
+        "قیمت‌های به‌روزشده و اخبار مهم امروز دنبال کنید.",
+        "",
+        "💬 به نظر شما مهم‌ترین عامل بازار فردا چیست؟",
 
     ]
 
@@ -3449,6 +3542,274 @@ def make_24h_report(
 
     return "\n".join(
         lines
+    )
+
+
+# =========================================================
+# MARKET PULSE
+# =========================================================
+
+def make_market_pulse(
+    rate,
+    products,
+    market=None
+):
+
+    lines = [
+
+        "📊 نبض بازار",
+        "━━━━━━━━━━━━━━",
+        f"📅 {iran_date_string()}",
+        f"🕐 {iran_time_string()}",
+        "",
+
+        "🥈 انس نقره",
+        f"{rate['ounce']:.2f} دلار",
+        "",
+
+        "💵 دلار تهران",
+        f"{format_price(rate['tehran'])} تومان",
+        "",
+
+        "🥈 ساچمه نقره ۹۹۵",
+        f"{format_price(products['shot_995'])} تومان",
+        "",
+
+        "🧱 شمش نادیر ۹۹۹.۹",
+        f"{format_price(products['nader_9999'])} تومان",
+
+    ]
+
+    if market:
+
+        lines.extend([
+
+            "",
+            "🥇 طلای ۱۸ مشهد",
+            f"{format_price(market['gold_18_mashhad'])} تومان",
+
+            "",
+            "🪙 سکه امامی",
+            f"{format_price(market['coin_imami'])} تومان",
+
+        ])
+
+    lines.extend([
+
+        "",
+        "💬 بازار را چطور می‌بینید؟",
+        "🟢 صعودی   🟡 نوسانی   🔴 نزولی",
+
+    ])
+
+    lines.append(
+        channel_footer()
+    )
+
+    return "\n".join(
+        lines
+    )
+
+
+# =========================================================
+# AI ECONOMY LESSON
+# =========================================================
+
+def ai_economy_lesson_sync():
+
+    if not OPENAI_API_KEY:
+
+        return None
+
+    client = OpenAI(
+        api_key=OPENAI_API_KEY
+    )
+
+    prompt = """
+برای کانال تلگرامی «یزدان‌دوست» یک پست کوتاه آموزشی اقتصادی بنویس.
+
+موضوع باید برای مخاطب بازار طلا، نقره، دلار و سرمایه‌گذاری عمومی مفید باشد.
+
+قوانین:
+- 60 تا 100 کلمه
+- ساده و قابل فهم
+- حرفه‌ای
+- بدون پیش‌بینی قیمت
+- بدون اطلاعات ساختگی
+- بدون Markdown
+- بدون هشتگ
+- عنوان جذاب داشته باشد
+- در پایان یک سؤال کوتاه برای تعامل مخاطب داشته باشد.
+
+موضوع را خودت از بین این موارد انتخاب کن:
+نرخ بهره، تورم، دلار، انس جهانی، حباب سکه،
+عرضه و تقاضا، فلزات گرانبها، فدرال رزرو.
+"""
+
+    response = client.responses.create(
+
+        model=OPENAI_MODEL,
+
+        instructions=(
+            "محتوای آموزشی اقتصادی کوتاه و دقیق تولید کن."
+        ),
+
+        input=prompt
+
+    )
+
+    return clean_ai_output(
+        response.output_text
+    )
+
+
+async def ai_economy_lesson():
+
+    return await asyncio.to_thread(
+        ai_economy_lesson_sync
+    )
+
+
+# =========================================================
+# AI MARKET RECAP
+# =========================================================
+
+def ai_market_recap_sync(
+    rate,
+    products,
+    market
+):
+
+    if not OPENAI_API_KEY:
+
+        return None
+
+    client = OpenAI(
+        api_key=OPENAI_API_KEY
+    )
+
+    prompt = f"""
+برای کانال «یزدان‌دوست» یک جمع‌بندی بسیار کوتاه
+از وضعیت بازار امروز بنویس.
+
+داده‌های قطعی امروز:
+
+انس نقره:
+{rate['ounce']}
+
+دلار تهران:
+{rate['tehran']}
+
+ساچمه ۹۹۵:
+{products['shot_995']}
+
+شمش نادیر ۹۹۹.۹:
+{products['nader_9999']}
+
+طلای ۱۸ مشهد:
+{market['gold_18_mashhad']}
+
+سکه امامی:
+{market['coin_imami']}
+
+قوانین:
+- فقط بر اساس همین داده‌ها بنویس.
+- هیچ پیش‌بینی قطعی نکن.
+- تغییر قیمت را اگر داده تغییر روزانه نداریم، ادعا نکن.
+- 70 تا 110 کلمه.
+- لحن حرفه‌ای و خبری.
+- عنوان کوتاه داشته باشد.
+- در پایان یک سؤال کوتاه برای مخاطب داشته باشد.
+- بدون Markdown.
+- بدون هشتگ.
+"""
+
+    response = client.responses.create(
+
+        model=OPENAI_MODEL,
+
+        instructions=(
+            "ویراستار حرفه‌ای بازار مالی و اقتصادی باش."
+        ),
+
+        input=prompt
+
+    )
+
+    return clean_ai_output(
+        response.output_text
+    )
+
+
+async def ai_market_recap(
+    rate,
+    products,
+    market
+):
+
+    return await asyncio.to_thread(
+
+        ai_market_recap_sync,
+
+        rate,
+        products,
+        market
+
+    )
+
+
+# =========================================================
+# TOMORROW MARKET MESSAGE
+# =========================================================
+
+def ai_tomorrow_message_sync():
+
+    if not OPENAI_API_KEY:
+
+        return None
+
+    client = OpenAI(
+        api_key=OPENAI_API_KEY
+    )
+
+    prompt = """
+برای کانال «یزدان‌دوست» یک پست کوتاه با عنوان
+«👀 فردا بازار را با این موارد دنبال کنید» بنویس.
+
+چون اطلاعات تقویم اقتصادی واقعی در اختیار تو نیست،
+نباید رویداد مشخص یا عدد مشخصی اختراع کنی.
+
+فقط 3 مورد عمومی و حرفه‌ای بنویس:
+- مسیر دلار
+- رفتار انس جهانی
+- اخبار مهم اقتصادی و سیاسی
+
+لحن حرفه‌ای و کوتاه باشد.
+در پایان یک سؤال تعاملی کوتاه قرار بده.
+بدون هشتگ و بدون Markdown.
+"""
+
+    response = client.responses.create(
+
+        model=OPENAI_MODEL,
+
+        instructions=(
+            "محتوای اقتصادی محافظه‌کار و بدون حدس تولید کن."
+        ),
+
+        input=prompt
+
+    )
+
+    return clean_ai_output(
+        response.output_text
+    )
+
+
+async def ai_tomorrow_message():
+
+    return await asyncio.to_thread(
+        ai_tomorrow_message_sync
     )
 
 
@@ -3664,12 +4025,11 @@ def news_is_due(
 def update_news_state(
     state,
     article,
-    message_id
+    message_id,
+    category="economic"
 ):
 
-    if is_urgent_news(
-        article
-    ):
+    if category == "world":
 
         state[
             "world_news_count"
@@ -3814,23 +4174,9 @@ async def send_news_post(
 
         return None
 
-    if len(
-        article.get(
-            "text",
-            ""
-        ).strip()
-    ) < 50:
-
-        return None
-
     caption = make_news_caption(
         article
     )
-
-    # -----------------------------------------------------
-    # جلوگیری از عبور از محدودیت تلگرام
-    # در حالت عادی AI متن را بسیار کوتاه‌تر از این می‌کند.
-    # -----------------------------------------------------
 
     if len(caption) >= 4000:
 
@@ -3881,7 +4227,7 @@ async def send_sticker(
 
 
 # =========================================================
-# SAFE FALLBACK DATA FOR 24H REPORT
+# SAVED DATA
 # =========================================================
 
 def get_saved_rate(
@@ -4032,19 +4378,12 @@ async def main():
 
         )
 
-    # -----------------------------------------------------
-    # API KEY هوش مصنوعی
-    # -----------------------------------------------------
-
     if NEWS_ENABLED and AI_NEWS_ENABLED:
 
         if not OPENAI_API_KEY:
 
             raise RuntimeError(
-                "OPENAI_API_KEY تنظیم نشده است. "
-                "برای انتشار اخبار با هوش مصنوعی، "
-                "کلید OpenAI را در Environment Variables "
-                "قرار بده."
+                "OPENAI_API_KEY تنظیم نشده است."
             )
 
     try:
@@ -4077,6 +4416,8 @@ async def main():
         "%H:%M"
     )
 
+    current_minute = current_minutes()
+
     log.info(
         "IRAN TIME = %s",
         current_time
@@ -4086,10 +4427,6 @@ async def main():
         "MARKET STATUS = %s",
         market_status_text()
     )
-
-    # =====================================================
-    # TELEGRAM CONNECTION
-    # =====================================================
 
     client = TelegramClient(
 
@@ -4131,19 +4468,19 @@ async def main():
         )
 
         # =================================================
-        # 08:00 MORNING MESSAGE
+        # MORNING
         # =================================================
 
         if (
 
-            current_minutes()
+            current_minute
             >=
             MORNING_HOUR * 60
             + MORNING_MINUTE
 
             and
 
-            current_minutes()
+            current_minute
             <
             CALENDAR_HOUR * 60
 
@@ -4185,19 +4522,19 @@ async def main():
                 )
 
         # =================================================
-        # 09:00 DAILY CALENDAR
+        # CALENDAR
         # =================================================
 
         if (
 
-            current_minutes()
+            current_minute
             >=
             CALENDAR_HOUR * 60
             + CALENDAR_MINUTE
 
             and
 
-            current_minutes()
+            current_minute
             <
             START_TRADES_HOUR * 60
             + START_TRADES_MINUTE
@@ -4243,7 +4580,6 @@ async def main():
 
         rate = None
         source_message_id = None
-
         products = None
 
         if is_price_time():
@@ -4281,7 +4617,7 @@ async def main():
         else:
 
             log.info(
-                "PRICE CHECK SKIPPED | OUTSIDE PRICE HOURS OR HOLIDAY"
+                "PRICE CHECK SKIPPED"
             )
 
         # =================================================
@@ -4397,7 +4733,7 @@ async def main():
                 )
 
         # =================================================
-        # 10:30 START TRADES
+        # START TRADES
         # =================================================
 
         if (
@@ -4406,17 +4742,16 @@ async def main():
 
             and
 
-            current_minutes()
+            current_minute
             >=
             START_TRADES_HOUR * 60
             + START_TRADES_MINUTE
 
             and
 
-            current_minutes()
+            current_minute
             <
             END_TRADES_HOUR * 60
-            + END_TRADES_MINUTE
 
             and
 
@@ -4457,7 +4792,6 @@ async def main():
 
         # =================================================
         # MASHHAD REPORTS
-        # 11:00 / 15:00 / 18:00
         # =================================================
 
         report_times = [
@@ -4495,7 +4829,7 @@ async def main():
 
                 start_minute
                 <=
-                current_minutes()
+                current_minute
                 <
                 start_minute + 20
 
@@ -4590,23 +4924,174 @@ async def main():
                                 )
 
         # =================================================
-        # NEWS
-        #
-        # خبر کامل -> AI -> خبر کوتاه -> کانال
+        # MARKET PULSE
         # =================================================
 
         if (
 
-            current_minutes()
-            <
-            24 * 60
+            not is_market_holiday()
 
             and
 
-            news_is_due(
+            current_minute
+            >=
+            MARKET_PULSE_HOUR * 60
+            + MARKET_PULSE_MINUTE
+
+            and
+
+            current_minute
+            <
+            MARKET_PULSE_HOUR * 60
+            + MARKET_PULSE_MINUTE
+            + 20
+
+            and
+
+            should_send_daily(
+                state,
+                "market_pulse"
+            )
+
+        ):
+
+            pulse_rate = rate
+
+            pulse_products = products
+
+            if pulse_rate is None:
+
+                pulse_rate = get_saved_rate(
+                    state
+                )
+
+            if pulse_products is None:
+
+                pulse_products = get_saved_products(
+                    state
+                )
+
+            pulse_market = get_saved_market(
                 state
             )
 
+            if (
+                pulse_rate
+                and
+                pulse_products
+            ):
+
+                try:
+
+                    await send_text_post(
+
+                        client,
+                        target,
+
+                        make_market_pulse(
+
+                            pulse_rate,
+                            pulse_products,
+                            pulse_market
+
+                        )
+
+                    )
+
+                    mark_daily_sent(
+                        state,
+                        "market_pulse"
+                    )
+
+                    save_state(
+                        state
+                    )
+
+                except Exception as error:
+
+                    log.exception(
+                        "MARKET PULSE FAILED: %s",
+                        error
+                    )
+
+        # =================================================
+        # AI ECONOMY LESSON
+        # =================================================
+
+        if (
+
+            current_minute
+            >=
+            ECONOMY_MINUTE_HOUR * 60
+            + ECONOMY_MINUTE_MINUTE
+
+            and
+
+            current_minute
+            <
+            ECONOMY_MINUTE_HOUR * 60
+            + ECONOMY_MINUTE_MINUTE
+            + 20
+
+            and
+
+            should_send_daily(
+                state,
+                "economy_lesson"
+            )
+
+        ):
+
+            try:
+
+                lesson = await ai_economy_lesson()
+
+                if lesson:
+
+                    lesson_text = (
+
+                        "💡 یک دقیقه اقتصاد\n"
+                        "━━━━━━━━━━━━━━\n\n"
+                        + lesson
+                        + "\n\n"
+                        "💬 نظر شما چیه؟"
+
+                        + channel_footer()
+
+                    )
+
+                    if len(lesson_text) < 4000:
+
+                        await send_text_post(
+
+                            client,
+                            target,
+                            lesson_text
+
+                        )
+
+                        mark_daily_sent(
+                            state,
+                            "economy_lesson"
+                        )
+
+                        save_state(
+                            state
+                        )
+
+            except Exception as error:
+
+                log.exception(
+                    "ECONOMY LESSON FAILED: %s",
+                    error
+                )
+
+        # =================================================
+        # NEWS
+        # =================================================
+
+        if news_is_due(
+            state
         ):
 
             history = state.get(
@@ -4642,10 +5127,7 @@ async def main():
             )
 
             news_article = None
-
-            # -------------------------------------------------
-            # خبر اقتصادی
-            # -------------------------------------------------
+            news_category = "economic"
 
             if (
                 economic_count
@@ -4668,10 +5150,6 @@ async def main():
                         error
                     )
 
-            # -------------------------------------------------
-            # خبر جهانی
-            # -------------------------------------------------
-
             if (
 
                 news_article is None
@@ -4690,7 +5168,10 @@ async def main():
                         await get_world_news(
                             history
                         )
+
                     )
+
+                    news_category = "world"
 
                 except Exception as error:
 
@@ -4699,15 +5180,7 @@ async def main():
                         error
                     )
 
-            # -------------------------------------------------
-            # AI EDITOR
-            # -------------------------------------------------
-
             if news_article:
-
-                log.info(
-                    "NEWS FOUND -> SENDING FULL ARTICLE TO AI"
-                )
 
                 try:
 
@@ -4727,7 +5200,7 @@ async def main():
                     )
 
                     log.info(
-                        "ORIGINAL NEWS LENGTH = %s CHARACTERS",
+                        "ORIGINAL NEWS LENGTH = %s",
                         original_length
                     )
 
@@ -4746,40 +5219,22 @@ async def main():
                         news_article = ai_article
 
                         log.info(
-                            "AI NEWS SUMMARY CREATED | TITLE=%s",
+                            "AI NEWS READY | %s",
                             news_article["title"]
                         )
 
-                        log.info(
-                            "AI NEWS LENGTH = %s CHARACTERS",
-                            len(
-                                news_article.get(
-                                    "text",
-                                    ""
-                                )
-                            )
-                        )
-
                     else:
-
-                        log.error(
-                            "AI RETURNED EMPTY RESULT -> NEWS NOT SENT"
-                        )
 
                         news_article = None
 
                 except Exception as error:
 
                     log.exception(
-                        "AI NEWS EDITOR FAILED -> NEWS NOT SENT: %s",
+                        "AI NEWS FAILED: %s",
                         error
                     )
 
                     news_article = None
-
-            # -------------------------------------------------
-            # ارسال خبر
-            # -------------------------------------------------
 
             if news_article:
 
@@ -4803,7 +5258,8 @@ async def main():
 
                             state,
                             news_article,
-                            news_message_id
+                            news_message_id,
+                            news_category
 
                         )
 
@@ -4812,13 +5268,7 @@ async def main():
                         )
 
                         log.info(
-                            "AI EDITED NEWS SENT SUCCESSFULLY"
-                        )
-
-                    else:
-
-                        log.warning(
-                            "NEWS WAS NOT SENT"
+                            "AI NEWS SENT SUCCESSFULLY"
                         )
 
                 except Exception as error:
@@ -4829,7 +5279,184 @@ async def main():
                     )
 
         # =================================================
-        # 21:00 END TRADES
+        # MARKET RECAP
+        # =================================================
+
+        if (
+
+            current_minute
+            >=
+            MARKET_RECAP_HOUR * 60
+            + MARKET_RECAP_MINUTE
+
+            and
+
+            current_minute
+            <
+            MARKET_RECAP_HOUR * 60
+            + MARKET_RECAP_MINUTE
+            + 20
+
+            and
+
+            should_send_daily(
+                state,
+                "market_recap"
+            )
+
+        ):
+
+            recap_rate = rate
+
+            recap_products = products
+
+            recap_market = get_saved_market(
+                state
+            )
+
+            if recap_rate is None:
+
+                recap_rate = get_saved_rate(
+                    state
+                )
+
+            if recap_products is None:
+
+                recap_products = get_saved_products(
+                    state
+                )
+
+            if (
+                recap_rate
+                and
+                recap_products
+                and
+                recap_market
+            ):
+
+                try:
+
+                    recap = await ai_market_recap(
+
+                        recap_rate,
+                        recap_products,
+                        recap_market
+
+                    )
+
+                    if recap:
+
+                        recap_text = (
+
+                            "🌙 جمع‌بندی بازار امروز\n"
+                            "━━━━━━━━━━━━━━\n\n"
+                            + recap
+                            + "\n\n"
+                            "📌 برای دنبال کردن نرخ‌های "
+                            "به‌روز نقره، کانال یزدان‌دوست را دنبال کنید."
+
+                            + channel_footer()
+
+                        )
+
+                        if len(recap_text) < 4000:
+
+                            await send_text_post(
+
+                                client,
+                                target,
+                                recap_text
+
+                            )
+
+                            mark_daily_sent(
+                                state,
+                                "market_recap"
+                            )
+
+                            save_state(
+                                state
+                            )
+
+                except Exception as error:
+
+                    log.exception(
+                        "MARKET RECAP FAILED: %s",
+                        error
+                    )
+
+        # =================================================
+        # TOMORROW LOOK
+        # =================================================
+
+        if (
+
+            current_minute
+            >=
+            TOMORROW_LOOK_HOUR * 60
+            + TOMORROW_LOOK_MINUTE
+
+            and
+
+            current_minute
+            <
+            TOMORROW_LOOK_HOUR * 60
+            + TOMORROW_LOOK_MINUTE
+            + 20
+
+            and
+
+            should_send_daily(
+                state,
+                "tomorrow_look"
+            )
+
+        ):
+
+            try:
+
+                tomorrow = await ai_tomorrow_message()
+
+                if tomorrow:
+
+                    tomorrow_text = (
+
+                        "👀 فردا بازار را با این موارد دنبال کنید\n"
+                        "━━━━━━━━━━━━━━\n\n"
+                        + tomorrow
+
+                        + channel_footer()
+
+                    )
+
+                    if len(tomorrow_text) < 4000:
+
+                        await send_text_post(
+
+                            client,
+                            target,
+                            tomorrow_text
+
+                        )
+
+                        mark_daily_sent(
+                            state,
+                            "tomorrow_look"
+                        )
+
+                        save_state(
+                            state
+                        )
+
+            except Exception as error:
+
+                log.exception(
+                    "TOMORROW LOOK FAILED: %s",
+                    error
+                )
+
+        # =================================================
+        # END TRADES
         # =================================================
 
         if (
@@ -4838,14 +5465,14 @@ async def main():
 
             and
 
-            current_minutes()
+            current_minute
             >=
             END_TRADES_HOUR * 60
             + END_TRADES_MINUTE
 
             and
 
-            current_minutes()
+            current_minute
             <
             REPORT_24H_HOUR * 60
             + REPORT_24H_MINUTE
@@ -4888,19 +5515,19 @@ async def main():
                 )
 
         # =================================================
-        # 21:15 24H REPORT
+        # 24H REPORT
         # =================================================
 
         if (
 
-            current_minutes()
+            current_minute
             >=
             REPORT_24H_HOUR * 60
             + REPORT_24H_MINUTE
 
             and
 
-            current_minutes()
+            current_minute
             <
             22 * 60
 
@@ -4918,10 +5545,6 @@ async def main():
                 report_rate = None
                 report_products = None
                 mashhad_market = None
-
-                # -----------------------------
-                # نرخ جدید
-                # -----------------------------
 
                 try:
 
@@ -4946,10 +5569,6 @@ async def main():
                         )
                     )
 
-                # -----------------------------
-                # محصولات جدید
-                # -----------------------------
-
                 try:
 
                     report_products = (
@@ -4970,10 +5589,6 @@ async def main():
                             state
                         )
                     )
-
-                # -----------------------------
-                # طلای مشهد
-                # -----------------------------
 
                 try:
 
@@ -4996,10 +5611,6 @@ async def main():
                         )
                     )
 
-                # -----------------------------
-                # ذخیره داده اتحادیه
-                # -----------------------------
-
                 if mashhad_market is not None:
 
                     state[
@@ -5017,10 +5628,6 @@ async def main():
                     save_state(
                         state
                     )
-
-                # -----------------------------
-                # ارسال گزارش
-                # -----------------------------
 
                 if (
 
@@ -5067,7 +5674,7 @@ async def main():
                 else:
 
                     log.error(
-                        "24H REPORT SKIPPED | REQUIRED DATA NOT AVAILABLE"
+                        "24H REPORT SKIPPED"
                     )
 
             except Exception as error:
