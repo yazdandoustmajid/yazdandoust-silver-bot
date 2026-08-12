@@ -3,7 +3,9 @@ import json
 import logging
 import os
 import re
+import time
 from datetime import datetime
+from difflib import SequenceMatcher
 from pathlib import Path
 from urllib.parse import urljoin
 from zoneinfo import ZoneInfo
@@ -94,6 +96,8 @@ AI_NEWS_ENABLED = True
 AI_NEWS_MAX_WORDS = 140
 
 AI_NEWS_RETRIES = 3
+
+AI_NEWS_SIMILARITY_LIMIT = 0.62
 
 
 # =========================================================
@@ -754,6 +758,7 @@ def is_price_time():
 
     end = (
         PRICE_END_HOUR * 60
+        + PRICE_END_HOUR * 0
         + PRICE_END_MINUTE
     )
 
@@ -3246,12 +3251,6 @@ def get_candidate_from_sources(
                 ""
             )
 
-            preliminary_text = (
-                title
-                + " "
-                + description
-            )
-
             title_relevant = keyword_match(
                 title,
                 keywords
@@ -3464,9 +3463,153 @@ def clean_ai_output(
     return text.strip()
 
 
+def count_words_fa(
+    text
+):
+
+    text = normalize_fa(
+        text
+    )
+
+    return len(
+        re.findall(
+            r"\S+",
+            text
+        )
+    )
+
+
+def normalize_for_similarity(
+    text
+):
+
+    text = normalize_fa(
+        text
+    ).lower()
+
+    text = re.sub(
+        r"[^\w\sآ-ی]",
+        " ",
+        text,
+        flags=re.UNICODE
+    )
+
+    text = re.sub(
+        r"\s+",
+        " ",
+        text
+    ).strip()
+
+    return text
+
+
+def calculate_text_similarity(
+    source,
+    generated
+):
+
+    source = normalize_for_similarity(
+        source
+    )
+
+    generated = normalize_for_similarity(
+        generated
+    )
+
+    if not source or not generated:
+
+        return 0.0
+
+    source_words = source.split()
+    generated_words = generated.split()
+
+    if not source_words or not generated_words:
+
+        return 0.0
+
+    source_sample = " ".join(
+        source_words[:4000]
+    )
+
+    generated_sample = " ".join(
+        generated_words[:500]
+    )
+
+    return SequenceMatcher(
+        None,
+        source_sample,
+        generated_sample
+    ).ratio()
+
+
+def calculate_word_overlap(
+    source,
+    generated
+):
+
+    source_words = set(
+        normalize_for_similarity(
+            source
+        ).split()
+    )
+
+    generated_words = set(
+        normalize_for_similarity(
+            generated
+        ).split()
+    )
+
+    if not generated_words:
+
+        return 0.0
+
+    return (
+        len(
+            source_words
+            &
+            generated_words
+        )
+        /
+        len(generated_words)
+    )
+
+
+def is_ai_copy_like(
+    source,
+    generated
+):
+
+    similarity = calculate_text_similarity(
+        source,
+        generated
+    )
+
+    overlap = calculate_word_overlap(
+        source,
+        generated
+    )
+
+    log.info(
+        "AI NEWS SIMILARITY = %.3f | WORD OVERLAP = %.3f",
+        similarity,
+        overlap
+    )
+
+    if similarity >= AI_NEWS_SIMILARITY_LIMIT:
+
+        return True
+
+    if overlap >= 0.78:
+
+        return True
+
+    return False
+
+
 def parse_ai_news_result(
     result,
-    original_title
+    original_title,
+    original_text
 ):
 
     result = clean_ai_output(
@@ -3637,25 +3780,107 @@ def parse_ai_news_result(
     if not sections["why"]:
 
         sections["why"] = (
-            "این خبر از آن جهت اهمیت دارد "
-            "که می‌تواند بر فضای کلی بازار "
-            "طلا، نقره، ارز یا اقتصاد اثرگذار باشد."
+            "این خبر می‌تواند بر فضای کلی "
+            "بازار و تصمیم‌های فعالان اثرگذار باشد."
         )
 
     if not sections["silver"]:
 
         sections["silver"] = (
-            "اهمیت این خبر برای بازار نقره "
+            "ارتباط آن با بازار نقره بیشتر "
             "به مسیر دلار و شرایط بازار جهانی "
-            "فلزات گرانبها بستگی دارد."
+            "فلزات گرانبها مربوط است."
         )
 
     if not sections["question"]:
 
         sections["question"] = (
-            "به نظر شما این خبر برای بازار نقره "
-            "چه اثری خواهد داشت؟"
+            "به نظر شما این خبر چه اثری بر بازار دارد؟"
         )
+
+    # -----------------------------------------------------
+    # حذف نشانه‌های احساس بازار از متن خبر
+    # -----------------------------------------------------
+
+    for key in [
+        "title",
+        "text",
+        "why",
+        "silver",
+        "question"
+    ]:
+
+        sections[key] = re.sub(
+            r"🟢\s*مثبت\s*[🟡🔴]*",
+            "",
+            sections[key]
+        )
+
+        sections[key] = re.sub(
+            r"🟡\s*خنثی\s*[🟢🔴]*",
+            "",
+            sections[key]
+        )
+
+        sections[key] = re.sub(
+            r"🔴\s*منفی\s*[🟢🟡]*",
+            "",
+            sections[key]
+        )
+
+        sections[key] = re.sub(
+            r"\s+",
+            " ",
+            sections[key]
+        ).strip()
+
+    # -----------------------------------------------------
+    # سقف ۱۴۰ کلمه برای کل محتوای تولیدشده
+    # -----------------------------------------------------
+
+    generated_content = "\n".join([
+
+        sections["title"],
+        sections["text"],
+        sections["why"],
+        sections["silver"],
+        sections["question"]
+
+    ])
+
+    word_count = count_words_fa(
+        generated_content
+    )
+
+    log.info(
+        "AI NEWS WORD COUNT = %s/%s",
+        word_count,
+        AI_NEWS_MAX_WORDS
+    )
+
+    if word_count > AI_NEWS_MAX_WORDS:
+
+        log.warning(
+            "AI NEWS REJECTED | OVER %s WORDS",
+            AI_NEWS_MAX_WORDS
+        )
+
+        return None
+
+    # -----------------------------------------------------
+    # جلوگیری از کپی متن خام منبع
+    # -----------------------------------------------------
+
+    if is_ai_copy_like(
+        original_text,
+        generated_content
+    ):
+
+        log.warning(
+            "AI NEWS REJECTED | TOO SIMILAR TO SOURCE"
+        )
+
+        return None
 
     return sections
 
@@ -3702,44 +3927,47 @@ def ai_summarize_news_sync(
     )
 
     prompt = f"""
-تو سردبیر حرفه‌ای کانال تلگرامی «یزدان‌دوست» هستی.
+تو سردبیر حرفه‌ای و مستقل کانال تلگرامی «یزدان‌دوست» هستی.
 
-متن کامل یک خبر واقعی را دریافت می‌کنی.
-وظیفه تو این است که آن را به یک پست کوتاه،
-جذاب، معتبر و قابل فوروارد برای تلگرام تبدیل کنی.
+من یک خبر واقعی و کامل در اختیار تو قرار می‌دهم.
+وظیفه تو این است که از آن یک خلاصه خبری واقعی،
+کوتاه، خوانا و قابل انتشار در تلگرام تولید کنی.
 
-هدف:
-مخاطب باید در چند ثانیه بفهمد چه اتفاقی افتاده،
-چرا خبر مهم است و چه ارتباطی با بازار طلا،
-نقره، دلار یا اقتصاد دارد.
+مهم‌ترین نکته:
+خروجی نباید بازنویسی خط‌به‌خط یا کپی متن منبع باشد.
+باید ابتدا نکات اصلی خبر را درک کنی و سپس با جمله‌بندی
+جدید و مستقل، یک خلاصه کوتاه بنویسی.
 
 قوانین بسیار مهم:
 
-1. فقط از اطلاعات موجود در متن منبع استفاده کن.
+1. فقط اطلاعات موجود در متن منبع را استفاده کن.
 2. هیچ عدد، قیمت، درصد، تاریخ، ساعت، نام یا واقعیت جدیدی اضافه نکن.
 3. هیچ پیش‌بینی قطعی درباره آینده قیمت نده.
-4. اگر منبع درباره اثر خبر بر نقره صحبت نکرده،
-   از خودت اثر قطعی نساز.
-5. خبر را تبلیغاتی یا زرد نکن.
-6. تیتر باید کوتاه، جذاب و خبری باشد.
-7. متن خبر حدود 70 تا 140 کلمه باشد.
-8. متن در 2 تا 4 پاراگراف کوتاه باشد.
-9. مهم‌ترین اتفاق را در ابتدای متن بیاور.
-10. اطلاعات حاشیه‌ای و تکراری را حذف کن.
-11. اگر خبر اقتصادی است، علت و نتیجه اعلام‌شده را حفظ کن.
-12. اگر خبر سیاسی یا بین‌المللی است،
-    طرف‌های اصلی و اصل اتفاق را دقیق نگه دار.
-13. بخش «چرا مهم است؟» حداکثر 2 جمله باشد.
-14. بخش «ارتباط با بازار نقره» نباید پیش‌بینی قطعی باشد.
-15. اگر ارتباط مستقیم با نقره وجود ندارد،
+4. متن خام منبع را کپی نکن.
+5. جمله‌بندی منبع را تکرار نکن.
+6. اطلاعات حاشیه‌ای، تکراری، تبلیغاتی و کم‌اهمیت را حذف کن.
+7. فقط مهم‌ترین اتفاق، علت اعلام‌شده و نتیجه اعلام‌شده را نگه دار.
+8. مهم‌ترین نکته خبر باید در ابتدای متن بیاید.
+9. متن اصلی خبر حداکثر 70 کلمه باشد.
+10. کل خروجی شامل عنوان، متن، اهمیت خبر، ارتباط با نقره و سؤال
+    باید در مجموع حداکثر 140 کلمه باشد.
+11. خروجی باید کوتاه باشد و نباید برای رسیدن به سقف 140 کلمه
+    عمداً طولانی شود.
+12. از تکرار یک مفهوم در چند بخش خودداری کن.
+13. اگر ارتباط مستقیم خبر با نقره وجود ندارد،
     صادقانه بگو ارتباط آن غیرمستقیم است.
-16. در بخش سؤال، مخاطب را به اظهار نظر تشویق کن.
-17. از عبارت‌های زرد مثل «انفجار قیمت»،
-    «فرصت طلایی قطعی»، «حتماً گران می‌شود»
-    و مشابه آن استفاده نکن.
-18. هیچ Markdown، # یا سه‌نقطه استفاده نکن.
-19. هیچ جمله ناقصی ایجاد نکن.
-20. خروجی دقیقاً با این ساختار باشد:
+14. بخش «چرا مهم است» حداکثر یک جمله کوتاه باشد.
+15. بخش «ارتباط با بازار نقره» حداکثر یک جمله کوتاه باشد.
+16. سؤال پایانی حداکثر یک جمله کوتاه باشد.
+17. هیچ جمله‌ای از منبع را عیناً یا تقریباً عیناً تکرار نکن.
+18. اگر خبر سیاسی یا بین‌المللی است، اصل اتفاق و طرف‌های اصلی را دقیق حفظ کن.
+19. اگر خبر اقتصادی است، علت و نتیجه اعلام‌شده را دقیق حفظ کن.
+20. از عبارت‌های زرد مانند «انفجار قیمت»،
+    «حتماً گران می‌شود»، «فرصت طلایی قطعی» و مشابه آن استفاده نکن.
+21. هیچ Markdown یا هشتگ استفاده نکن.
+22. از ایموجی‌های 🟢، 🟡 و 🔴 برای تحلیل احساس بازار استفاده نکن.
+23. هیچ متن خام، نقل‌قول طولانی یا پاراگراف منبع را کپی نکن.
+24. خروجی دقیقاً با ساختار زیر باشد:
 
 عنوان: ...
 
@@ -3755,7 +3983,7 @@ def ai_summarize_news_sync(
 نظر شما:
 ...
 
-عنوان اصلی:
+عنوان اصلی خبر:
 {title}
 
 متن کامل منبع:
@@ -3777,7 +4005,9 @@ def ai_summarize_news_sync(
 
                 instructions=(
                     "تو سردبیر دقیق و بی‌طرف اخبار فارسی هستی. "
-                    "هیچ اطلاعاتی خارج از منبع اضافه نکن."
+                    "خبر را واقعاً خلاصه کن، نه اینکه متن منبع را "
+                    "کپی یا خط‌به‌خط بازنویسی کنی. "
+                    "حداکثر ۱۴۰ کلمه برای کل خروجی تولید کن."
                 ),
 
                 input=prompt
@@ -3788,7 +4018,8 @@ def ai_summarize_news_sync(
 
             parsed = parse_ai_news_result(
                 result,
-                title
+                title,
+                text
             )
 
             if parsed:
@@ -3796,7 +4027,8 @@ def ai_summarize_news_sync(
                 return parsed
 
             raise RuntimeError(
-                "خروجی AI قابل استفاده نبود."
+                "خروجی AI یا بیشتر از ۱۴۰ کلمه بود "
+                "یا بیش از حد به متن منبع شباهت داشت."
             )
 
         except Exception as error:
@@ -3808,7 +4040,6 @@ def ai_summarize_news_sync(
                 "AI NEWS ATTEMPT %s/%s FAILED: %s",
 
                 attempt,
-
                 AI_NEWS_RETRIES,
 
                 error
@@ -3816,8 +4047,6 @@ def ai_summarize_news_sync(
             )
 
             if attempt < AI_NEWS_RETRIES:
-
-                import time
 
                 time.sleep(
                     NEWS_AI_RETRY_DELAY_SECONDS
@@ -3923,16 +4152,117 @@ def make_news_caption(
         "🥈 ارتباط با بازار نقره\n"
         f"{article.get('silver', '')}\n\n"
 
-        "💬 نظر شما؟\n"
-        f"{article.get('question', '')}\n\n"
-
-        "🟢 مثبت   🟡 خنثی   🔴 منفی\n\n"
-
         "━━━━━━━━━━━━━━\n"
         f"🕐 {iran_time_string()}"
 
         + channel_footer()
 
+    )
+
+
+# =========================================================
+# NEWS POLL
+# =========================================================
+
+def make_news_poll_question(
+    article
+):
+
+    title = normalize_fa(
+        article.get(
+            "title",
+            ""
+        )
+    )
+
+    if not title:
+
+        return (
+            "📊 برداشت شما از این خبر چیست؟"
+        )
+
+    question = (
+        "📊 برداشت شما از این خبر چیست؟"
+    )
+
+    return question
+
+
+async def send_news_poll(
+    client,
+    target,
+    article
+):
+
+    question = make_news_poll_question(
+        article
+    )
+
+    poll = Poll(
+
+        id=0,
+
+        question=question,
+
+        answers=[
+
+            PollAnswer(
+                text="🟢 مثبت",
+                option=b"\x01"
+            ),
+
+            PollAnswer(
+                text="🟡 خنثی",
+                option=b"\x02"
+            ),
+
+            PollAnswer(
+                text="🔴 منفی",
+                option=b"\x03"
+            )
+
+        ],
+
+        closed=False,
+
+        public_voters=False,
+
+        multiple_choice=False,
+
+        quiz=False
+
+    )
+
+    media = InputMediaPoll(
+        poll=poll
+    )
+
+    sent = await client(
+        SendMediaRequest(
+
+            peer=target,
+
+            media=media,
+
+            message=(
+                "📊 برداشت شما از این خبر چیست؟\n\n"
+                "رأی خود را ثبت کنید 👇"
+            ),
+
+            random_id=client.rng.getrandbits(
+                64
+            )
+
+        )
+    )
+
+    log.info(
+        "NEWS POLL SENT | %s",
+        sent.id
+    )
+
+    return int(
+        sent.id
     )
 
 
@@ -4513,12 +4843,6 @@ def news_is_due(
     state
 ):
 
-    """
-    نکته مهم:
-    این تابع عمداً هیچ بررسی برای تعطیلی یا جمعه ندارد.
-    اخبار حتی در روزهای تعطیل نیز باید بررسی و منتشر شوند.
-    """
-
     if not NEWS_ENABLED:
 
         return False
@@ -4585,7 +4909,8 @@ def update_news_state(
     state,
     article,
     message_id,
-    category="economic"
+    category="economic",
+    poll_message_id=None
 ):
 
     if category == "world":
@@ -4668,6 +4993,14 @@ def update_news_state(
     ] = int(
         message_id
     )
+
+    if poll_message_id:
+
+        state[
+            "last_news_poll_message_id"
+        ] = int(
+            poll_message_id
+        )
 
 
 # =========================================================
@@ -4787,7 +5120,7 @@ async def send_news_post(
 
     if not article:
 
-        return None
+        return None, None
 
     caption = make_news_caption(
         article
@@ -4799,12 +5132,44 @@ async def send_news_post(
             "NEWS CAPTION TOO LONG -> NOT SENT"
         )
 
-        return None
+        return None, None
 
-    return await send_text_post(
+    # -----------------------------------------------------
+    # ابتدا خبر
+    # -----------------------------------------------------
+
+    news_message_id = await send_text_post(
         client,
         target,
         caption
+    )
+
+    # -----------------------------------------------------
+    # سپس Poll واقعی Telegram
+    # -----------------------------------------------------
+
+    poll_message_id = None
+
+    try:
+
+        poll_message_id = (
+            await send_news_poll(
+                client,
+                target,
+                article
+            )
+        )
+
+    except Exception as error:
+
+        log.exception(
+            "NEWS POLL FAILED: %s",
+            error
+        )
+
+    return (
+        news_message_id,
+        poll_message_id
     )
 
 
@@ -4939,8 +5304,7 @@ def get_saved_market(
         or
         state.get(
             "coin_imami"
-        )
-        is None
+        ) is None
     ):
 
         return None
@@ -5871,11 +6235,15 @@ async def main():
                         news_article["title"]
                     )
 
-                    original_length = len(
+                    original_text = (
                         news_article.get(
                             "text",
                             ""
                         )
+                    )
+
+                    original_length = len(
+                        original_text
                     )
 
                     log.info(
@@ -5935,7 +6303,10 @@ async def main():
 
                 try:
 
-                    news_message_id = (
+                    (
+                        news_message_id,
+                        poll_message_id
+                    ) = (
 
                         await send_news_post(
 
@@ -5954,7 +6325,8 @@ async def main():
                             state,
                             news_article,
                             news_message_id,
-                            news_category
+                            news_category,
+                            poll_message_id
 
                         )
 
@@ -5963,8 +6335,10 @@ async def main():
                         )
 
                         log.info(
-                            "AI NEWS SENT SUCCESSFULLY | CATEGORY=%s",
-                            news_category
+                            "AI NEWS + POLL SENT SUCCESSFULLY | CATEGORY=%s | NEWS=%s | POLL=%s",
+                            news_category,
+                            news_message_id,
+                            poll_message_id
                         )
 
                 except Exception as error:
