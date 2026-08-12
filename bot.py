@@ -4121,6 +4121,64 @@ def update_news_state(
 # TELEGRAM SENDERS
 # =========================================================
 
+# =========================================================
+# DAILY MARKET POLL
+# =========================================================
+
+async def send_market_poll(
+    client,
+    target
+):
+
+    poll = Poll(
+        id=0,
+        question="📊 پیش‌بینی بازار نقره | امروز",
+        answers=[
+            PollAnswer(
+                text="🟢 صعودی",
+                option=b"\x01"
+            ),
+            PollAnswer(
+                text="🔴 کاهشی",
+                option=b"\x02"
+            ),
+            PollAnswer(
+                text="🟡 کم‌نوسان",
+                option=b"\x03"
+            )
+        ],
+        closed=False,
+        public_voters=False,
+        multiple_choice=False,
+        quiz=False
+    )
+
+    media = InputMediaPoll(
+        poll=poll
+    )
+
+    sent = await client(
+        SendMediaRequest(
+            peer=target,
+            media=media,
+            message=(
+                "🔮 به نظر شما روند بازار نقره "
+                "امروز چگونه خواهد بود؟\n\n"
+                "قبل از شروع معاملات، "
+                "پیش‌بینی خودت را ثبت کن 👇"
+            ),
+            random_id=client.rng.getrandbits(64)
+        )
+    )
+
+    log.info(
+        "MARKET POLL SENT | %s",
+        sent.id
+    )
+
+    return int(
+        sent.id
+    )
 async def send_rate_post(
     client,
     target,
@@ -4580,6 +4638,66 @@ async def main():
                     error
                 )
 
+        # =================================================
+        # 09:45 DAILY MARKET POLL
+        # =================================================
+
+        if (
+
+            not is_market_holiday()
+
+            and
+
+            current_minutes()
+            >=
+            9 * 60
+            + 45
+
+            and
+
+            current_minutes()
+            <
+            10 * 60
+
+            and
+
+            should_send_daily(
+                state,
+                "market_poll"
+            )
+
+        ):
+
+            try:
+
+                poll_message_id = (
+                    await send_market_poll(
+                        client,
+                        target
+                    )
+                )
+
+                if poll_message_id:
+
+                    mark_daily_sent(
+                        state,
+                        "market_poll"
+                    )
+
+                    save_state(
+                        state
+                    )
+
+                    log.info(
+                        "DAILY MARKET POLL SENT SUCCESSFULLY"
+                    )
+
+            except Exception as error:
+
+                log.exception(
+                    "DAILY MARKET POLL FAILED: %s",
+                    error
+                )
         # =================================================
         # FETCH CURRENT PRICE
         # =================================================
