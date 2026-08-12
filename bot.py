@@ -3,9 +3,9 @@ import json
 import logging
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
 import requests
@@ -71,6 +71,57 @@ OPENAI_MODEL = os.getenv(
 AI_NEWS_ENABLED = True
 
 AI_NEWS_MAX_WORDS = 130
+
+
+# =========================================================
+# AI PREMIUM FEATURES
+# =========================================================
+
+AI_MARKET_ANALYSIS_ENABLED = True
+
+AI_MARKET_ANALYSIS_MIN_CHANGE_PERCENT = 0.35
+
+AI_MARKET_ANALYSIS_MAX_PER_DAY = 3
+
+AI_MARKET_ANALYSIS_COOLDOWN_MINUTES = 180
+
+AI_DAILY_EDUCATION_ENABLED = True
+
+AI_DAILY_EDUCATION_HOUR = 13
+
+AI_DAILY_EDUCATION_MINUTE = 0
+
+AI_DAILY_EDUCATION_MAX_PER_DAY = 1
+
+AI_INTERACTION_ENABLED = True
+
+AI_INTERACTION_HOUR = 17
+
+AI_INTERACTION_MINUTE = 0
+
+AI_INTERACTION_MAX_PER_DAY = 1
+
+AI_MARKET_PULSE_ENABLED = True
+
+AI_MARKET_PULSE_HOUR = 19
+
+AI_MARKET_PULSE_MINUTE = 0
+
+AI_MARKET_PULSE_MAX_PER_DAY = 1
+
+AI_PRODUCT_CONTENT_ENABLED = True
+
+AI_PRODUCT_CONTENT_MAX_PER_DAY = 1
+
+AI_PRODUCT_CONTENT_HOUR = 12
+
+AI_PRODUCT_CONTENT_MINUTE = 0
+
+AI_STRONG_MOVE_ALERT_ENABLED = True
+
+AI_STRONG_MOVE_PERCENT = 1.50
+
+AI_MAX_GENERATED_POSTS_PER_DAY = 6
 
 
 # =========================================================
@@ -254,6 +305,137 @@ PRICE_ONLY_NEWS_KEYWORDS = [
     "نرخ طلا",
     "نرخ سکه",
     "آخرین قیمت طلا",
+
+]
+
+
+# =========================================================
+# EDUCATIONAL TOPICS
+# =========================================================
+
+EDUCATIONAL_TOPICS = [
+
+    {
+        "title": "ساچمه نقره ۹۹۵ یعنی چه؟",
+        "topic": "تفاوت عیار ۹۹۵ با نقره خالص و کاربرد ساچمه نقره ۹۹۵"
+    },
+
+    {
+        "title": "شمش نقره ۹۹۹.۹ چه تفاوتی دارد؟",
+        "topic": "تفاوت شمش با ساچمه و مفهوم خلوص ۹۹۹.۹"
+    },
+
+    {
+        "title": "چرا قیمت نقره تغییر می‌کند؟",
+        "topic": "نقش انس جهانی نقره و دلار تهران در قیمت داخلی"
+    },
+
+    {
+        "title": "انس نقره چیست؟",
+        "topic": "تعریف انس جهانی و ارتباط آن با قیمت هر گرم نقره"
+    },
+
+    {
+        "title": "عیار نقره را چگونه بخوانیم؟",
+        "topic": "معنی ۹۲۵، ۹۹۵ و ۹۹۹.۹ در بازار نقره"
+    },
+
+    {
+        "title": "ساچمه بهتر است یا شمش؟",
+        "topic": "تفاوت کاربردی ساچمه و شمش برای خریداران نقره"
+    },
+
+    {
+        "title": "وزن شمش چرا مهم است؟",
+        "topic": "تأثیر وزن، عیار و برند بر خرید شمش نقره"
+    },
+
+    {
+        "title": "حباب سکه یعنی چه؟",
+        "topic": "تعریف ساده حباب و تفاوت قیمت بازار با ارزش ذاتی"
+    },
+
+    {
+        "title": "دلار چه اثری روی نقره ایران دارد؟",
+        "topic": "ارتباط نرخ دلار تهران با قیمت داخلی نقره"
+    },
+
+    {
+        "title": "انس جهانی نقره را از کجا دنبال کنیم؟",
+        "topic": "نقش بازار جهانی در قیمت‌گذاری نقره"
+    },
+
+]
+
+
+# =========================================================
+# INTERACTION TOPICS
+# =========================================================
+
+INTERACTION_TOPICS = [
+
+    {
+        "title": "انتخاب شما چیست؟",
+        "question": "اگر قصد خرید نقره داشته باشید، ساچمه ۹۹۵ را انتخاب می‌کنید یا شمش ۹۹۹.۹؟ چرا؟",
+        "options": [
+            "۱️⃣ ساچمه ۹۹۵",
+            "۲️⃣ شمش ۹۹۹.۹",
+        ]
+    },
+
+    {
+        "title": "نظر شما درباره بازار نقره",
+        "question": "اگر قیمت نقره دوباره افزایش پیدا کند، ترجیح می‌دهید خریدتان را یکجا انجام دهید یا مرحله‌ای؟",
+        "options": [
+            "۱️⃣ خرید یکجا",
+            "۲️⃣ خرید مرحله‌ای",
+        ]
+    },
+
+    {
+        "title": "یک انتخاب ساده",
+        "question": "برای نگهداری بلندمدت، کدام گزینه برای شما جذاب‌تر است؟",
+        "options": [
+            "۱️⃣ ساچمه نقره",
+            "۲️⃣ شمش نقره",
+        ]
+    },
+
+    {
+        "title": "بازار را چطور می‌بینید؟",
+        "question": "به نظر شما در تصمیم خرید نقره، کدام عامل مهم‌تر است؟",
+        "options": [
+            "۱️⃣ انس جهانی",
+            "۲️⃣ دلار تهران",
+            "۳️⃣ قیمت داخلی",
+        ]
+    },
+
+]
+
+
+# =========================================================
+# PRODUCT CONTENT
+# =========================================================
+
+PRODUCT_CONTENT_TOPICS = [
+
+    {
+        "name": "ساچمه نقره ۹۹۵",
+        "description": (
+            "ساچمه نقره با عیار ۹۹۵، مناسب "
+            "برای افرادی که به دنبال خرید نقره "
+            "با وزن‌های مختلف هستند."
+        )
+    },
+
+    {
+        "name": "شمش نقره ۹۹۹.۹ نادیر",
+        "description": (
+            "شمش نقره ۹۹۹.۹ نادیر با خلوص بالا، "
+            "مناسب برای علاقه‌مندان به شمش نقره."
+        )
+    },
 
 ]
 
@@ -906,10 +1088,8 @@ def find_latest_public_rate():
 
     raise RuntimeError(
         "هیچ نرخ معتبر شامل انس و دلار تهران پیدا نشد."
-    )
-
-
-# =========================================================
+)
+    # =========================================================
 # WEBSITE PRICES
 # =========================================================
 
@@ -1446,6 +1626,253 @@ def calculate_coin_bubble(
 
 
 # =========================================================
+# PRICE CHANGE ANALYSIS
+# =========================================================
+
+def safe_percent_change(
+    old_value,
+    new_value
+):
+
+    try:
+
+        old_value = float(
+            old_value
+        )
+
+        new_value = float(
+            new_value
+        )
+
+    except (
+        TypeError,
+        ValueError
+    ):
+
+        return 0.0
+
+    if old_value == 0:
+        return 0.0
+
+    return (
+        (
+            new_value
+            - old_value
+        )
+        / old_value
+        * 100
+    )
+
+
+def calculate_price_changes(
+    previous,
+    current
+):
+
+    if not previous or not current:
+        return {}
+
+    fields = [
+        "ounce",
+        "tehran",
+        "shot_995",
+        "nader_9999",
+        "mithqal_995"
+    ]
+
+    result = {}
+
+    for field in fields:
+
+        old_value = previous.get(
+            field
+        )
+
+        new_value = current.get(
+            field
+        )
+
+        if (
+            old_value is None
+            or
+            new_value is None
+        ):
+            continue
+
+        result[field] = {
+
+            "old":
+                float(old_value),
+
+            "new":
+                float(new_value),
+
+            "change":
+                float(
+                    new_value
+                    - old_value
+                ),
+
+            "percent":
+                safe_percent_change(
+                    old_value,
+                    new_value
+                )
+
+        }
+
+    return result
+
+
+def get_previous_price_data(state):
+
+    required = [
+
+        "ounce",
+        "tehran",
+        "shot_995",
+        "nader_9999",
+        "mithqal_995"
+
+    ]
+
+    if any(
+        state.get(
+            key
+        ) is None
+        for key in required
+    ):
+
+        return None
+
+    return {
+
+        "ounce":
+            float(
+                state["ounce"]
+            ),
+
+        "tehran":
+            float(
+                state["tehran"]
+            ),
+
+        "shot_995":
+            float(
+                state["shot_995"]
+            ),
+
+        "nader_9999":
+            float(
+                state["nader_9999"]
+            ),
+
+        "mithqal_995":
+            float(
+                state["mithqal_995"]
+            )
+
+    }
+
+
+def make_current_price_data(
+    rate,
+    products
+):
+
+    return {
+
+        "ounce":
+            float(
+                rate["ounce"]
+            ),
+
+        "tehran":
+            float(
+                rate["tehran"]
+            ),
+
+        "shot_995":
+            float(
+                products["shot_995"]
+            ),
+
+        "nader_9999":
+            float(
+                products["nader_9999"]
+            ),
+
+        "mithqal_995":
+            float(
+                products["mithqal_995"]
+            )
+
+    }
+
+
+def biggest_price_move(changes):
+
+    if not changes:
+        return None
+
+    candidates = []
+
+    for field, data in changes.items():
+
+        candidates.append(
+            (
+                abs(
+                    float(
+                        data.get(
+                            "percent",
+                            0
+                        )
+                    )
+                ),
+                field,
+                data
+            )
+        )
+
+    if not candidates:
+        return None
+
+    candidates.sort(
+        key=lambda x: x[0],
+        reverse=True
+    )
+
+    return candidates[0]
+
+
+def price_change_label(field):
+
+    labels = {
+
+        "ounce":
+            "انس نقره",
+
+        "tehran":
+            "دلار تهران",
+
+        "shot_995":
+            "ساچمه نقره ۹۹۵",
+
+        "nader_9999":
+            "شمش نادیر ۹۹۹.۹",
+
+        "mithqal_995":
+            "مثقال نقره ۹۹۵"
+
+    }
+
+    return labels.get(
+        field,
+        field
+    )
+
+
+# =========================================================
 # PRICE SIGNATURE
 # =========================================================
 
@@ -1792,9 +2219,7 @@ def make_caption():
         + channel_footer()
 
     )
-
-
-# =========================================================
+    # =========================================================
 # MORNING MESSAGES
 # =========================================================
 
@@ -1984,6 +2409,485 @@ def make_calendar_message():
 
 
 # =========================================================
+# MARKET INSIGHT - AI READY
+# =========================================================
+
+MARKET_INSIGHT_LABELS = {
+
+    "ounce":
+        "انس نقره",
+
+    "tehran":
+        "دلار تهران",
+
+    "shot_995":
+        "ساچمه نقره ۹۹۵",
+
+    "nader_9999":
+        "شمش نادیر ۹۹۹.۹",
+
+    "mithqal_995":
+        "مثقال نقره ۹۹۵"
+
+}
+
+
+def make_market_direction(
+    old_value,
+    new_value
+):
+
+    try:
+
+        old_value = float(
+            old_value
+        )
+
+        new_value = float(
+            new_value
+        )
+
+    except (
+        TypeError,
+        ValueError
+    ):
+
+        return "بدون تغییر"
+
+    if new_value > old_value:
+        return "صعودی"
+
+    if new_value < old_value:
+        return "نزولی"
+
+    return "بدون تغییر"
+
+
+def make_price_change_text(
+    changes
+):
+
+    if not changes:
+        return ""
+
+    lines = []
+
+    for field, data in changes.items():
+
+        label = MARKET_INSIGHT_LABELS.get(
+            field,
+            field
+        )
+
+        change = float(
+            data.get(
+                "change",
+                0
+            )
+        )
+
+        percent = float(
+            data.get(
+                "percent",
+                0
+            )
+        )
+
+        if change > 0:
+
+            icon = "🟢"
+            direction = "افزایش"
+
+        elif change < 0:
+
+            icon = "🔴"
+            direction = "کاهش"
+
+        else:
+
+            icon = "⚪"
+            direction = "بدون تغییر"
+
+        if field == "ounce":
+
+            change_text = (
+                f"{change:+.2f}"
+            )
+
+        else:
+
+            change_text = (
+                f"{change:+,.0f}"
+            )
+
+        lines.append(
+
+            f"{icon} {label}: "
+            f"{direction} "
+            f"{change_text} "
+            f"({percent:+.2f}٪)"
+
+        )
+
+    return "\n".join(
+        lines
+    )
+
+
+def make_market_snapshot(
+    rate,
+    products,
+    previous=None
+):
+
+    current = make_current_price_data(
+        rate,
+        products
+    )
+
+    changes = calculate_price_changes(
+        previous,
+        current
+    )
+
+    biggest = biggest_price_move(
+        changes
+    )
+
+    if biggest:
+
+        _, field, data = biggest
+
+        direction = make_market_direction(
+            data["old"],
+            data["new"]
+        )
+
+        biggest_text = (
+            f"{price_change_label(field)} "
+            f"در این بازه {direction} بوده است."
+        )
+
+    else:
+
+        biggest_text = (
+            "برای مقایسه با نرخ قبلی، "
+            "داده کافی در دسترس نیست."
+        )
+
+    return {
+
+        "current":
+            current,
+
+        "changes":
+            changes,
+
+        "biggest":
+            biggest_text
+
+    }
+
+
+# =========================================================
+# AI MARKET INSIGHT
+# =========================================================
+
+def parse_ai_market_insight(
+    result
+):
+
+    result = clean_ai_output(
+        result
+    )
+
+    if not result:
+        return None
+
+    lines = [
+        x.strip()
+        for x in result.splitlines()
+        if x.strip()
+    ]
+
+    data = {
+
+        "title":
+            "",
+
+        "summary":
+            "",
+
+        "question":
+            ""
+
+    }
+
+    current = None
+
+    for line in lines:
+
+        normalized = normalize_fa(
+            line
+        )
+
+        match = re.match(
+            r"^(TITLE|عنوان)\s*[:：]\s*(.*)$",
+            normalized,
+            flags=re.IGNORECASE
+        )
+
+        if match:
+
+            current = "title"
+
+            data["title"] = (
+                match.group(2).strip()
+            )
+
+            continue
+
+        match = re.match(
+            r"^(SUMMARY|خلاصه|تحلیل)\s*[:：]\s*(.*)$",
+            normalized,
+            flags=re.IGNORECASE
+        )
+
+        if match:
+
+            current = "summary"
+
+            data["summary"] = (
+                match.group(2).strip()
+            )
+
+            continue
+
+        match = re.match(
+            r"^(QUESTION|سؤال|سوال)\s*[:：]\s*(.*)$",
+            normalized,
+            flags=re.IGNORECASE
+        )
+
+        if match:
+
+            current = "question"
+
+            data["question"] = (
+                match.group(2).strip()
+            )
+
+            continue
+
+        if current:
+
+            data[current] += (
+                "\n" + line
+            )
+
+    for key in data:
+
+        data[key] = clean_ai_field(
+            data[key]
+        )
+
+    if not data["title"]:
+
+        data["title"] = (
+            "📊 نگاه کوتاه به بازار"
+        )
+
+    if not data["summary"]:
+
+        data["summary"] = (
+            "تغییرات فعلی بازار در حال رصد است."
+        )
+
+    if not data["question"]:
+
+        data["question"] = (
+            "به نظر شما ادامه مسیر بازار چگونه خواهد بود؟"
+        )
+
+    return data
+
+
+def ai_create_market_insight_sync(
+    snapshot
+):
+
+    if not OPENAI_API_KEY:
+
+        return None
+
+    client = OpenAI(
+        api_key=OPENAI_API_KEY
+    )
+
+    changes = snapshot.get(
+        "changes",
+        {}
+    )
+
+    change_text = make_price_change_text(
+        changes
+    )
+
+    biggest = snapshot.get(
+        "biggest",
+        ""
+    )
+
+    prompt = f"""
+تو تحلیلگر محتوای یک کانال حرفه‌ای
+به نام «یزدان‌دوست» هستی.
+
+قرار نیست پیش‌بینی قطعی قیمت انجام بدهی.
+
+فقط داده‌های زیر را به یک متن کوتاه،
+حرفه‌ای و قابل فهم برای مخاطب تلگرام تبدیل کن.
+
+قوانین:
+
+1. هیچ عددی را تغییر نده.
+2. هیچ داده‌ای خارج از اطلاعات داده‌شده اضافه نکن.
+3. پیش‌بینی قطعی انجام نده.
+4. از عبارت‌هایی مثل «قطعاً بالا می‌رود»
+   یا «حتماً ریزش می‌کند» استفاده نکن.
+5. متن باید برای فعالان طلا، نقره و ارز قابل فهم باشد.
+6. متن حدود 60 تا 100 کلمه باشد.
+7. در پایان یک سؤال کوتاه برای مشارکت مخاطب بده.
+8. متن فارسی روان باشد.
+9. Markdown استفاده نکن.
+10. ایموجی تولید نکن.
+11. ساختار دقیقاً این باشد:
+
+عنوان: ...
+خلاصه: ...
+سؤال: ...
+
+بزرگ‌ترین تغییر:
+{biggest}
+
+تغییرات:
+{change_text}
+"""
+
+    try:
+
+        response = client.responses.create(
+
+            model=OPENAI_MODEL,
+
+            instructions=(
+                "فقط بر اساس داده‌های ورودی بنویس "
+                "و از پیش‌بینی قطعی بازار خودداری کن."
+            ),
+
+            input=prompt
+
+        )
+
+        output = (
+            response.output_text
+            .strip()
+        )
+
+        return parse_ai_market_insight(
+            output
+        )
+
+    except Exception as error:
+
+        log.exception(
+            "AI MARKET INSIGHT FAILED: %s",
+            error
+        )
+
+        return None
+
+
+async def ai_create_market_insight(
+    snapshot
+):
+
+    return await asyncio.to_thread(
+
+        ai_create_market_insight_sync,
+
+        snapshot
+
+    )
+
+
+# =========================================================
+# MARKET INSIGHT CAPTION
+# =========================================================
+
+def make_market_insight_caption(
+    insight,
+    snapshot
+):
+
+    if not insight:
+        return None
+
+    title = (
+        insight.get(
+            "title",
+            "نگاه کوتاه به بازار"
+        )
+    )
+
+    summary = (
+        insight.get(
+            "summary",
+            ""
+        )
+    )
+
+    question = (
+        insight.get(
+            "question",
+            ""
+        )
+    )
+
+    changes = snapshot.get(
+        "changes",
+        {}
+    )
+
+    change_text = make_price_change_text(
+        changes
+    )
+
+    return (
+
+        "🧠 <b>نگاه هوشمند یزدان‌دوست</b>\n"
+        "━━━━━━━━━━━━━━\n\n"
+
+        f"🔥 <b>{title}</b>\n\n"
+
+        f"{summary}\n\n"
+
+        "📈 <b>تغییرات ثبت‌شده:</b>\n"
+        f"{change_text or 'هنوز تغییر قابل مقایسه‌ای ثبت نشده است.'}\n\n"
+
+        "💬 <b>سؤال امروز:</b>\n"
+        f"{question}\n\n"
+
+        "━━━━━━━━━━━━━━\n"
+        f"🕐 {iran_time_string()}\n"
+        "🤖 تحلیل متنی با هوش مصنوعی\n\n"
+
+        "📲 <b>یزدان‌دوست</b>\n"
+        f"{CHANNEL_LINK}"
+
+    )
+
+
+# =========================================================
 # NEWS HELPERS
 # =========================================================
 
@@ -2056,7 +2960,9 @@ def extract_title(
                 strip=True
             )
 
-        value = normalize_fa(value)
+        value = normalize_fa(
+            value
+        )
 
         if len(value) >= 5:
             return value
@@ -2068,7 +2974,9 @@ def extract_title(
 
 def clean_article_paragraph(text):
 
-    text = normalize_fa(text)
+    text = normalize_fa(
+        text
+    )
 
     if not text:
         return ""
@@ -2590,7 +3498,7 @@ async def get_world_news(history):
 
 
 # =========================================================
-# AI NEWS EDITOR - NEW PREMIUM VERSION
+# AI NEWS EDITOR - PREMIUM
 # =========================================================
 
 def clean_ai_output(text):
@@ -2660,11 +3568,22 @@ def parse_ai_news_result(
         return None
 
     data = {
-        "title": "",
-        "hook": "",
-        "body": "",
-        "impact": "",
-        "question": ""
+
+        "title":
+            "",
+
+        "hook":
+            "",
+
+        "body":
+            "",
+
+        "impact":
+            "",
+
+        "question":
+            ""
+
     }
 
     current = None
@@ -2888,8 +3807,7 @@ def ai_summarize_news_sync(
 که مخاطب در نگاه اول مکث کند، خبر را بخواند و
 احتمال واکنش یا نظر دادن او بیشتر شود.
 
-اما بسیار مهم:
-جذاب بودن به معنی دروغ، اغراق یا ایجاد ترس نیست.
+اما جذاب بودن به معنی دروغ، اغراق یا ایجاد ترس نیست.
 
 فقط و فقط بر اساس متن منبع کار کن.
 
@@ -2910,8 +3828,7 @@ def ai_summarize_news_sync(
     در بخش اهمیت همان موضوع را صادقانه بگو.
 11. در پایان یک سؤال کوتاه و طبیعی برای گرفتن نظر مخاطب بساز.
 12. سؤال نباید جواب مشخصی را به مخاطب تحمیل کند.
-13. از عبارت‌های کلیشه‌ای مثل «در ادامه می‌خوانید»
-    استفاده نکن.
+13. از عبارت‌های کلیشه‌ای استفاده نکن.
 14. از «خبر فوری» فقط وقتی استفاده کن که واقعاً
     اتفاق مهم و فوری در متن وجود داشته باشد.
 15. از ایموجی در متن خروجی استفاده نکن؛
@@ -3186,6 +4103,9 @@ def make_news_caption(article):
 
 
 # =========================================================
+# END OF PART 3
+# =========================================================
+# =========================================================
 # MASHHAD REPORT
 # =========================================================
 
@@ -3329,248 +4249,235 @@ def make_24h_report(
 
 
 # =========================================================
-# STATE
+# PRICE HISTORY / MARKET INTELLIGENCE
 # =========================================================
 
-def load_state():
+def make_current_price_data(
+    rate,
+    products
+):
 
-    if not STATE.exists():
-        return {}
+    return {
+
+        "ounce":
+            float(
+                rate["ounce"]
+            ),
+
+        "tehran":
+            int(
+                rate["tehran"]
+            ),
+
+        "shot_995":
+            int(
+                products["shot_995"]
+            ),
+
+        "nader_9999":
+            int(
+                products["nader_9999"]
+            ),
+
+        "mithqal_995":
+            int(
+                products["mithqal_995"]
+            )
+
+    }
+
+
+def calculate_change(
+    old_value,
+    new_value
+):
 
     try:
 
-        data = json.loads(
-            STATE.read_text(
-                encoding="utf-8"
-            )
+        old_value = float(
+            old_value
         )
 
-        if isinstance(
-            data,
-            dict
-        ):
-            return data
-
-    except Exception as error:
-
-        log.warning(
-            "STATE READ ERROR: %s",
-            error
+        new_value = float(
+            new_value
         )
 
-    return {}
-
-
-def save_state(state):
-
-    temp = STATE.with_suffix(
-        ".tmp"
-    )
-
-    temp.write_text(
-
-        json.dumps(
-            state,
-            ensure_ascii=False,
-            indent=2
-        ),
-
-        encoding="utf-8"
-    )
-
-    temp.replace(
-        STATE
-    )
-
-
-def today_key():
-    return iran_date_string()
-
-
-def daily_key(name):
-
-    return (
-        f"{today_key()}_{name}"
-    )
-
-
-def should_send_daily(
-    state,
-    name
-):
-
-    return (
-        state.get(
-            daily_key(name)
-        )
-        !=
-        True
-    )
-
-
-def mark_daily_sent(
-    state,
-    name
-):
-
-    state[
-        daily_key(name)
-    ] = True
-
-
-# =========================================================
-# NEWS DAILY CONTROL
-# =========================================================
-
-def reset_news_day_if_needed(
-    state
-):
-
-    today = today_key()
-
-    if state.get(
-        "news_date"
-    ) != today:
-
-        state[
-            "news_date"
-        ] = today
-
-        state[
-            "economic_news_count"
-        ] = 0
-
-        state[
-            "world_news_count"
-        ] = 0
-
-        state[
-            "news_count"
-        ] = 0
-
-        state[
-            "news_last_posted_at"
-        ] = None
-
-        save_state(
-            state
-        )
-
-
-def news_is_due(state):
-
-    if not NEWS_ENABLED:
-        return False
-
-    reset_news_day_if_needed(
-        state
-    )
-
-    total = int(
-        state.get(
-            "news_count",
-            0
-        )
-        or 0
-    )
-
-    if total >= NEWS_TOTAL_MAX_PER_DAY:
-        return False
-
-    last = state.get(
-        "news_last_posted_at"
-    )
-
-    if not last:
-        return True
-
-    try:
-
-        last_dt = datetime.fromisoformat(
-            last
-        )
-
-        if last_dt.tzinfo is None:
-
-            last_dt = last_dt.replace(
-                tzinfo=IRAN_TZ
-            )
-
-        elapsed = (
-            iran_now()
-            - last_dt.astimezone(
-                IRAN_TZ
-            )
-        ).total_seconds() / 60
-
-        return (
-            elapsed
-            >=
-            NEWS_MIN_GAP_MINUTES
-        )
-
-    except Exception:
-
-        return True
-
-
-def update_news_state(
-    state,
-    article,
-    message_id
-):
-
-    if is_urgent_news(
-        article
+    except (
+        TypeError,
+        ValueError
     ):
 
-        state[
-            "world_news_count"
-        ] = (
-            int(
-                state.get(
-                    "world_news_count",
-                    0
-                )
-                or 0
-            )
-            + 1
-        )
+        return {
+
+            "old":
+                old_value,
+
+            "new":
+                new_value,
+
+            "change":
+                0,
+
+            "percent":
+                0
+
+        }
+
+    change = (
+        new_value
+        - old_value
+    )
+
+    if old_value == 0:
+
+        percent = 0
 
     else:
 
-        state[
-            "economic_news_count"
-        ] = (
-            int(
-                state.get(
-                    "economic_news_count",
-                    0
-                )
-                or 0
-            )
-            + 1
+        percent = (
+            change
+            /
+            old_value
+            *
+            100
         )
 
-    state[
-        "news_count"
-    ] = (
-        int(
-            state.get(
-                "news_count",
-                0
-            )
-            or 0
+    return {
+
+        "old":
+            old_value,
+
+        "new":
+            new_value,
+
+        "change":
+            change,
+
+        "percent":
+            percent
+
+    }
+
+
+def calculate_price_changes(
+    previous,
+    current
+):
+
+    if not previous:
+        return {}
+
+    changes = {}
+
+    for field in MARKET_INSIGHT_LABELS:
+
+        if field not in previous:
+            continue
+
+        if field not in current:
+            continue
+
+        changes[field] = calculate_change(
+            previous[field],
+            current[field]
         )
-        + 1
+
+    return changes
+
+
+def price_change_label(
+    field
+):
+
+    return MARKET_INSIGHT_LABELS.get(
+        field,
+        field
     )
 
-    state[
-        "news_last_posted_at"
-    ] = iran_now().isoformat()
+
+def biggest_price_move(
+    changes
+):
+
+    if not changes:
+        return None
+
+    candidates = []
+
+    for field, data in changes.items():
+
+        try:
+
+            percent = abs(
+                float(
+                    data.get(
+                        "percent",
+                        0
+                    )
+                )
+            )
+
+        except (
+            TypeError,
+            ValueError
+        ):
+
+            continue
+
+        candidates.append(
+            (
+                percent,
+                field,
+                data
+            )
+        )
+
+    if not candidates:
+        return None
+
+    candidates.sort(
+        key=lambda x: x[0],
+        reverse=True
+    )
+
+    return candidates[0]
+
+
+def make_market_history_record(
+    rate,
+    products
+):
+
+    current = make_current_price_data(
+        rate,
+        products
+    )
+
+    return {
+
+        "date":
+            iran_date_string(),
+
+        "time":
+            iran_time_string(),
+
+        "timestamp":
+            iran_now().isoformat(),
+
+        "data":
+            current
+
+    }
+
+
+def save_market_history(
+    state,
+    rate,
+    products
+):
 
     history = state.get(
-        "news_history",
+        "market_history",
         []
     )
 
@@ -3581,20 +4488,230 @@ def update_news_state(
 
         history = []
 
+    record = make_market_history_record(
+        rate,
+        products
+    )
+
     history.append(
-        article["url"]
+        record
     )
 
     state[
-        "news_history"
+        "market_history"
     ] = history[
-        -NEWS_HISTORY_LIMIT:
+        -100:
     ]
 
+    return record
+
+
+def get_previous_market_record(
+    state
+):
+
+    history = state.get(
+        "market_history",
+        []
+    )
+
+    if not isinstance(
+        history,
+        list
+    ):
+
+        return None
+
+    if len(history) < 2:
+
+        return None
+
+    return history[-2].get(
+        "data"
+    )
+
+
+def cleanup_market_history(
+    state
+):
+
+    history = state.get(
+        "market_history",
+        []
+    )
+
+    if not isinstance(
+        history,
+        list
+    ):
+
+        state[
+            "market_history"
+        ] = []
+
+        return
+
     state[
-        "last_news_message_id"
-    ] = int(
-        message_id
+        "market_history"
+    ] = history[
+        -100:
+    ]
+
+
+# =========================================================
+# DAILY MARKET SNAPSHOT
+# =========================================================
+
+def make_daily_snapshot_text(
+    rate,
+    products
+):
+
+    return (
+
+        "📌 وضعیت فعلی بازار نقره\n"
+        "━━━━━━━━━━━━━━\n\n"
+
+        f"🌍 انس نقره: {rate['ounce']:.2f}\n"
+
+        f"💵 دلار تهران: "
+        f"{format_price(rate['tehran'])} تومان\n\n"
+
+        "🥈 ساچمه ۹۹۵: "
+        f"{format_price(products['shot_995'])} تومان\n"
+
+        "🧱 شمش نادیر ۹۹۹.۹: "
+        f"{format_price(products['nader_9999'])} تومان\n"
+
+        "⚖️ مثقال نقره ۹۹۵: "
+        f"{format_price(products['mithqal_995'])} تومان"
+
+        + channel_footer()
+
+    )
+
+
+# =========================================================
+# MARKET ALERT
+# =========================================================
+
+def should_create_market_alert(
+    changes
+):
+
+    if not changes:
+        return False
+
+    for data in changes.values():
+
+        try:
+
+            percent = abs(
+                float(
+                    data.get(
+                        "percent",
+                        0
+                    )
+                )
+            )
+
+        except (
+            TypeError,
+            ValueError
+        ):
+
+            continue
+
+        if percent >= 1.0:
+
+            return True
+
+    return False
+
+
+def make_market_alert(
+    changes
+):
+
+    biggest = biggest_price_move(
+        changes
+    )
+
+    if not biggest:
+        return None
+
+    _, field, data = biggest
+
+    change = float(
+        data.get(
+            "change",
+            0
+        )
+    )
+
+    percent = float(
+        data.get(
+            "percent",
+            0
+        )
+    )
+
+    label = price_change_label(
+        field
+    )
+
+    if change > 0:
+
+        icon = "🚀"
+
+        direction = "افزایش"
+
+    elif change < 0:
+
+        icon = "⚠️"
+
+        direction = "کاهش"
+
+    else:
+
+        icon = "ℹ️"
+
+        direction = "بدون تغییر"
+
+    if field == "ounce":
+
+        change_text = (
+            f"{change:+.2f}"
+        )
+
+    else:
+
+        change_text = (
+            f"{change:+,.0f}"
+        )
+
+    return (
+
+        f"{icon} <b>حرکت قابل توجه بازار</b>\n"
+        "━━━━━━━━━━━━━━\n\n"
+
+        f"📌 {label}\n"
+
+        f"📊 {direction}: "
+        f"{change_text}\n"
+
+        f"📈 تغییر درصدی: "
+        f"{percent:+.2f}٪\n\n"
+
+        "این پیام صرفاً بر اساس تغییر ثبت‌شده "
+        "در داده‌های قیمت تهیه شده و به معنی "
+        "پیش‌بینی قطعی روند بازار نیست.\n\n"
+
+        f"🕐 {iran_time_string()}\n"
+
+        "📲 یزدان‌دوست\n"
+        f"{CHANNEL_LINK}"
+
     )
 
 
@@ -3643,6 +4760,31 @@ async def send_text_post(
 
     log.info(
         "TEXT POST CREATED | %s",
+        sent.id
+    )
+
+    return int(
+        sent.id
+    )
+
+
+async def send_html_post(
+    client,
+    target,
+    text
+):
+
+    sent = await client.send_message(
+
+        target,
+        text,
+        parse_mode="html",
+        link_preview=False
+
+    )
+
+    log.info(
+        "HTML POST CREATED | %s",
         sent.id
     )
 
@@ -3861,6 +5003,644 @@ def get_saved_market(state):
 
 
 # =========================================================
+# STATE VALIDATION
+# =========================================================
+
+def ensure_state_defaults(
+    state
+):
+
+    defaults = {
+
+        "market_history":
+            [],
+
+        "news_history":
+            [],
+
+        "economic_news_count":
+            0,
+
+        "world_news_count":
+            0,
+
+        "news_count":
+            0,
+
+        "news_last_posted_at":
+            None,
+
+        "last_news_message_id":
+            None,
+
+        "price_signature":
+            None,
+
+        "last_market_insight":
+            None,
+
+        "last_market_alert":
+            None
+
+    }
+
+    for key, value in defaults.items():
+
+        if key not in state:
+
+            if isinstance(
+                value,
+                list
+            ):
+
+                state[key] = []
+
+            else:
+
+                state[key] = value
+
+    cleanup_market_history(
+        state
+    )
+
+    return state
+
+
+# =========================================================
+# NEWS DAILY CONTROL
+# =========================================================
+
+def reset_news_day_if_needed(
+    state
+):
+
+    today = today_key()
+
+    if state.get(
+        "news_date"
+    ) != today:
+
+        state[
+            "news_date"
+        ] = today
+
+        state[
+            "economic_news_count"
+        ] = 0
+
+        state[
+            "world_news_count"
+        ] = 0
+
+        state[
+            "news_count"
+        ] = 0
+
+        state[
+            "news_last_posted_at"
+        ] = None
+
+        save_state(
+            state
+        )
+
+
+def news_is_due(state):
+
+    if not NEWS_ENABLED:
+        return False
+
+    reset_news_day_if_needed(
+        state
+    )
+
+    total = int(
+        state.get(
+            "news_count",
+            0
+        )
+        or 0
+    )
+
+    if total >= NEWS_TOTAL_MAX_PER_DAY:
+        return False
+
+    last = state.get(
+        "news_last_posted_at"
+    )
+
+    if not last:
+        return True
+
+    try:
+
+        last_dt = datetime.fromisoformat(
+            last
+        )
+
+        if last_dt.tzinfo is None:
+
+            last_dt = last_dt.replace(
+                tzinfo=IRAN_TZ
+            )
+
+        elapsed = (
+            iran_now()
+            - last_dt.astimezone(
+                IRAN_TZ
+            )
+        ).total_seconds() / 60
+
+        return (
+            elapsed
+            >=
+            NEWS_MIN_GAP_MINUTES
+        )
+
+    except Exception:
+
+        return True
+
+
+def update_news_state(
+    state,
+    article,
+    message_id
+):
+
+    if is_urgent_news(
+        article
+    ):
+
+        state[
+            "world_news_count"
+        ] = (
+            int(
+                state.get(
+                    "world_news_count",
+                    0
+                )
+                or 0
+            )
+            + 1
+        )
+
+    else:
+
+        state[
+            "economic_news_count"
+        ] = (
+            int(
+                state.get(
+                    "economic_news_count",
+                    0
+                )
+                or 0
+            )
+            + 1
+        )
+
+    state[
+        "news_count"
+    ] = (
+        int(
+            state.get(
+                "news_count",
+                0
+            )
+            or 0
+        )
+        + 1
+    )
+
+    state[
+        "news_last_posted_at"
+    ] = iran_now().isoformat()
+
+    history = state.get(
+        "news_history",
+        []
+    )
+
+    if not isinstance(
+        history,
+        list
+    ):
+
+        history = []
+
+    history.append(
+        article["url"]
+    )
+
+    state[
+        "news_history"
+    ] = history[
+        -NEWS_HISTORY_LIMIT:
+    ]
+
+    state[
+        "last_news_message_id"
+    ] = int(
+        message_id
+    )
+
+
+# =========================================================
+# END OF PART 4
+# =========================================================
+# =========================================================
+# AI MARKET FEATURES SETTINGS
+# =========================================================
+
+MARKET_INSIGHT_ENABLED = True
+
+MARKET_INSIGHT_MIN_PERCENT = 0.50
+
+MARKET_INSIGHT_MIN_GAP_MINUTES = 180
+
+MARKET_ALERT_ENABLED = True
+
+MARKET_ALERT_MIN_PERCENT = 1.00
+
+
+# =========================================================
+# MARKET INSIGHT CONTROL
+# =========================================================
+
+def market_insight_is_due(
+    state
+):
+
+    if not MARKET_INSIGHT_ENABLED:
+        return False
+
+    last = state.get(
+        "last_market_insight"
+    )
+
+    if not last:
+        return True
+
+    try:
+
+        last_dt = datetime.fromisoformat(
+            last
+        )
+
+        if last_dt.tzinfo is None:
+
+            last_dt = last_dt.replace(
+                tzinfo=IRAN_TZ
+            )
+
+        elapsed = (
+            iran_now()
+            - last_dt.astimezone(
+                IRAN_TZ
+            )
+        ).total_seconds() / 60
+
+        return (
+            elapsed
+            >=
+            MARKET_INSIGHT_MIN_GAP_MINUTES
+        )
+
+    except Exception:
+
+        return True
+
+
+def mark_market_insight_sent(
+    state
+):
+
+    state[
+        "last_market_insight"
+    ] = iran_now().isoformat()
+
+
+def market_alert_is_due(
+    state
+):
+
+    if not MARKET_ALERT_ENABLED:
+        return False
+
+    last = state.get(
+        "last_market_alert"
+    )
+
+    if not last:
+        return True
+
+    try:
+
+        last_dt = datetime.fromisoformat(
+            last
+        )
+
+        if last_dt.tzinfo is None:
+
+            last_dt = last_dt.replace(
+                tzinfo=IRAN_TZ
+            )
+
+        elapsed = (
+            iran_now()
+            - last_dt.astimezone(
+                IRAN_TZ
+            )
+        ).total_seconds() / 60
+
+        return (
+            elapsed
+            >=
+            NEWS_MIN_GAP_MINUTES
+        )
+
+    except Exception:
+
+        return True
+
+
+def mark_market_alert_sent(
+    state
+):
+
+    state[
+        "last_market_alert"
+    ] = iran_now().isoformat()
+
+
+# =========================================================
+# MARKET CHANGE FILTER
+# =========================================================
+
+def has_significant_market_change(
+    changes,
+    minimum_percent=0.50
+):
+
+    if not changes:
+        return False
+
+    for data in changes.values():
+
+        try:
+
+            percent = abs(
+                float(
+                    data.get(
+                        "percent",
+                        0
+                    )
+                )
+            )
+
+        except (
+            TypeError,
+            ValueError
+        ):
+
+            continue
+
+        if percent >= minimum_percent:
+
+            return True
+
+    return False
+
+
+# =========================================================
+# MARKET INTELLIGENCE PROCESSOR
+# =========================================================
+
+async def process_market_intelligence(
+    client,
+    target,
+    state,
+    rate,
+    products
+):
+
+    if not rate:
+        return
+
+    if not products:
+        return
+
+    try:
+
+        current = make_current_price_data(
+            rate,
+            products
+        )
+
+        previous = get_previous_market_record(
+            state
+        )
+
+        changes = calculate_price_changes(
+            previous,
+            current
+        )
+
+        if not changes:
+
+            log.info(
+                "MARKET INTELLIGENCE | NO PREVIOUS DATA"
+            )
+
+            save_market_history(
+                state,
+                rate,
+                products
+            )
+
+            save_state(
+                state
+            )
+
+            return
+
+        log.info(
+            "MARKET INTELLIGENCE | CHANGES DETECTED"
+        )
+
+        significant = (
+            has_significant_market_change(
+                changes,
+                MARKET_INSIGHT_MIN_PERCENT
+            )
+        )
+
+        # -------------------------------------------------
+        # MARKET ALERT
+        # -------------------------------------------------
+
+        if (
+
+            MARKET_ALERT_ENABLED
+
+            and
+
+            significant
+
+            and
+
+            market_alert_is_due(
+                state
+            )
+
+        ):
+
+            alert_text = make_market_alert(
+                changes
+            )
+
+            if alert_text:
+
+                try:
+
+                    await send_html_post(
+
+                        client,
+                        target,
+                        alert_text
+
+                    )
+
+                    mark_market_alert_sent(
+                        state
+                    )
+
+                    save_state(
+                        state
+                    )
+
+                    log.info(
+                        "MARKET ALERT SENT"
+                    )
+
+                except Exception as error:
+
+                    log.exception(
+                        "MARKET ALERT SEND FAILED: %s",
+                        error
+                    )
+
+        # -------------------------------------------------
+        # AI MARKET INSIGHT
+        # -------------------------------------------------
+
+        if (
+
+            MARKET_INSIGHT_ENABLED
+
+            and
+
+            significant
+
+            and
+
+            market_insight_is_due(
+                state
+            )
+
+        ):
+
+            snapshot = make_market_snapshot(
+                rate,
+                products,
+                previous
+            )
+
+            log.info(
+                "AI MARKET INSIGHT | GENERATING"
+            )
+
+            try:
+
+                insight = (
+                    await ai_create_market_insight(
+                        snapshot
+                    )
+                )
+
+            except Exception as error:
+
+                log.exception(
+                    "AI MARKET INSIGHT ERROR: %s",
+                    error
+                )
+
+                insight = None
+
+            if insight:
+
+                caption = (
+                    make_market_insight_caption(
+                        insight,
+                        snapshot
+                    )
+                )
+
+                if caption:
+
+                    try:
+
+                        await send_html_post(
+
+                            client,
+                            target,
+                            caption
+
+                        )
+
+                        mark_market_insight_sent(
+                            state
+                        )
+
+                        save_state(
+                            state
+                        )
+
+                        log.info(
+                            "AI MARKET INSIGHT SENT"
+                        )
+
+                    except Exception as error:
+
+                        log.exception(
+                            "AI MARKET INSIGHT SEND FAILED: %s",
+                            error
+                        )
+
+        # -------------------------------------------------
+        # SAVE CURRENT MARKET HISTORY
+        # -------------------------------------------------
+
+        save_market_history(
+            state,
+            rate,
+            products
+        )
+
+        save_state(
+            state
+        )
+
+    except Exception as error:
+
+        log.exception(
+            "MARKET INTELLIGENCE FAILED: %s",
+            error
+        )
+
+
+# =========================================================
 # MAIN
 # =========================================================
 
@@ -3895,6 +5675,14 @@ async def main():
                 "OPENAI_API_KEY تنظیم نشده است."
             )
 
+    if MARKET_INSIGHT_ENABLED:
+
+        if not OPENAI_API_KEY:
+
+            raise RuntimeError(
+                "OPENAI_API_KEY برای Market Insight تنظیم نشده است."
+            )
+
     try:
 
         api_id = int(
@@ -3914,6 +5702,10 @@ async def main():
         )
 
     state = load_state()
+
+    state = ensure_state_defaults(
+        state
+    )
 
     reset_news_day_if_needed(
         state
@@ -4160,6 +5952,10 @@ async def main():
                 "price_signature"
             )
 
+            # ---------------------------------------------
+            # NEW PRICE
+            # ---------------------------------------------
+
             if (
                 current_signature
                 !=
@@ -4229,6 +6025,20 @@ async def main():
 
                 save_state(
                     state
+                )
+
+                # -----------------------------------------
+                # AI MARKET INTELLIGENCE
+                # -----------------------------------------
+
+                await process_market_intelligence(
+
+                    client,
+                    target,
+                    state,
+                    rate,
+                    products
+
                 )
 
             else:
@@ -4433,12 +6243,6 @@ async def main():
 
         if (
 
-            current_minutes()
-            <
-            24 * 60
-
-            and
-
             news_is_due(
                 state
             )
@@ -4476,7 +6280,7 @@ async def main():
             news_article = None
 
             # -------------------------------------------------
-            # ECONOMIC
+            # ECONOMIC NEWS
             # -------------------------------------------------
 
             if (
@@ -4501,7 +6305,7 @@ async def main():
                     )
 
             # -------------------------------------------------
-            # WORLD
+            # WORLD NEWS
             # -------------------------------------------------
 
             if (
@@ -4610,7 +6414,7 @@ async def main():
                     news_article = None
 
             # -------------------------------------------------
-            # SEND
+            # SEND NEWS
             # -------------------------------------------------
 
             if news_article:
@@ -4917,3 +6721,8 @@ if __name__ == "__main__":
         )
 
         raise
+
+
+# =========================================================
+# END OF BOT.PY
+# =========================================================
