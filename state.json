@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/22",
-  "economic_news_count": 3,
+  "economic_news_count": 4,
   "world_news_count": 0,
-  "news_count": 3,
-  "news_last_posted_at": "2026-08-13T08:48:20.159555+03:30",
+  "news_count": 4,
+  "news_last_posted_at": "2026-08-13T13:14:43.927125+03:30",
   "source_message_id": 34348,
   "target_message_id": 275,
   "ounce": 64.78,
@@ -26,9 +26,10 @@
     "https://www.tasnimnews.ir/fa/news/1405/05/21/3669497/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%82%DB%8C%D9%85%D8%AA-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%A8%D9%87-4414-%D8%AF%D9%84%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%87%D8%B1-%D8%A7%D9%88%D9%86%D8%B3",
     "https://www.tasnimnews.ir/fa/news/1405/05/17/3665958/%D8%B7%D9%84%D8%A7-%D8%AF%D8%B1-%D8%AF%D9%88-%D8%B1%D8%A7%D9%87%DB%8C-%D9%87%D8%B1%D9%85%D8%B2-%D9%88-%D9%81%D8%AF%D8%B1%D8%A7%D9%84-%D8%B1%D8%B2%D8%B1%D9%88",
     "https://www.tasnimnews.ir/fa/news/1405/05/06/3658503/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-06",
-    "https://www.tasnimnews.ir/fa/news/1405/05/19/3667555/%D8%AA%D8%AB%D8%A8%DB%8C%D8%AA-%D8%A7%D9%86%D8%B3-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%AF%D8%B1-%D9%85%D8%AD%D8%AF%D9%88%D8%AF%D9%87-4350-%D8%AF%D9%84%D8%A7%D8%B1"
+    "https://www.tasnimnews.ir/fa/news/1405/05/19/3667555/%D8%AA%D8%AB%D8%A8%DB%8C%D8%AA-%D8%A7%D9%86%D8%B3-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%AF%D8%B1-%D9%85%D8%AD%D8%AF%D9%88%D8%AF%D9%87-4350-%D8%AF%D9%84%D8%A7%D8%B1",
+    "https://www.tasnimnews.ir/fa/news/1405/05/04/3656718/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-04"
   ],
-  "last_news_message_id": 293,
+  "last_news_message_id": 295,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1797200, \"nader_9999\": 403000, \"ounce\": 64.78, \"shot_995\": 390000, \"tehran\": 187000}",
