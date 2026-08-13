@@ -1,0 +1,23 @@
+name: Test Rubika
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-rubika:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Rubika updates
+        env:
+          RUBIKA_TOKEN: ${{ secrets.RUBIKA_TOKEN }}
+        run: |
+          curl -s -X POST \
+            "https://botapi.rubika.ir/v3/${RUBIKA_TOKEN}/getUpdates" \
+            -H "Content-Type: application/json" \
+            -d '{"limit":10}' | tee rubika_response.json
+
+      - name: Show result
+        run: |
+          echo "===== RUBIKA RESPONSE ====="
+          cat rubika_response.json
