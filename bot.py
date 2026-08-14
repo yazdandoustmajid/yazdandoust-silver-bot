@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import asyncio
 import json
 import logging
@@ -21,6 +22,11 @@ from telethon.tl.types import (
     PollAnswer
 )
 from openai import OpenAI
+
+try:
+    from rubka import Robot as RubikaRobot
+except ImportError:
+    RubikaRobot = None
 
 
 # =========================================================
@@ -78,6 +84,33 @@ MASHHAD_UNION_URL = os.getenv(
 
 
 # =========================================================
+# RUBIKA
+# =========================================================
+
+RUBIKA_TOKEN = os.getenv(
+    "RUBIKA_TOKEN",
+    ""
+).strip()
+
+RUBIKA_CHAT_ID = os.getenv(
+    "RUBIKA_CHAT_ID",
+    ""
+).strip()
+
+RUBIKA_MANUAL_SCAN_STATE_KEY = (
+    "rubika_manual_scan_message_id"
+)
+
+RUBIKA_AUTO_MESSAGE_IDS_KEY = (
+    "rubika_auto_telegram_message_ids"
+)
+
+RUBIKA_AUTO_MESSAGE_IDS_LIMIT = 1000
+
+RUBIKA_CURRENT_AUTO_MESSAGE_IDS = []
+
+
+# =========================================================
 # OPENAI AI
 # =========================================================
 
@@ -93,10 +126,8 @@ OPENAI_MODEL = os.getenv(
 
 AI_NEWS_ENABLED = True
 
-# سقف کل خروجی خبر
 AI_NEWS_MAX_WORDS = 140
 
-# حداکثر طول متن اصلی خبر
 AI_NEWS_MAX_BODY_WORDS = 90
 
 AI_NEWS_RETRIES = 3
@@ -179,22 +210,18 @@ TOMORROW_LOOK_MINUTE = 15
 
 NEWS_ENABLED = True
 
-# حداکثر خبر مهم در کل روز
 NEWS_TOTAL_MAX_PER_DAY = 10
 
-# حداقل فاصله بین دو خبر
 NEWS_MIN_GAP_MINUTES = 120
 
 NEWS_HISTORY_LIMIT = 300
 
-# حداقل امتیاز لازم برای انتشار خبر
 NEWS_MIN_IMPORTANCE = 6
 
 NEWS_MAX_CANDIDATES_PER_SOURCE = 20
 
 NEWS_AI_RETRY_DELAY_SECONDS = 4
 
-# برای جلوگیری از انتشار مجدد یک خبر با URL متفاوت
 NEWS_TITLE_SIMILARITY_LIMIT = 0.78
 
 
@@ -3158,9 +3185,6 @@ def is_price_only_news(
 
     )
 
-    # اگر تیتر فقط درباره قیمت است ولی متن
-    # حاوی یک اتفاق اقتصادی/سیاسی واقعی نیست،
-    # خبر کنار گذاشته می‌شود.
     if (
         title_price_only
         and
@@ -3169,8 +3193,6 @@ def is_price_only_news(
 
         return True
 
-    # خبرهایی که فقط قیمت لحظه‌ای را گزارش می‌کنند
-    # و متن بسیار کوتاهی دارند، حذف می‌شوند.
     if (
         keyword_match(
             title,
@@ -3361,7 +3383,6 @@ def get_candidate_from_sources(
                 ""
             )
 
-            # جلوگیری از تکرار خبر با URL متفاوت
             if is_duplicate_news(
                 item,
                 history_titles
@@ -3369,7 +3390,6 @@ def get_candidate_from_sources(
 
                 continue
 
-            # جلوگیری از دو لینک متفاوت با تیتر تقریباً یکسان
             if any(
 
                 news_titles_similar(
@@ -3982,10 +4002,6 @@ def parse_ai_news_result(
             "ارتباط آن با نقره بیشتر از مسیر دلار و بازار جهانی است."
         )
 
-    # -----------------------------------------------------
-    # حذف نشانه‌های احساس بازار
-    # -----------------------------------------------------
-
     for key in [
         "title",
         "text",
@@ -4017,10 +4033,6 @@ def parse_ai_news_result(
             sections[key]
         ).strip()
 
-    # -----------------------------------------------------
-    # کوتاه‌سازی بخش اهمیت
-    # -----------------------------------------------------
-
     why_words = sections["why"].split()
 
     if len(why_words) > 18:
@@ -4033,10 +4045,6 @@ def parse_ai_news_result(
             + "."
         )
 
-    # -----------------------------------------------------
-    # کوتاه‌سازی ارتباط با نقره
-    # -----------------------------------------------------
-
     silver_words = sections["silver"].split()
 
     if len(silver_words) > 18:
@@ -4048,10 +4056,6 @@ def parse_ai_news_result(
             .rstrip("،؛.")
             + "."
         )
-
-    # -----------------------------------------------------
-    # سقف کل خروجی
-    # -----------------------------------------------------
 
     generated_content = "\n".join([
 
@@ -4080,10 +4084,6 @@ def parse_ai_news_result(
         )
 
         return None
-
-    # -----------------------------------------------------
-    # جلوگیری از کپی متن خام منبع
-    # -----------------------------------------------------
 
     if is_ai_copy_like(
         original_text,
@@ -4444,6 +4444,17 @@ async def send_news_poll(
         "NEWS POLL SENT | %s",
         sent.id
     )
+
+    try:
+        message_id = int(sent.id)
+
+        if message_id not in RUBIKA_CURRENT_AUTO_MESSAGE_IDS:
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS.append(
+                message_id
+            )
+
+    except Exception:
+        pass
 
     return int(
         sent.id
@@ -5010,7 +5021,6 @@ def reset_news_day_if_needed(
             "news_last_posted_at"
         ] = None
 
-        # برای سازگاری با stateهای قدیمی
         state[
             "economic_news_count"
         ] = 0
@@ -5110,9 +5120,6 @@ def update_news_state(
     poll_message_id=None
 ):
 
-    # category فقط برای سازگاری با state قبلی نگه داشته شده
-    # و دیگر محدودیت جداگانه اقتصادی/جهانی ندارد.
-
     if category == "world":
 
         state[
@@ -5188,10 +5195,6 @@ def update_news_state(
         -NEWS_HISTORY_LIMIT:
     ]
 
-    # ---------------------------------------------
-    # ذخیره عنوان خبر برای جلوگیری از تکرار
-    # ---------------------------------------------
-
     history_titles = state.get(
         "news_title_history",
         []
@@ -5234,6 +5237,632 @@ def update_news_state(
         ] = int(
             poll_message_id
         )
+
+
+# =========================================================
+# RUBIKA SENDERS / TELEGRAM -> RUBIKA SYNC
+# =========================================================
+
+def rubika_clean_text(text):
+
+    text = text or ""
+
+    text = text.replace(
+        PHONE,
+        ""
+    )
+
+    text = re.sub(
+        r"\n{3,}",
+        "\n\n",
+        text
+    )
+
+    return text.strip()
+
+
+def rubika_is_configured():
+
+    return bool(
+        RUBIKA_TOKEN
+        and
+        RUBIKA_CHAT_ID
+        and
+        RubikaRobot is not None
+    )
+
+
+def rubika_robot():
+
+    if not RUBIKA_TOKEN:
+
+        raise RuntimeError(
+            "RUBIKA_TOKEN تنظیم نشده است."
+        )
+
+    if not RUBIKA_CHAT_ID:
+
+        raise RuntimeError(
+            "RUBIKA_CHAT_ID تنظیم نشده است."
+        )
+
+    if RubikaRobot is None:
+
+        raise RuntimeError(
+            "کتابخانه rubka نصب نشده است."
+        )
+
+    return RubikaRobot(
+        token=RUBIKA_TOKEN
+    )
+
+
+async def send_rubika_text(
+    text
+):
+
+    if not rubika_is_configured():
+
+        log.warning(
+            "RUBIKA TEXT SKIPPED | NOT CONFIGURED"
+        )
+
+        return False
+
+    text = rubika_clean_text(
+        text
+    )
+
+    if not text:
+
+        return False
+
+    try:
+
+        bot = rubika_robot()
+
+        await bot.send_message(
+
+            chat_id=RUBIKA_CHAT_ID,
+
+            text=text
+
+        )
+
+        log.info(
+            "RUBIKA TEXT SENT"
+        )
+
+        return True
+
+    except Exception as error:
+
+        log.exception(
+            "RUBIKA TEXT FAILED: %s",
+            error
+        )
+
+        return False
+
+
+async def send_rubika_media(
+    message
+):
+
+    if not rubika_is_configured():
+
+        log.warning(
+            "RUBIKA MEDIA SKIPPED | NOT CONFIGURED"
+        )
+
+        return False
+
+    if getattr(
+        message,
+        "poll",
+        None
+    ):
+
+        log.info(
+            "RUBIKA | POLL SKIPPED | TELEGRAM=%s",
+            message.id
+        )
+
+        return False
+
+    if getattr(
+        message,
+        "sticker",
+        None
+    ):
+
+        log.info(
+            "RUBIKA | STICKER SKIPPED | TELEGRAM=%s",
+            message.id
+        )
+
+        return False
+
+    caption = rubika_clean_text(
+
+        getattr(
+            message,
+            "message",
+            None
+        )
+        or
+        getattr(
+            message,
+            "text",
+            None
+        )
+        or
+        ""
+
+    )
+
+    if not message.media:
+
+        if caption:
+
+            return await send_rubika_text(
+                caption
+            )
+
+        return False
+
+    temp_dir = BASE / ".rubika_media"
+
+    temp_dir.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    file_path = None
+
+    try:
+
+        file_path = await message.download_media(
+
+            file=str(
+
+                temp_dir
+                /
+                f"telegram_{message.id}"
+
+            )
+
+        )
+
+        if not file_path:
+
+            log.warning(
+                "RUBIKA MEDIA DOWNLOAD FAILED | TELEGRAM=%s",
+                message.id
+            )
+
+            return False
+
+        bot = rubika_robot()
+
+        if getattr(
+            message,
+            "photo",
+            None
+        ):
+
+            await bot.send_image(
+
+                chat_id=RUBIKA_CHAT_ID,
+
+                path=file_path,
+
+                text=caption
+
+            )
+
+        elif getattr(
+            message,
+            "video",
+            None
+        ):
+
+            await bot.send_video(
+
+                chat_id=RUBIKA_CHAT_ID,
+
+                path=file_path,
+
+                text=caption
+
+            )
+
+        elif getattr(
+            message,
+            "voice",
+            None
+        ):
+
+            await bot.send_voice(
+
+                chat_id=RUBIKA_CHAT_ID,
+
+                path=file_path,
+
+                text=caption
+
+            )
+
+        elif getattr(
+            message,
+            "audio",
+            None
+        ):
+
+            await bot.send_music(
+
+                chat_id=RUBIKA_CHAT_ID,
+
+                path=file_path,
+
+                text=caption
+
+            )
+
+        elif getattr(
+            message,
+            "gif",
+            None
+        ):
+
+            await bot.send_gif(
+
+                chat_id=RUBIKA_CHAT_ID,
+
+                path=file_path,
+
+                text=caption
+
+            )
+
+        else:
+
+            await bot.send_document(
+
+                chat_id=RUBIKA_CHAT_ID,
+
+                path=file_path,
+
+                text=caption
+
+            )
+
+        log.info(
+            "RUBIKA MEDIA SENT | TELEGRAM=%s",
+            message.id
+        )
+
+        return True
+
+    except Exception as error:
+
+        log.exception(
+            "RUBIKA MEDIA FAILED | TELEGRAM=%s | %s",
+            message.id,
+            error
+        )
+
+        return False
+
+    finally:
+
+        try:
+
+            if file_path:
+
+                Path(
+                    file_path
+                ).unlink(
+                    missing_ok=True
+                )
+
+        except Exception:
+
+            pass
+
+
+async def sync_manual_telegram_messages(
+    client,
+    target,
+    state
+):
+
+    if not rubika_is_configured():
+
+        return
+
+    scan_id = state.get(
+        RUBIKA_MANUAL_SCAN_STATE_KEY
+    )
+
+    auto_ids = state.get(
+        RUBIKA_AUTO_MESSAGE_IDS_KEY,
+        []
+    )
+
+    if not isinstance(
+        auto_ids,
+        list
+    ):
+
+        auto_ids = []
+
+    auto_ids = {
+
+        int(x)
+
+        for x in auto_ids
+
+        if str(x).isdigit()
+
+    }
+
+    if scan_id is None:
+
+        try:
+
+            latest = await client.get_messages(
+
+                target,
+
+                limit=1
+
+            )
+
+            if latest:
+
+                state[
+                    RUBIKA_MANUAL_SCAN_STATE_KEY
+                ] = int(
+                    latest[0].id
+                )
+
+                save_state(
+                    state
+                )
+
+            log.info(
+                "RUBIKA MANUAL SYNC INITIALIZED"
+            )
+
+        except Exception as error:
+
+            log.exception(
+                "RUBIKA MANUAL SYNC INIT FAILED: %s",
+                error
+            )
+
+        return
+
+    try:
+
+        scan_id = int(
+            scan_id
+        )
+
+    except Exception:
+
+        scan_id = 0
+
+    try:
+
+        messages = []
+
+        async for message in client.iter_messages(
+
+            target,
+
+            min_id=scan_id,
+
+            reverse=True
+
+        ):
+
+            messages.append(
+                message
+            )
+
+        if not messages:
+
+            return
+
+        newest_id = max(
+
+            int(
+                message.id
+            )
+
+            for message in messages
+
+        )
+
+        for message in messages:
+
+            message_id = int(
+                message.id
+            )
+
+            if message_id in auto_ids:
+
+                continue
+
+            if getattr(
+                message,
+                "poll",
+                None
+            ):
+
+                log.info(
+                    "RUBIKA MANUAL SYNC | POLL SKIPPED | %s",
+                    message_id
+                )
+
+                continue
+
+            if getattr(
+                message,
+                "sticker",
+                None
+            ):
+
+                log.info(
+                    "RUBIKA MANUAL SYNC | STICKER SKIPPED | %s",
+                    message_id
+                )
+
+                continue
+
+            try:
+
+                await send_rubika_media(
+                    message
+                )
+
+            except Exception as error:
+
+                log.exception(
+                    "RUBIKA MANUAL MESSAGE FAILED | %s | %s",
+                    message_id,
+                    error
+                )
+
+        state[
+            RUBIKA_MANUAL_SCAN_STATE_KEY
+        ] = newest_id
+
+        save_state(
+            state
+        )
+
+        log.info(
+
+            "RUBIKA MANUAL SYNC COMPLETED | "
+            "CHECKED=%s | NEWEST=%s",
+
+            len(messages),
+
+            newest_id
+
+        )
+
+    except Exception as error:
+
+        log.exception(
+            "RUBIKA MANUAL SYNC FAILED: %s",
+            error
+        )
+
+
+def remember_rubika_auto_message(
+    state,
+    message_id
+):
+
+    if not message_id:
+
+        return
+
+    history = state.get(
+
+        RUBIKA_AUTO_MESSAGE_IDS_KEY,
+
+        []
+
+    )
+
+    if not isinstance(
+        history,
+        list
+    ):
+
+        history = []
+
+    try:
+
+        message_id = int(
+            message_id
+        )
+
+    except Exception:
+
+        return
+
+    if message_id not in history:
+
+        history.append(
+            message_id
+        )
+
+    try:
+
+        if (
+            message_id
+            not in
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS
+        ):
+
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS.append(
+                message_id
+            )
+
+    except Exception:
+
+        pass
+
+    state[
+        RUBIKA_AUTO_MESSAGE_IDS_KEY
+    ] = history[
+        -RUBIKA_AUTO_MESSAGE_IDS_LIMIT:
+    ]
+
+
+async def send_rubika_rate_post(
+    rate,
+    products
+):
+
+    text = (
+
+        "🥈 قیمت و معاملات نقره یزدان‌دوست\n"
+        "━━━━━━━━━━━━━━\n\n"
+
+        f"📅 تاریخ: {iran_date_string()}\n"
+        f"🕐 آخرین بروزرسانی: {iran_time_string()}\n\n"
+
+        "🌍 انس نقره\n"
+        f"{rate['ounce']:.2f} دلار\n\n"
+
+        "💵 دلار تهران\n"
+        f"{format_price(rate['tehran'])} تومان\n\n"
+
+        "🥈 ساچمه نقره ۹۹۵\n"
+        f"{format_price(products['shot_995'])} تومان\n\n"
+
+        "🧱 شمش نادیر ۹۹۹.۹\n"
+        f"{format_price(products['nader_9999'])} تومان\n\n"
+
+        "⚖️ مثقال نقره ۹۹۵\n"
+        f"{format_price(products['mithqal_995'])} تومان\n\n"
+
+        "━━━━━━━━━━━━━━\n"
+        "📲 کانال قیمت نقره یزدان‌دوست\n"
+        f"{CHANNEL_LINK}"
+
+    )
+
+    return await send_rubika_text(
+        text
+    )
 
 
 # =========================================================
@@ -5291,6 +5920,26 @@ async def send_market_poll(
         sent.id
     )
 
+    try:
+
+        message_id = int(
+            sent.id
+        )
+
+        if (
+            message_id
+            not in
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS
+        ):
+
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS.append(
+                message_id
+            )
+
+    except Exception:
+
+        pass
+
     return int(
         sent.id
     )
@@ -5316,6 +5965,26 @@ async def send_rate_post(
         sent.id
     )
 
+    try:
+
+        message_id = int(
+            sent.id
+        )
+
+        if (
+            message_id
+            not in
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS
+        ):
+
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS.append(
+                message_id
+            )
+
+    except Exception:
+
+        pass
+
     return int(
         sent.id
     )
@@ -5338,6 +6007,32 @@ async def send_text_post(
     log.info(
         "TEXT POST CREATED | %s",
         sent.id
+    )
+
+    try:
+
+        message_id = int(
+            sent.id
+        )
+
+        if (
+            message_id
+            not in
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS
+        ):
+
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS.append(
+                message_id
+            )
+
+    except Exception:
+
+        pass
+
+    # همه پست‌های متنی خودکار به روبیکا هم می‌روند.
+    # شماره تماس داخل send_rubika_text حذف می‌شود.
+    await send_rubika_text(
+        text
     )
 
     return int(
@@ -5367,19 +6062,11 @@ async def send_news_post(
 
         return None, None
 
-    # -----------------------------------------------------
-    # ابتدا خبر
-    # -----------------------------------------------------
-
     news_message_id = await send_text_post(
         client,
         target,
         caption
     )
-
-    # -----------------------------------------------------
-    # سپس Poll واقعی Telegram
-    # -----------------------------------------------------
 
     poll_message_id = None
 
@@ -5433,6 +6120,26 @@ async def send_sticker(
         "STICKER SENT | %s",
         sent.id
     )
+
+    try:
+
+        message_id = int(
+            sent.id
+        )
+
+        if (
+            message_id
+            not in
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS
+        ):
+
+            RUBIKA_CURRENT_AUTO_MESSAGE_IDS.append(
+                message_id
+            )
+
+    except Exception:
+
+        pass
 
     return int(
         sent.id
@@ -5567,6 +6274,10 @@ def get_saved_market(
 
 async def main():
 
+    global RUBIKA_CURRENT_AUTO_MESSAGE_IDS
+
+    RUBIKA_CURRENT_AUTO_MESSAGE_IDS = []
+
     missing = []
 
     if not API_ID:
@@ -5684,6 +6395,20 @@ async def main():
             "TARGET CONNECTED = %s",
             TARGET_CHANNEL
         )
+
+        if not RUBIKA_TOKEN or not RUBIKA_CHAT_ID:
+
+            log.warning(
+                "RUBIKA IS NOT CONFIGURED | "
+                "RUBIKA_TOKEN/RUBIKA_CHAT_ID MISSING"
+            )
+
+        elif RubikaRobot is None:
+
+            log.warning(
+                "RUBIKA IS NOT CONFIGURED | "
+                "rubka PACKAGE IS MISSING"
+            )
 
         # =================================================
         # MORNING
@@ -5960,6 +6685,17 @@ async def main():
 
                 )
 
+                # روبیکا: نرخ فقط به صورت متن
+                await send_rubika_rate_post(
+                    rate,
+                    products
+                )
+
+                remember_rubika_auto_message(
+                    state,
+                    target_message_id
+                )
+
                 state.update({
 
                     "source_message_id":
@@ -6048,6 +6784,14 @@ async def main():
                     client,
                     target,
                     START_STICKER
+
+                )
+
+                await send_rubika_text(
+
+                    "🟢 شروع معاملات\n"
+                    "━━━━━━━━━━━━━━\n"
+                    "معاملات نقره یزدان‌دوست آغاز شد."
 
                 )
 
@@ -6400,11 +7144,6 @@ async def main():
             news_article = None
             news_category = "economic"
 
-            # -------------------------------------------------
-            # ابتدا تمام منابع اقتصادی بررسی می‌شوند.
-            # دیگر سقف جداگانه برای اقتصادی وجود ندارد.
-            # -------------------------------------------------
-
             try:
 
                 news_article = (
@@ -6420,11 +7159,6 @@ async def main():
                     "ECONOMIC NEWS FAILED: %s",
                     error
                 )
-
-            # -------------------------------------------------
-            # اگر خبر اقتصادی مناسب نبود،
-            # منابع جهانی بررسی می‌شوند.
-            # -------------------------------------------------
 
             if news_article is None:
 
@@ -6558,7 +7292,8 @@ async def main():
                         )
 
                         log.info(
-                            "AI NEWS + POLL SENT SUCCESSFULLY | CATEGORY=%s | NEWS=%s | POLL=%s | TOTAL=%s/%s",
+                            "AI NEWS + POLL SENT SUCCESSFULLY | "
+                            "CATEGORY=%s | NEWS=%s | POLL=%s | TOTAL=%s/%s",
                             news_category,
                             news_message_id,
                             poll_message_id,
@@ -6800,6 +7535,14 @@ async def main():
 
                 )
 
+                await send_rubika_text(
+
+                    "🔴 پایان معاملات\n"
+                    "━━━━━━━━━━━━━━\n"
+                    "معاملات نقره یزدان‌دوست پایان یافت."
+
+                )
+
                 if message_id:
 
                     mark_daily_sent(
@@ -6987,6 +7730,34 @@ async def main():
                     "24H REPORT FAILED: %s",
                     error
                 )
+
+        # =================================================
+        # TELEGRAM -> RUBIKA MANUAL SYNC
+        # =================================================
+
+        for auto_message_id in RUBIKA_CURRENT_AUTO_MESSAGE_IDS:
+
+            remember_rubika_auto_message(
+
+                state,
+
+                auto_message_id
+
+            )
+
+        save_state(
+            state
+        )
+
+        await sync_manual_telegram_messages(
+
+            client,
+
+            target,
+
+            state
+
+        )
 
     finally:
 
