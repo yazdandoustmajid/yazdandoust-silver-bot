@@ -93,11 +93,11 @@ OPENAI_MODEL = os.getenv(
 
 AI_NEWS_ENABLED = True
 
-# سقف کل خروجی خبر بسیار کوتاه‌تر شده
-AI_NEWS_MAX_WORDS = 90
+# سقف کل خروجی خبر
+AI_NEWS_MAX_WORDS = 140
 
 # حداکثر طول متن اصلی خبر
-AI_NEWS_MAX_BODY_WORDS = 50
+AI_NEWS_MAX_BODY_WORDS = 90
 
 AI_NEWS_RETRIES = 3
 
@@ -179,21 +179,23 @@ TOMORROW_LOOK_MINUTE = 15
 
 NEWS_ENABLED = True
 
-NEWS_ECONOMIC_MAX_PER_DAY = 5
+# حداکثر خبر مهم در کل روز
+NEWS_TOTAL_MAX_PER_DAY = 10
 
-NEWS_WORLD_MAX_PER_DAY = 2
-
-NEWS_TOTAL_MAX_PER_DAY = 7
-
+# حداقل فاصله بین دو خبر
 NEWS_MIN_GAP_MINUTES = 120
 
 NEWS_HISTORY_LIMIT = 300
 
+# حداقل امتیاز لازم برای انتشار خبر
 NEWS_MIN_IMPORTANCE = 6
 
 NEWS_MAX_CANDIDATES_PER_SOURCE = 20
 
 NEWS_AI_RETRY_DELAY_SECONDS = 4
+
+# برای جلوگیری از انتشار مجدد یک خبر با URL متفاوت
+NEWS_TITLE_SIMILARITY_LIMIT = 0.78
 
 
 # =========================================================
@@ -3011,6 +3013,90 @@ def keyword_hits(
     return hits
 
 
+def normalize_news_title(
+    text
+):
+
+    text = normalize_fa(
+        text
+    ).lower()
+
+    text = re.sub(
+        r"[^\w\sآ-ی]",
+        " ",
+        text,
+        flags=re.UNICODE
+    )
+
+    text = re.sub(
+        r"\s+",
+        " ",
+        text
+    ).strip()
+
+    return text
+
+
+def news_titles_similar(
+    title_a,
+    title_b
+):
+
+    a = normalize_news_title(
+        title_a
+    )
+
+    b = normalize_news_title(
+        title_b
+    )
+
+    if not a or not b:
+
+        return False
+
+    if a == b:
+
+        return True
+
+    ratio = SequenceMatcher(
+        None,
+        a,
+        b
+    ).ratio()
+
+    return (
+        ratio >= NEWS_TITLE_SIMILARITY_LIMIT
+    )
+
+
+def is_duplicate_news(
+    article,
+    history_titles
+):
+
+    title = article.get(
+        "title",
+        ""
+    )
+
+    for old_title in history_titles:
+
+        if news_titles_similar(
+            title,
+            old_title
+        ):
+
+            log.info(
+                "DUPLICATE NEWS SKIPPED | %s | OLD=%s",
+                title,
+                old_title
+            )
+
+            return True
+
+    return False
+
+
 def is_price_only_news(
     article
 ):
@@ -3032,7 +3118,7 @@ def is_price_only_news(
     combined = (
         title
         + " "
-        + text[:500]
+        + text[:800]
     )
 
     title_price_only = keyword_match(
@@ -3063,11 +3149,18 @@ def is_price_only_news(
             "اقتصاد",
             "سیاست",
             "تنش",
+            "درگیری",
+            "آتش بس",
+            "حمله",
+            "تحریم جدید",
 
         ]
 
     )
 
+    # اگر تیتر فقط درباره قیمت است ولی متن
+    # حاوی یک اتفاق اقتصادی/سیاسی واقعی نیست،
+    # خبر کنار گذاشته می‌شود.
     if (
         title_price_only
         and
@@ -3076,10 +3169,22 @@ def is_price_only_news(
 
         return True
 
-    return keyword_match(
-        combined,
-        PRICE_ONLY_NEWS_KEYWORDS
-    ) and len(text) < 500
+    # خبرهایی که فقط قیمت لحظه‌ای را گزارش می‌کنند
+    # و متن بسیار کوتاهی دارند، حذف می‌شوند.
+    if (
+        keyword_match(
+            title,
+            PRICE_ONLY_NEWS_KEYWORDS
+        )
+        and
+        len(text) < 500
+        and
+        not body_has_real_context
+    ):
+
+        return True
+
+    return False
 
 
 def calculate_news_importance(
@@ -3182,7 +3287,8 @@ def calculate_news_importance(
 def get_candidate_from_sources(
     sources,
     keywords,
-    history
+    history,
+    history_titles=None
 ):
 
     history = set(
@@ -3193,9 +3299,15 @@ def get_candidate_from_sources(
 
     )
 
+    if history_titles is None:
+
+        history_titles = []
+
     candidates = []
 
     seen_urls = set()
+
+    seen_titles = []
 
     for source in sources:
 
@@ -3249,6 +3361,28 @@ def get_candidate_from_sources(
                 ""
             )
 
+            # جلوگیری از تکرار خبر با URL متفاوت
+            if is_duplicate_news(
+                item,
+                history_titles
+            ):
+
+                continue
+
+            # جلوگیری از دو لینک متفاوت با تیتر تقریباً یکسان
+            if any(
+
+                news_titles_similar(
+                    title,
+                    old_title
+                )
+
+                for old_title in seen_titles
+
+            ):
+
+                continue
+
             description = item.get(
                 "description",
                 ""
@@ -3277,6 +3411,26 @@ def get_candidate_from_sources(
             )
 
             if not article:
+
+                continue
+
+            if is_duplicate_news(
+                article,
+                history_titles
+            ):
+
+                continue
+
+            if any(
+
+                news_titles_similar(
+                    article["title"],
+                    old_title
+                )
+
+                for old_title in seen_titles
+
+            ):
 
                 continue
 
@@ -3347,6 +3501,10 @@ def get_candidate_from_sources(
                 article
             )
 
+            seen_titles.append(
+                article["title"]
+            )
+
     if not candidates:
 
         return None
@@ -3397,7 +3555,8 @@ def get_candidate_from_sources(
 
 
 async def get_economic_news(
-    history
+    history,
+    history_titles=None
 ):
 
     return await asyncio.to_thread(
@@ -3408,13 +3567,16 @@ async def get_economic_news(
 
         ECONOMIC_KEYWORDS,
 
-        history
+        history,
+
+        history_titles
 
     )
 
 
 async def get_world_news(
-    history
+    history,
+    history_titles=None
 ):
 
     return await asyncio.to_thread(
@@ -3425,7 +3587,9 @@ async def get_world_news(
 
         WORLD_KEYWORDS,
 
-        history
+        history,
+
+        history_titles
 
     )
 
@@ -3535,7 +3699,7 @@ def calculate_text_similarity(
     )
 
     generated_sample = " ".join(
-        generated_words[:500]
+        generated_words[:700]
     )
 
     return SequenceMatcher(
@@ -3977,11 +4141,11 @@ def ai_summarize_news_sync(
 تو سردبیر حرفه‌ای و مستقل کانال تلگرامی «یزدان‌دوست» هستی.
 
 من یک خبر واقعی و کامل در اختیار تو قرار می‌دهم.
-وظیفه تو این است که از آن یک خلاصه بسیار کوتاه،
-خوانا و حرفه‌ای برای کانال تلگرام تولید کنی.
+وظیفه تو این است که از آن یک خلاصه حرفه‌ای،
+خوانا و مستقل برای کانال تلگرام تولید کنی.
 
 هدف این نیست که متن منبع را بازنویسی کنی.
-ابتدا مفهوم خبر را درک کن و سپس با جمله‌بندی مستقل،
+ابتدا مفهوم خبر را درک کن و سپس با جمله‌بندی کاملاً مستقل،
 فقط مهم‌ترین اطلاعات را منتقل کن.
 
 قوانین بسیار مهم:
@@ -3993,9 +4157,9 @@ def ai_summarize_news_sync(
 5. جمله‌بندی منبع را تکرار نکن.
 6. اطلاعات حاشیه‌ای و تکراری را حذف کن.
 7. مهم‌ترین اتفاق خبر را در ابتدای متن بیاور.
-8. متن اصلی خبر حداکثر 50 کلمه باشد.
-9. کل خروجی حداکثر 90 کلمه باشد.
-10. خروجی باید تا حد امکان کوتاه باشد.
+8. متن اصلی خبر حداکثر 90 کلمه باشد.
+9. کل خروجی حداکثر 140 کلمه باشد.
+10. خروجی باید تا حد امکان کوتاه و مفید باشد.
 11. بخش «چرا مهم است» فقط یک جمله کوتاه باشد.
 12. بخش «ارتباط با بازار نقره» فقط یک جمله کوتاه باشد.
 13. از تکرار یک مفهوم در بخش‌های مختلف خودداری کن.
@@ -4006,7 +4170,9 @@ def ai_summarize_news_sync(
 17. از ایموجی‌های 🟢، 🟡 و 🔴 برای تحلیل بازار استفاده نکن.
 18. سؤال پایانی تولید نکن.
 19. ساعت یا زمان انتشار خبر را در خروجی نیاور.
-20. خروجی دقیقاً با این ساختار باشد:
+20. عنوان باید کوتاه و خبری باشد.
+21. متن باید خلاصه واقعی و مستقل باشد، نه بازنویسی خط‌به‌خط.
+22. خروجی دقیقاً با این ساختار باشد:
 
 عنوان: ...
 
@@ -4041,9 +4207,9 @@ def ai_summarize_news_sync(
 
                 instructions=(
                     "تو سردبیر دقیق و بی‌طرف اخبار فارسی هستی. "
-                    "خبر را بسیار کوتاه خلاصه کن. "
+                    "خبر را حرفه‌ای و خلاصه کن. "
                     "متن منبع را کپی یا خط‌به‌خط بازنویسی نکن. "
-                    "کل خروجی حداکثر ۹۰ کلمه باشد."
+                    "کل خروجی حداکثر ۱۴۰ کلمه باشد."
                 ),
 
                 input=prompt
@@ -4837,20 +5003,21 @@ def reset_news_day_if_needed(
         ] = today
 
         state[
-            "economic_news_count"
-        ] = 0
-
-        state[
-            "world_news_count"
-        ] = 0
-
-        state[
             "news_count"
         ] = 0
 
         state[
             "news_last_posted_at"
         ] = None
+
+        # برای سازگاری با stateهای قدیمی
+        state[
+            "economic_news_count"
+        ] = 0
+
+        state[
+            "world_news_count"
+        ] = 0
 
         save_state(
             state
@@ -4880,6 +5047,12 @@ def news_is_due(
     )
 
     if total >= NEWS_TOTAL_MAX_PER_DAY:
+
+        log.info(
+            "NEWS DAILY LIMIT REACHED | %s/%s",
+            total,
+            NEWS_TOTAL_MAX_PER_DAY
+        )
 
         return False
 
@@ -4912,11 +5085,17 @@ def news_is_due(
 
         ).total_seconds() / 60
 
-        return (
-            elapsed
-            >=
-            NEWS_MIN_GAP_MINUTES
-        )
+        if elapsed < NEWS_MIN_GAP_MINUTES:
+
+            log.info(
+                "NEWS WAITING | %.1f/%s MINUTES",
+                elapsed,
+                NEWS_MIN_GAP_MINUTES
+            )
+
+            return False
+
+        return True
 
     except Exception:
 
@@ -4930,6 +5109,9 @@ def update_news_state(
     category="economic",
     poll_message_id=None
 ):
+
+    # category فقط برای سازگاری با state قبلی نگه داشته شده
+    # و دیگر محدودیت جداگانه اقتصادی/جهانی ندارد.
 
     if category == "world":
 
@@ -5003,6 +5185,39 @@ def update_news_state(
     state[
         "news_history"
     ] = history[
+        -NEWS_HISTORY_LIMIT:
+    ]
+
+    # ---------------------------------------------
+    # ذخیره عنوان خبر برای جلوگیری از تکرار
+    # ---------------------------------------------
+
+    history_titles = state.get(
+        "news_title_history",
+        []
+    )
+
+    if not isinstance(
+        history_titles,
+        list
+    ):
+
+        history_titles = []
+
+    title = article.get(
+        "title",
+        ""
+    )
+
+    if title:
+
+        history_titles.append(
+            title
+        )
+
+    state[
+        "news_title_history"
+    ] = history_titles[
         -NEWS_HISTORY_LIMIT:
     ]
 
@@ -5426,7 +5641,9 @@ async def main():
     )
 
     log.info(
-        "NEWS STATUS = ENABLED | HOLIDAY INDEPENDENT"
+        "NEWS STATUS = ENABLED | MAX=%s/DAY | GAP=%s MIN",
+        NEWS_TOTAL_MAX_PER_DAY,
+        NEWS_MIN_GAP_MINUTES
     )
 
     client = TelegramClient(
@@ -6168,67 +6385,55 @@ async def main():
 
                 history = []
 
-            economic_count = int(
-
-                state.get(
-                    "economic_news_count",
-                    0
-                )
-                or 0
-
+            history_titles = state.get(
+                "news_title_history",
+                []
             )
 
-            world_count = int(
+            if not isinstance(
+                history_titles,
+                list
+            ):
 
-                state.get(
-                    "world_news_count",
-                    0
-                )
-                or 0
-
-            )
+                history_titles = []
 
             news_article = None
             news_category = "economic"
 
-            if (
-                economic_count
-                <
-                NEWS_ECONOMIC_MAX_PER_DAY
-            ):
+            # -------------------------------------------------
+            # ابتدا تمام منابع اقتصادی بررسی می‌شوند.
+            # دیگر سقف جداگانه برای اقتصادی وجود ندارد.
+            # -------------------------------------------------
 
-                try:
+            try:
 
-                    news_article = (
-                        await get_economic_news(
-                            history
-                        )
+                news_article = (
+                    await get_economic_news(
+                        history,
+                        history_titles
                     )
+                )
 
-                except Exception as error:
+            except Exception as error:
 
-                    log.exception(
-                        "ECONOMIC NEWS FAILED: %s",
-                        error
-                    )
+                log.exception(
+                    "ECONOMIC NEWS FAILED: %s",
+                    error
+                )
 
-            if (
+            # -------------------------------------------------
+            # اگر خبر اقتصادی مناسب نبود،
+            # منابع جهانی بررسی می‌شوند.
+            # -------------------------------------------------
 
-                news_article is None
-
-                and
-
-                world_count
-                <
-                NEWS_WORLD_MAX_PER_DAY
-
-            ):
+            if news_article is None:
 
                 try:
 
                     news_article = (
                         await get_world_news(
-                            history
+                            history,
+                            history_titles
                         )
                     )
 
@@ -6353,10 +6558,15 @@ async def main():
                         )
 
                         log.info(
-                            "AI NEWS + POLL SENT SUCCESSFULLY | CATEGORY=%s | NEWS=%s | POLL=%s",
+                            "AI NEWS + POLL SENT SUCCESSFULLY | CATEGORY=%s | NEWS=%s | POLL=%s | TOTAL=%s/%s",
                             news_category,
                             news_message_id,
-                            poll_message_id
+                            poll_message_id,
+                            state.get(
+                                "news_count",
+                                0
+                            ),
+                            NEWS_TOTAL_MAX_PER_DAY
                         )
 
                 except Exception as error:
