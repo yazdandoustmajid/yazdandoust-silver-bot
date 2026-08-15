@@ -84,6 +84,16 @@ MASHHAD_UNION_URL = os.getenv(
 
 
 # =========================================================
+# GOLD OUNCE SOURCE
+# =========================================================
+
+GOLD_OUNCE_URL = os.getenv(
+    "GOLD_OUNCE_URL",
+    "https://www.tgju.org/profile/%D8%A7%D9%86%D8%B3-%D8%B7%D9%84%D8%A7"
+).strip()
+
+
+# =========================================================
 # RUBIKA
 # =========================================================
 
@@ -154,6 +164,10 @@ COIN_IMAMI_WEIGHT = 8.133
 COIN_FINENESS = 0.900
 
 COIN_MINTING_FEE = 0
+
+GOLD_18_FINENESS = 0.750
+
+OUNCE_GRAMS = 31.1034768
 
 
 # =========================================================
@@ -375,10 +389,6 @@ PRICE_ONLY_NEWS_KEYWORDS = [
 
 BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
 
-    # -------------------------
-    # دلار
-    # -------------------------
-
     "دلار",
     "دلار تهران",
     "دلار آزاد",
@@ -414,10 +424,6 @@ BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
     "usd/irr",
     "usd/ir",
 
-    # -------------------------
-    # ارز و نرخ ارز
-    # -------------------------
-
     "نرخ ارز",
     "قیمت ارز",
     "بازار ارز",
@@ -449,10 +455,6 @@ BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
     "currency rates",
     "currency exchange",
 
-    # -------------------------
-    # یورو
-    # -------------------------
-
     "یورو",
     "قیمت یورو",
     "نرخ یورو",
@@ -464,10 +466,6 @@ BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
     "eur",
     "eur/irr",
 
-    # -------------------------
-    # پوند
-    # -------------------------
-
     "پوند",
     "قیمت پوند",
     "نرخ پوند",
@@ -477,10 +475,6 @@ BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
     "british pound",
     "pound sterling",
 
-    # -------------------------
-    # درهم
-    # -------------------------
-
     "درهم",
     "قیمت درهم",
     "نرخ درهم",
@@ -489,10 +483,6 @@ BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
     "درهم مبادله ای",
     "aed",
     "uae dirham",
-
-    # -------------------------
-    # سایر ارزها
-    # -------------------------
 
     "لیر",
     "قیمت لیر",
@@ -511,10 +501,6 @@ BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
     "yen",
     "ruble",
     "lira",
-
-    # -------------------------
-    # طلا
-    # -------------------------
 
     "طلا",
     "طلای ۱۸",
@@ -555,10 +541,6 @@ BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
     "spot gold",
     "xau",
     "xau/usd",
-
-    # -------------------------
-    # سکه
-    # -------------------------
 
     "سکه",
     "سکه امامی",
@@ -1333,6 +1315,200 @@ def find_latest_public_rate():
 
 
 # =========================================================
+# GOLD OUNCE
+# =========================================================
+
+def parse_gold_ounce(
+    html
+):
+
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
+
+    text = normalize_fa(
+        soup.get_text(
+            " ",
+            strip=True
+        )
+    )
+
+    # -----------------------------------------
+    # روش اول:
+    # پیدا کردن عبارت «انس طلا» و عدد نزدیک آن
+    # -----------------------------------------
+
+    patterns = [
+
+        r"انس\s*طلا"
+        r".{0,150}?"
+        r"(?:نرخ\s*فعلی|قیمت|نرخ)?"
+        r"\s*:?\s*"
+        r"([\d,٬.]+)",
+
+        r"انس\s*طلا"
+        r".{0,100}?"
+        r"([\d,٬.]+)",
+
+    ]
+
+    for pattern in patterns:
+
+        matches = re.finditer(
+            pattern,
+            text,
+            re.IGNORECASE
+        )
+
+        for match in matches:
+
+            candidate_text = match.group(1)
+
+            candidate = decimal_value(
+                candidate_text
+            )
+
+            if candidate is None:
+
+                continue
+
+            if (
+                1000 <= candidate <= 10000
+            ):
+
+                log.info(
+                    "GOLD OUNCE FOUND = %.2f",
+                    candidate
+                )
+
+                return float(candidate)
+
+    # -----------------------------------------
+    # روش دوم:
+    # بررسی متادیتا و title
+    # -----------------------------------------
+
+    meta_selectors = [
+
+        "meta[property='og:title']",
+        "meta[name='twitter:title']",
+        "title"
+
+    ]
+
+    for selector in meta_selectors:
+
+        node = soup.select_one(
+            selector
+        )
+
+        if not node:
+
+            continue
+
+        if node.name == "meta":
+
+            value = node.get(
+                "content",
+                ""
+            )
+
+        else:
+
+            value = node.get_text(
+                " ",
+                strip=True
+            )
+
+        value = normalize_fa(
+            value
+        )
+
+        match = re.search(
+            r"([\d,٬.]{4,})",
+            value
+        )
+
+        if match:
+
+            candidate = decimal_value(
+                match.group(1)
+            )
+
+            if candidate is not None:
+
+                if (
+                    1000 <= candidate <= 10000
+                ):
+
+                    log.info(
+                        "GOLD OUNCE FOUND FROM META = %.2f",
+                        candidate
+                    )
+
+                    return float(candidate)
+
+    return None
+
+
+def get_gold_ounce_sync():
+
+    html = http_get(
+        GOLD_OUNCE_URL,
+        timeout=30
+    )
+
+    ounce = parse_gold_ounce(
+        html
+    )
+
+    if ounce is None:
+
+        raise RuntimeError(
+            "قیمت انس طلا از منبع تعیین‌شده پیدا نشد."
+        )
+
+    return ounce
+
+
+async def get_gold_ounce():
+
+    last_error = None
+
+    for attempt in range(
+        1,
+        4
+    ):
+
+        try:
+
+            return await asyncio.to_thread(
+                get_gold_ounce_sync
+            )
+
+        except Exception as error:
+
+            last_error = error
+
+            log.warning(
+                "GOLD OUNCE ATTEMPT %s/3 FAILED: %s",
+                attempt,
+                error
+            )
+
+            if attempt < 3:
+
+                await asyncio.sleep(
+                    3
+                )
+
+    raise RuntimeError(
+        f"خطا در دریافت انس طلا: {last_error}"
+    )
+
+
+# =========================================================
 # WEBSITE PRICES
 # =========================================================
 
@@ -1580,8 +1756,6 @@ def get_website_prices_sync():
             "قیمت ساچمه پیدا نشد."
         )
 
-    # نام دقیق محصول سایت عمداً دست‌نخورده است.
-    # فقط متن‌های نمایشی «شمش نادیر» به «شمش ندیر» تغییر کرده‌اند.
     nader_title = (
         "شمش 1000 گرمی 999.9 نادیر"
     )
@@ -1885,6 +2059,69 @@ async def get_mashhad_market():
 
 
 # =========================================================
+# GOLD 18 BUBBLE
+# =========================================================
+
+def calculate_gold_18_bubble(
+    rate,
+    gold_ounce,
+    gold_18_price
+):
+
+    if not gold_ounce:
+        return None
+
+    intrinsic = (
+
+        gold_ounce
+        * rate["tehran"]
+        / OUNCE_GRAMS
+        * GOLD_18_FINENESS
+
+    )
+
+    bubble = (
+        gold_18_price
+        - intrinsic
+    )
+
+    bubble_percent = 0
+
+    if intrinsic > 0:
+
+        bubble_percent = (
+            bubble
+            /
+            intrinsic
+            *
+            100
+        )
+
+    return {
+
+        "intrinsic":
+            int(
+                round(
+                    intrinsic
+                )
+            ),
+
+        "bubble":
+            int(
+                round(
+                    bubble
+                )
+            ),
+
+        "bubble_percent":
+            float(
+                bubble_percent
+            )
+
+    }
+
+
+# =========================================================
 # COIN BUBBLE
 # =========================================================
 
@@ -1897,7 +2134,7 @@ def calculate_coin_bubble(
 
         rate["ounce"]
         * rate["tehran"]
-        / 31.1034768
+        / OUNCE_GRAMS
         * COIN_FINENESS
         * COIN_IMAMI_WEIGHT
 
@@ -4566,8 +4803,8 @@ def ai_summarize_news_sync(
 23. اگر خبر صرفاً درباره تغییر قیمت یا نرخ دلار،
     ارز، طلا یا سکه است، آن را منتشر نکن.
 24. حتی اگر خبر درباره یک رویداد اقتصادی باشد،
-    نباید موضوع اصلی آن نرخ دلار، نرخ ارز، قیمت طلا
-    یا قیمت سکه باشد.
+    نباید موضوع اصلی آن نرخ دلار، نرخ ارز،
+    قیمت طلا یا قیمت سکه باشد.
 25. خروجی دقیقاً با این ساختار باشد:
 
 عنوان: ...
@@ -4865,10 +5102,11 @@ async def send_news_poll(
 
 def make_mashhad_report(
     market,
-    rate
+    rate,
+    gold_ounce=None
 ):
 
-    bubble = calculate_coin_bubble(
+    coin_bubble = calculate_coin_bubble(
 
         rate,
 
@@ -4878,51 +5116,129 @@ def make_mashhad_report(
 
     )
 
-    bubble_text = format_price(
+    coin_bubble_text = format_price(
         abs(
-            bubble["bubble"]
+            coin_bubble["bubble"]
         )
     )
 
-    if bubble["bubble"] > 0:
+    if coin_bubble["bubble"] > 0:
 
-        bubble_label = (
-            f"🔴 حباب مثبت: {bubble_text} تومان"
+        coin_bubble_label = (
+            f"🔴 حباب مثبت: {coin_bubble_text} تومان"
         )
 
-    elif bubble["bubble"] < 0:
+    elif coin_bubble["bubble"] < 0:
 
-        bubble_label = (
-            f"🟢 حباب منفی: {bubble_text} تومان"
+        coin_bubble_label = (
+            f"🟢 حباب منفی: {coin_bubble_text} تومان"
         )
 
     else:
 
-        bubble_label = (
+        coin_bubble_label = (
             "⚪ حباب: بدون حباب"
         )
 
-    return (
+    gold_bubble = None
 
-        "🪙 گزارش بازار طلا و سکه مشهد\n"
-        "━━━━━━━━━━━━━━\n"
+    if gold_ounce is not None:
 
-        f"📅 {iran_date_string()}\n"
-        f"🕐 {iran_time_string()}\n\n"
+        try:
 
-        "🥇 طلای ۱۸ عیار مشهد\n"
-        f"💰 {format_price(market['gold_18_mashhad'])} تومان\n\n"
+            gold_bubble = calculate_gold_18_bubble(
 
-        "🪙 سکه امامی\n"
-        f"💰 {format_price(market['coin_imami'])} تومان\n\n"
+                rate,
+                gold_ounce,
+                market[
+                    "gold_18_mashhad"
+                ]
 
-        f"{bubble_label}\n\n"
+            )
 
-        "📌 ارزش ذاتی محاسبه‌شده سکه\n"
-        f"{format_price(bubble['intrinsic'])} تومان"
+        except Exception as error:
 
-        + channel_footer()
+            log.exception(
+                "GOLD 18 BUBBLE CALCULATION FAILED: %s",
+                error
+            )
 
+    lines = [
+
+        "🪙 گزارش بازار طلا و سکه مشهد",
+        "━━━━━━━━━━━━━━",
+
+        f"📅 {iran_date_string()}",
+        f"🕐 {iran_time_string()}",
+        "",
+
+        "🥇 طلای ۱۸ عیار مشهد",
+        f"💰 {format_price(market['gold_18_mashhad'])} تومان",
+
+    ]
+
+    if gold_ounce is not None:
+
+        lines.extend([
+
+            "",
+            "🌍 انس طلا",
+            f"💵 {gold_ounce:.2f} دلار",
+
+        ])
+
+    if gold_bubble is not None:
+
+        if gold_bubble["bubble"] > 0:
+
+            gold_bubble_text = (
+                f"🔴 حباب مثبت: "
+                f"{format_price(gold_bubble['bubble'])} تومان"
+            )
+
+        elif gold_bubble["bubble"] < 0:
+
+            gold_bubble_text = (
+                f"🟢 حباب منفی: "
+                f"{format_price(abs(gold_bubble['bubble']))} تومان"
+            )
+
+        else:
+
+            gold_bubble_text = (
+                "⚪ حباب: بدون حباب"
+            )
+
+        lines.extend([
+
+            "",
+            f"🎈 حباب طلای ۱۸ عیار",
+            gold_bubble_text,
+
+        ])
+
+    lines.extend([
+
+        "",
+        "🪙 سکه امامی",
+        f"💰 {format_price(market['coin_imami'])} تومان",
+
+        "",
+        "🎈 حباب سکه امامی",
+        coin_bubble_label,
+
+        "",
+        "📌 ارزش ذاتی محاسبه‌شده سکه",
+        f"{format_price(coin_bubble['intrinsic'])} تومان",
+
+    ])
+
+    lines.append(
+        channel_footer()
+    )
+
+    return "\n".join(
+        lines
     )
 
 
@@ -6423,8 +6739,6 @@ async def send_text_post(
 
         pass
 
-    # همه پست‌های متنی خودکار به روبیکا هم می‌روند.
-    # شماره تماس داخل send_rubika_text حذف می‌شود.
     await send_rubika_text(
         text
     )
@@ -6674,6 +6988,37 @@ def get_saved_market(
             )
 
     }
+
+
+def get_saved_gold_ounce(
+    state
+):
+
+    if state.get(
+        "gold_ounce"
+    ) is None:
+
+        return None
+
+    try:
+
+        value = float(
+            state[
+                "gold_ounce"
+            ]
+        )
+
+        if (
+            1000 <= value <= 10000
+        ):
+
+            return value
+
+    except Exception:
+
+        pass
+
+    return None
 
 
 # =========================================================
@@ -7278,6 +7623,10 @@ async def main():
                     report_key
                 ):
 
+                    # -----------------------------------------
+                    # دریافت قیمت طلای ۱۸ و سکه
+                    # -----------------------------------------
+
                     try:
 
                         mashhad_market = (
@@ -7311,17 +7660,70 @@ async def main():
                             state
                         )
 
-                    if mashhad_market is not None:
+                    # -----------------------------------------
+                    # دریافت انس طلا
+                    # -----------------------------------------
 
-                        report_rate = rate
+                    gold_ounce = None
 
-                        if report_rate is None:
+                    try:
 
-                            report_rate = (
-                                get_saved_rate(
-                                    state
-                                )
+                        gold_ounce = (
+                            await get_gold_ounce()
+                        )
+
+                        state[
+                            "gold_ounce"
+                        ] = gold_ounce
+
+                        state[
+                            "gold_ounce_updated_at"
+                        ] = iran_now().isoformat()
+
+                        save_state(
+                            state
+                        )
+
+                    except Exception as error:
+
+                        log.warning(
+                            "GOLD OUNCE FETCH FAILED: %s",
+                            error
+                        )
+
+                        gold_ounce = (
+                            get_saved_gold_ounce(
+                                state
                             )
+                        )
+
+                        if gold_ounce is not None:
+
+                            log.info(
+                                "USING SAVED GOLD OUNCE = %.2f",
+                                gold_ounce
+                            )
+
+                    # -----------------------------------------
+                    # نرخ دلار و انس نقره
+                    # بدون تغییر نسبت به قبل
+                    # -----------------------------------------
+
+                    report_rate = rate
+
+                    if report_rate is None:
+
+                        report_rate = (
+                            get_saved_rate(
+                                state
+                            )
+                        )
+
+                    # -----------------------------------------
+                    # ارسال گزارش
+                    # -----------------------------------------
+
+                    if mashhad_market is not None:
 
                         if report_rate is not None:
 
@@ -7335,7 +7737,8 @@ async def main():
                                     make_mashhad_report(
 
                                         mashhad_market,
-                                        report_rate
+                                        report_rate,
+                                        gold_ounce
 
                                     )
 
@@ -7348,6 +7751,13 @@ async def main():
 
                                 save_state(
                                     state
+                                )
+
+                                log.info(
+                                    "MASHHAD REPORT SENT | "
+                                    "TIME=%s | GOLD_OUNCE=%s",
+                                    report_time,
+                                    gold_ounce
                                 )
 
                             except Exception as error:
@@ -7591,10 +8001,6 @@ async def main():
                         error
                     )
 
-            # -------------------------------------------------
-            # کنترل نهایی قبل از ارسال به AI
-            # -------------------------------------------------
-
             if news_article:
 
                 if is_blocked_rate_gold_news(
@@ -7668,10 +8074,6 @@ async def main():
                                 "importance"
                             ]
 
-                        # -------------------------------------------------
-                        # کنترل نهایی بعد از AI
-                        # -------------------------------------------------
-
                         if is_blocked_rate_gold_news(
                             ai_article
                         ):
@@ -7708,10 +8110,6 @@ async def main():
                     )
 
                     news_article = None
-
-            # -------------------------------------------------
-            # آخرین کنترل درست قبل از انتشار
-            # -------------------------------------------------
 
             if news_article:
 
