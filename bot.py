@@ -1580,6 +1580,8 @@ def get_website_prices_sync():
             "قیمت ساچمه پیدا نشد."
         )
 
+    # نام دقیق محصول سایت عمداً دست‌نخورده است.
+    # فقط متن‌های نمایشی «شمش نادیر» به «شمش ندیر» تغییر کرده‌اند.
     nader_title = (
         "شمش 1000 گرمی 999.9 نادیر"
     )
@@ -1592,7 +1594,7 @@ def get_website_prices_sync():
     if nader_card is None:
 
         raise RuntimeError(
-            "محصول دقیق شمش نادیر پیدا نشد."
+            "محصول دقیق شمش ندیر پیدا نشد."
         )
 
     nader_package = (
@@ -1604,7 +1606,7 @@ def get_website_prices_sync():
     if nader_package is None:
 
         raise RuntimeError(
-            "قیمت شمش نادیر پیدا نشد."
+            "قیمت شمش ندیر پیدا نشد."
         )
 
     shot_995_per_gram = (
@@ -3377,8 +3379,6 @@ def is_blocked_rate_gold_news(
         BLOCKED_RATE_GOLD_NEWS_KEYWORDS
     )
 
-    # اگر عنوان مستقیماً درباره دلار، ارز، طلا،
-    # سکه یا نرخ آن‌ها باشد، خبر کاملاً حذف می‌شود.
     if title_hits >= 1:
 
         log.info(
@@ -3389,8 +3389,6 @@ def is_blocked_rate_gold_news(
 
         return True
 
-    # اگر در متن خبر چند بار موضوع ارز/طلا/دلار
-    # تکرار شده باشد، موضوع اصلی خبر محسوب می‌شود.
     if body_hits >= 2:
 
         log.info(
@@ -3401,7 +3399,6 @@ def is_blocked_rate_gold_news(
 
         return True
 
-    # ترکیب چند نشانه مرتبط با نرخ و قیمت نیز ممنوع است.
     rate_terms = [
 
         "نرخ",
@@ -3457,9 +3454,6 @@ def is_blocked_rate_gold_news(
 
         return True
 
-    # اگر چندین بار نشانه‌های مربوط به این بازارها
-    # در متن دیده شود، برای جلوگیری از عبور خبرهای
-    # قیمت‌محور، آن را حذف می‌کنیم.
     if combined_hits >= 3:
 
         log.info(
@@ -3729,9 +3723,6 @@ def get_candidate_from_sources(
                 ""
             )
 
-            # فیلتر اول:
-            # خبرهایی که از همان ابتدا در عنوان
-            # مربوط به دلار، ارز، طلا یا سکه هستند.
             if is_blocked_rate_gold_news(
                 item
             ):
@@ -3794,8 +3785,6 @@ def get_candidate_from_sources(
 
                 continue
 
-            # فیلتر دوم:
-            # بعد از دریافت متن کامل خبر.
             if is_blocked_rate_gold_news(
                 article
             ):
@@ -4458,9 +4447,6 @@ def parse_ai_news_result(
 
         return None
 
-    # فیلتر سوم:
-    # اگر AI خبر ممنوعه را با جمله‌بندی جدید تولید کرد،
-    # باز هم اجازه انتشار ندارد.
     ai_article_for_filter = {
 
         "title":
@@ -5000,7 +4986,7 @@ def make_24h_report(
         f"💰 {format_price(products['shot_995'])} تومان",
         "",
 
-        "🧱 شمش نادیر ۹۹۹.۹",
+        "🧱 شمش ندیر ۹۹۹.۹",
         f"💰 {format_price(products['nader_9999'])} تومان",
         "",
 
@@ -5062,7 +5048,7 @@ def make_market_pulse(
         f"{format_price(products['shot_995'])} تومان",
         "",
 
-        "🧱 شمش نادیر ۹۹۹.۹",
+        "🧱 شمش ندیر ۹۹۹.۹",
         f"{format_price(products['nader_9999'])} تومان",
 
     ]
@@ -5080,14 +5066,6 @@ def make_market_pulse(
             f"{format_price(market['coin_imami'])} تومان",
 
         ])
-
-    lines.extend([
-
-        "",
-        "💬 بازار را چطور می‌بینید؟",
-        "🟢 صعودی   🟡 نوسانی   🔴 نزولی",
-
-    ])
 
     lines.append(
         channel_footer()
@@ -5194,7 +5172,7 @@ def ai_market_recap_sync(
 ساچمه ۹۹۵:
 {products['shot_995']}
 
-شمش نادیر ۹۹۹.۹:
+شمش ندیر ۹۹۹.۹:
 {products['nader_9999']}
 
 طلای ۱۸ مشهد:
@@ -6264,7 +6242,7 @@ async def send_rubika_rate_post(
         "🥈 ساچمه نقره ۹۹۵\n"
         f"{format_price(products['shot_995'])} تومان\n\n"
 
-        "🧱 شمش نادیر ۹۹۹.۹\n"
+        "🧱 شمش ندیر ۹۹۹.۹\n"
         f"{format_price(products['nader_9999'])} تومان\n\n"
 
         "⚖️ مثقال نقره ۹۹۵\n"
@@ -6466,9 +6444,6 @@ async def send_news_post(
 
         return None, None
 
-    # آخرین کنترل درست قبل از انتشار.
-    # حتی اگر یک خبر از هر مسیر دیگری به این تابع برسد،
-    # خبر دلار/ارز/طلا/سکه نباید منتشر شود.
     if is_blocked_rate_gold_news(
         article
     ):
@@ -7122,7 +7097,6 @@ async def main():
 
                 )
 
-                # روبیکا: نرخ فقط به صورت متن
                 await send_rubika_rate_post(
                     rate,
                     products
