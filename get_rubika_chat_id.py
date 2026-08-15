@@ -13,93 +13,49 @@ async def main():
 
     bot = Robot(token=TOKEN)
 
-    print("=" * 60)
-    print("       RUBIKA CHANNEL LISTENER TEST")
-    print("=" * 60)
+    print("=" * 45)
+    print("RUBIKA CHANNEL TEST")
+    print("=" * 45)
 
-    try:
-        bot_chat_id = await bot.get_bot_chat_id()
-        print("🤖 BOT CHAT ID:")
-        print(bot_chat_id)
-    except Exception as e:
-        print("❌ BOT CHAT ID ERROR:")
-        print(type(e).__name__, e)
-
-    print()
-    print("=" * 60)
-    print("📡 ثبت Listener کانال...")
-    print("=" * 60)
+    found = False
 
     @bot.on_message_channel()
-    async def channel_message_handler(message):
+    async def channel_handler(message):
+        nonlocal found
+        found = True
 
         print()
-        print("=" * 60)
-        print("🎯🎯🎯 CHANNEL MESSAGE RECEIVED 🎯🎯🎯")
-        print("=" * 60)
+        print("✅ CHANNEL MESSAGE RECEIVED")
+        print("-" * 45)
 
-        print("TYPE:")
-        print(type(message))
+        print("CHAT ID:", getattr(message, "chat_id", None))
+        print("MESSAGE ID:", getattr(message, "message_id", None))
+        print("TEXT:", getattr(message, "text", None))
 
-        print()
-        print("CHAT ID:")
-        print(getattr(message, "chat_id", None))
+        print("-" * 45)
 
-        print()
-        print("MESSAGE ID:")
-        print(getattr(message, "message_id", None))
+    print("🟢 Listener فعال شد")
+    print("📩 الان داخل کانال یک پیام بفرست:")
+    print("تست")
 
-        print()
-        print("TEXT:")
-        print(getattr(message, "text", None))
-
-        print()
-        print("SENDER ID:")
-        print(getattr(message, "sender_id", None))
-
-        print()
-        print("RAW MESSAGE:")
-        print(message)
-
-        print()
-        print("=" * 60)
-        print("✅ CHANNEL CHAT ID FOUND")
-        print("=" * 60)
-
-        print()
-        print("📌 CHAT ID:")
-        print(getattr(message, "chat_id", None))
-
-        print()
-        print("=" * 60)
-
-    print()
-    print("=" * 60)
-    print("🟢 LISTENER فعال شد")
-    print("=" * 60)
-    print()
-    print("حالا داخل کانال یک پیام بفرست:")
-    print()
-    print("تست ربات")
-    print()
-    print("⏳ منتظر پیام کانال...")
-    print()
-
-    # اجرای دائمی ربات
     try:
-        await bot.run()
-    except TypeError:
-        try:
-            bot.run()
-        except Exception as e:
-            print()
-            print("❌ BOT RUN ERROR:")
-            print(type(e).__name__, e)
+        await asyncio.wait_for(bot.run(), timeout=12)
+
+    except asyncio.TimeoutError:
+        print()
+        print("⏱ Timeout — تست تمام شد")
 
     except Exception as e:
         print()
-        print("❌ BOT RUN ERROR:")
+        print("❌ ERROR:")
         print(type(e).__name__, e)
+
+    print()
+
+    if not found:
+        print("❌ در این ۱۲ ثانیه پیام کانال دریافت نشد.")
+    else:
+        print("🎯 CHAT ID با موفقیت دریافت شد.")
 
 
 asyncio.run(main())
