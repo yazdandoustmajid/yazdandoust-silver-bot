@@ -1,11 +1,9 @@
 import os
 import asyncio
+import inspect
 from rubka import Robot
 
 TOKEN = os.getenv("RUBIKA_TOKEN", "").strip()
-
-CHANNEL_USERNAME = "Yazdandoustsilver"
-CHANNEL_LINK = "https://rubika.ir/Yazdandoustsilver"
 
 
 async def main():
@@ -15,36 +13,28 @@ async def main():
 
     bot = Robot(token=TOKEN)
 
-    print("========== RUBIKA CHANNEL INFO ==========")
-    print("CHANNEL:", CHANNEL_USERNAME)
-    print("LINK:", CHANNEL_LINK)
-    print()
+    print("========== RUBIKA CHAT METHODS ==========")
 
-    # بررسی متد get_username
-    try:
-        result = await bot.get_username(CHANNEL_USERNAME)
+    for name in dir(bot):
+        if name.startswith("_"):
+            continue
 
-        print("========== GET_USERNAME RESULT ==========")
-        print(result)
-        print("=========================================")
+        if any(x in name.lower() for x in [
+            "chat",
+            "channel",
+            "list",
+            "search",
+            "preview",
+            "username"
+        ]):
+            try:
+                attr = getattr(bot, name)
+                signature = inspect.signature(attr)
+                print(f"{name}{signature}")
+            except Exception:
+                print(name)
 
-    except Exception as e:
-        print("❌ get_username ERROR:")
-        print(type(e).__name__, str(e))
-
-    print()
-
-    # بررسی get_bot_chat_id
-    try:
-        result = await bot.get_bot_chat_id()
-
-        print("========== GET_BOT_CHAT_ID RESULT ==========")
-        print(result)
-        print("=============================================")
-
-    except Exception as e:
-        print("❌ get_bot_chat_id ERROR:")
-        print(type(e).__name__, str(e))
+    print("=========================================")
 
 
 asyncio.run(main())
