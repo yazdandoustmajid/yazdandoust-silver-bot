@@ -14,36 +14,39 @@ async def main():
     bot = Robot(token=TOKEN)
 
     print("=" * 45)
-    print("RUBIKA CHANNEL TEST")
+    print("RUBIKA UNIVERSAL MESSAGE TEST")
     print("=" * 45)
 
     found = False
 
-    @bot.on_message_channel()
-    async def channel_handler(message):
+    @bot.on_message()
+    async def handler(message):
+
         nonlocal found
         found = True
 
         print()
-        print("✅ CHANNEL MESSAGE RECEIVED")
-        print("-" * 45)
+        print("=" * 45)
+        print("✅ MESSAGE RECEIVED")
+        print("=" * 45)
 
         print("CHAT ID:", getattr(message, "chat_id", None))
         print("MESSAGE ID:", getattr(message, "message_id", None))
         print("TEXT:", getattr(message, "text", None))
+        print("SENDER ID:", getattr(message, "sender_id", None))
 
-        print("-" * 45)
+        print("=" * 45)
 
     print("🟢 Listener فعال شد")
-    print("📩 الان داخل کانال یک پیام بفرست:")
+    print("📩 حالا داخل کانال یک پیام جدید بفرست:")
     print("تست")
 
     try:
-        await asyncio.wait_for(bot.run(), timeout=12)
+        await asyncio.wait_for(bot.run(), timeout=10)
 
     except asyncio.TimeoutError:
         print()
-        print("⏱ Timeout — تست تمام شد")
+        print("⏱ Timeout")
 
     except Exception as e:
         print()
@@ -53,9 +56,9 @@ async def main():
     print()
 
     if not found:
-        print("❌ در این ۱۲ ثانیه پیام کانال دریافت نشد.")
+        print("❌ هیچ پیام جدیدی دریافت نشد.")
     else:
-        print("🎯 CHAT ID با موفقیت دریافت شد.")
+        print("🎯 پیام دریافت شد.")
 
 
 asyncio.run(main())
