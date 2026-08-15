@@ -231,17 +231,11 @@ NEWS_TITLE_SIMILARITY_LIMIT = 0.78
 
 ECONOMIC_SOURCES = [
 
-    "https://www.tasnimnews.ir/fa/service/79/"
-    "%D9%BE%D9%88%D9%84-%D8%A7%D8%B1%D8%B2-%D8%A8%D8%A7%D9%86%DA%A9",
-
-    "https://www.tasnimnews.ir/fa/service/1408/"
-    "%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D8%B3%DA%A9%D9%87-%D9%88-%D8%A7%D8%B1%D8%B2",
-
     "https://www.tasnimnews.ir/fa/service/1407/",
 
     (
         "https://news.google.com/rss/search?"
-        "q=%D8%B7%D9%84%D8%A7+%D9%86%D9%82%D8%B1%D9%87+%D8%AF%D9%84%D8%A7%D8%B1+%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF"
+        "q=%D8%A7%DB%8C%D8%B1%D8%A7%D9%86+%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF+%D8%AA%D8%AD%D8%B1%DB%8C%D9%85+%D8%AA%D9%88%D8%B1%D9%85+%D9%86%D8%B1%D8%AE+%D8%A8%D9%87%D8%B1%D9%87"
         "&hl=fa&gl=IR&ceid=IR:fa"
     ),
 
@@ -267,15 +261,7 @@ WORLD_SOURCES = [
 
 ECONOMIC_KEYWORDS = [
 
-    "طلا",
     "نقره",
-    "اونس",
-    "انس",
-    "دلار",
-    "ارز",
-    "یورو",
-    "سکه",
-    "شمش",
     "بانک مرکزی",
     "مرکز مبادله",
     "تورم",
@@ -379,6 +365,217 @@ PRICE_ONLY_NEWS_KEYWORDS = [
     "قیمت لحظه‌ای طلا",
     "قیمت لحظه ای دلار",
     "قیمت لحظه‌ای دلار",
+
+]
+
+
+# =========================================================
+# BLOCKED RATE / GOLD / CURRENCY NEWS
+# =========================================================
+
+BLOCKED_RATE_GOLD_NEWS_KEYWORDS = [
+
+    # -------------------------
+    # دلار
+    # -------------------------
+
+    "دلار",
+    "دلار تهران",
+    "دلار آزاد",
+    "دلار توافقی",
+    "دلار نیمایی",
+    "دلار مبادله‌ای",
+    "دلار مبادله ای",
+    "دلار صرافی",
+    "دلار دولتی",
+    "دلار آمریکا",
+    "دلار امریکا",
+    "قیمت دلار",
+    "نرخ دلار",
+    "قیمت لحظه‌ای دلار",
+    "قیمت لحظه ای دلار",
+    "نرخ لحظه‌ای دلار",
+    "نرخ لحظه ای دلار",
+    "ارزش دلار",
+    "روند دلار",
+    "بازار دلار",
+    "دلار گران شد",
+    "دلار ارزان شد",
+    "دلار افزایش یافت",
+    "دلار کاهش یافت",
+    "دلار صعود کرد",
+    "دلار سقوط کرد",
+
+    "usd",
+    "us dollar",
+    "dollar",
+    "dollar rate",
+    "dollar price",
+    "usd/irr",
+    "usd/ir",
+
+    # -------------------------
+    # ارز و نرخ ارز
+    # -------------------------
+
+    "نرخ ارز",
+    "قیمت ارز",
+    "بازار ارز",
+    "ارز آزاد",
+    "ارز دولتی",
+    "ارز مبادله‌ای",
+    "ارز مبادله ای",
+    "ارز توافقی",
+    "ارز نیمایی",
+    "ارز خارجی",
+    "ارزش ارز",
+    "تغییر نرخ ارز",
+    "افزایش نرخ ارز",
+    "کاهش نرخ ارز",
+    "نوسان ارز",
+    "نوسانات ارز",
+    "قیمت ارزها",
+    "نرخ ارزها",
+    "بازار ارزها",
+    "نرخ تبدیل ارز",
+    "تبدیل ارز",
+
+    "foreign exchange",
+    "exchange rate",
+    "exchange rates",
+    "forex",
+    "fx market",
+    "currency rate",
+    "currency rates",
+    "currency exchange",
+
+    # -------------------------
+    # یورو
+    # -------------------------
+
+    "یورو",
+    "قیمت یورو",
+    "نرخ یورو",
+    "یورو تهران",
+    "یورو آزاد",
+    "یورو مبادله‌ای",
+    "یورو مبادله ای",
+    "euro",
+    "eur",
+    "eur/irr",
+
+    # -------------------------
+    # پوند
+    # -------------------------
+
+    "پوند",
+    "قیمت پوند",
+    "نرخ پوند",
+    "پوند انگلیس",
+    "پوند انگلستان",
+    "gbp",
+    "british pound",
+    "pound sterling",
+
+    # -------------------------
+    # درهم
+    # -------------------------
+
+    "درهم",
+    "قیمت درهم",
+    "نرخ درهم",
+    "درهم امارات",
+    "درهم مبادله‌ای",
+    "درهم مبادله ای",
+    "aed",
+    "uae dirham",
+
+    # -------------------------
+    # سایر ارزها
+    # -------------------------
+
+    "لیر",
+    "قیمت لیر",
+    "نرخ لیر",
+    "لیر ترکیه",
+    "روبل",
+    "قیمت روبل",
+    "نرخ روبل",
+    "روپیه",
+    "فرانک",
+    "ین",
+    "یوان",
+    "قیمت یوان",
+    "نرخ یوان",
+    "yuan",
+    "yen",
+    "ruble",
+    "lira",
+
+    # -------------------------
+    # طلا
+    # -------------------------
+
+    "طلا",
+    "طلای ۱۸",
+    "طلای 18",
+    "طلای ۲۴",
+    "طلای 24",
+    "طلای آبشده",
+    "طلای آب شده",
+    "گرم طلا",
+    "گرم طلای ۱۸",
+    "گرم طلای 18",
+    "قیمت طلا",
+    "نرخ طلا",
+    "قیمت طلای ۱۸",
+    "قیمت طلای 18",
+    "قیمت طلای آبشده",
+    "قیمت طلای آب شده",
+    "قیمت طلای جهانی",
+    "نرخ طلای جهانی",
+    "بازار طلا",
+    "بازار طلای ایران",
+    "بازار طلای جهانی",
+    "طلای جهانی",
+    "اونس طلا",
+    "انس طلا",
+    "اونس جهانی طلا",
+    "انس جهانی طلا",
+    "قیمت اونس طلا",
+    "نرخ اونس طلا",
+    "طلای جهانی افزایش",
+    "طلای جهانی کاهش",
+
+    "gold price",
+    "gold rate",
+    "gold market",
+    "gold ounce",
+    "gold futures",
+    "spot gold",
+    "xau",
+    "xau/usd",
+
+    # -------------------------
+    # سکه
+    # -------------------------
+
+    "سکه",
+    "سکه امامی",
+    "سکه بهار آزادی",
+    "نیم سکه",
+    "ربع سکه",
+    "سکه گرمی",
+    "قیمت سکه",
+    "نرخ سکه",
+    "حباب سکه",
+    "بازار سکه",
+    "قیمت امروز سکه",
+    "قیمت لحظه‌ای سکه",
+    "قیمت لحظه ای سکه",
+
+    "coin price",
+    "coin market",
 
 ]
 
@@ -3124,6 +3321,158 @@ def is_duplicate_news(
     return False
 
 
+def is_blocked_rate_gold_news(
+    article
+):
+
+    if not article:
+
+        return False
+
+    title = normalize_fa(
+        article.get(
+            "title",
+            ""
+        )
+    )
+
+    text = normalize_fa(
+        article.get(
+            "text",
+            ""
+        )
+    )
+
+    description = normalize_fa(
+        article.get(
+            "description",
+            ""
+        )
+    )
+
+    combined = (
+        title
+        + " "
+        + description
+        + " "
+        + text
+    )
+
+    title_hits = keyword_hits(
+        title,
+        BLOCKED_RATE_GOLD_NEWS_KEYWORDS
+    )
+
+    first_part = (
+        text[:1200]
+    )
+
+    body_hits = keyword_hits(
+        first_part,
+        BLOCKED_RATE_GOLD_NEWS_KEYWORDS
+    )
+
+    combined_hits = keyword_hits(
+        combined[:3000],
+        BLOCKED_RATE_GOLD_NEWS_KEYWORDS
+    )
+
+    # اگر عنوان مستقیماً درباره دلار، ارز، طلا،
+    # سکه یا نرخ آن‌ها باشد، خبر کاملاً حذف می‌شود.
+    if title_hits >= 1:
+
+        log.info(
+            "BLOCKED RATE/GOLD NEWS | TITLE MATCH=%s | %s",
+            title_hits,
+            title
+        )
+
+        return True
+
+    # اگر در متن خبر چند بار موضوع ارز/طلا/دلار
+    # تکرار شده باشد، موضوع اصلی خبر محسوب می‌شود.
+    if body_hits >= 2:
+
+        log.info(
+            "BLOCKED RATE/GOLD NEWS | BODY MATCH=%s | %s",
+            body_hits,
+            title
+        )
+
+        return True
+
+    # ترکیب چند نشانه مرتبط با نرخ و قیمت نیز ممنوع است.
+    rate_terms = [
+
+        "نرخ",
+        "قیمت",
+        "ارزش",
+        "افزایش",
+        "کاهش",
+        "صعود",
+        "سقوط",
+        "گران",
+        "ارزان",
+        "بازار",
+
+    ]
+
+    asset_terms = [
+
+        "دلار",
+        "ارز",
+        "یورو",
+        "پوند",
+        "درهم",
+        "طلا",
+        "سکه",
+        "gold",
+        "dollar",
+        "currency",
+        "euro",
+        "pound",
+
+    ]
+
+    has_rate_term = keyword_match(
+        combined[:3000],
+        rate_terms
+    )
+
+    has_asset_term = keyword_match(
+        combined[:3000],
+        asset_terms
+    )
+
+    if (
+        has_rate_term
+        and
+        has_asset_term
+    ):
+
+        log.info(
+            "BLOCKED RATE/GOLD NEWS | RATE+ASSET | %s",
+            title
+        )
+
+        return True
+
+    # اگر چندین بار نشانه‌های مربوط به این بازارها
+    # در متن دیده شود، برای جلوگیری از عبور خبرهای
+    # قیمت‌محور، آن را حذف می‌کنیم.
+    if combined_hits >= 3:
+
+        log.info(
+            "BLOCKED RATE/GOLD NEWS | COMBINED MATCH=%s | %s",
+            combined_hits,
+            title
+        )
+
+        return True
+
+    return False
+
+
 def is_price_only_news(
     article
 ):
@@ -3278,10 +3627,7 @@ def calculate_news_importance(
         "تنگه هرمز",
         "Trump",
         "ترامپ",
-        "دلار",
         "نقره",
-        "طلا",
-        "اونس",
 
     ]
 
@@ -3383,6 +3729,20 @@ def get_candidate_from_sources(
                 ""
             )
 
+            # فیلتر اول:
+            # خبرهایی که از همان ابتدا در عنوان
+            # مربوط به دلار، ارز، طلا یا سکه هستند.
+            if is_blocked_rate_gold_news(
+                item
+            ):
+
+                log.info(
+                    "BLOCKED RATE/GOLD INDEX ITEM | %s",
+                    title
+                )
+
+                continue
+
             if is_duplicate_news(
                 item,
                 history_titles
@@ -3431,6 +3791,19 @@ def get_candidate_from_sources(
             )
 
             if not article:
+
+                continue
+
+            # فیلتر دوم:
+            # بعد از دریافت متن کامل خبر.
+            if is_blocked_rate_gold_news(
+                article
+            ):
+
+                log.info(
+                    "BLOCKED RATE/GOLD ARTICLE | %s",
+                    article["title"]
+                )
 
                 continue
 
@@ -3999,7 +4372,7 @@ def parse_ai_news_result(
     if not sections["silver"]:
 
         sections["silver"] = (
-            "ارتباط آن با نقره بیشتر از مسیر دلار و بازار جهانی است."
+            "ارتباط آن با نقره می‌تواند از مسیر تحولات اقتصادی و بازار جهانی باشد."
         )
 
     for key in [
@@ -4081,6 +4454,35 @@ def parse_ai_news_result(
         log.warning(
             "AI NEWS REJECTED | OVER %s WORDS",
             AI_NEWS_MAX_WORDS
+        )
+
+        return None
+
+    # فیلتر سوم:
+    # اگر AI خبر ممنوعه را با جمله‌بندی جدید تولید کرد،
+    # باز هم اجازه انتشار ندارد.
+    ai_article_for_filter = {
+
+        "title":
+            sections["title"],
+
+        "text":
+            (
+                sections["text"]
+                + " "
+                + sections["why"]
+                + " "
+                + sections["silver"]
+            )
+
+    }
+
+    if is_blocked_rate_gold_news(
+        ai_article_for_filter
+    ):
+
+        log.warning(
+            "AI NEWS REJECTED | RATE/GOLD/CURRENCY TOPIC"
         )
 
         return None
@@ -4172,7 +4574,15 @@ def ai_summarize_news_sync(
 19. ساعت یا زمان انتشار خبر را در خروجی نیاور.
 20. عنوان باید کوتاه و خبری باشد.
 21. متن باید خلاصه واقعی و مستقل باشد، نه بازنویسی خط‌به‌خط.
-22. خروجی دقیقاً با این ساختار باشد:
+22. اگر موضوع اصلی خبر قیمت یا نرخ دلار، هر نوع ارز،
+    طلا، طلای جهانی، سکه یا نرخ تبدیل ارزهاست،
+    این خبر نباید برای انتشار انتخاب شود.
+23. اگر خبر صرفاً درباره تغییر قیمت یا نرخ دلار،
+    ارز، طلا یا سکه است، آن را منتشر نکن.
+24. حتی اگر خبر درباره یک رویداد اقتصادی باشد،
+    نباید موضوع اصلی آن نرخ دلار، نرخ ارز، قیمت طلا
+    یا قیمت سکه باشد.
+25. خروجی دقیقاً با این ساختار باشد:
 
 عنوان: ...
 
@@ -4209,7 +4619,8 @@ def ai_summarize_news_sync(
                     "تو سردبیر دقیق و بی‌طرف اخبار فارسی هستی. "
                     "خبر را حرفه‌ای و خلاصه کن. "
                     "متن منبع را کپی یا خط‌به‌خط بازنویسی نکن. "
-                    "کل خروجی حداکثر ۱۴۰ کلمه باشد."
+                    "کل خروجی حداکثر ۱۴۰ کلمه باشد. "
+                    "خبرهای مربوط به نرخ و قیمت دلار، ارزها، طلا و سکه را تولید نکن."
                 ),
 
                 input=prompt
@@ -4230,7 +4641,8 @@ def ai_summarize_news_sync(
 
             raise RuntimeError(
                 "خروجی AI یا بیش از حد طولانی بود "
-                "یا بیش از حد به متن منبع شباهت داشت."
+                "یا بیش از حد به متن منبع شباهت داشت "
+                "یا موضوع آن مربوط به نرخ ارز/دلار/طلا/سکه بود."
             )
 
         except Exception as error:
@@ -4704,7 +5116,7 @@ def ai_economy_lesson_sync():
     prompt = """
 برای کانال تلگرامی «یزدان‌دوست» یک پست کوتاه آموزشی اقتصادی بنویس.
 
-موضوع باید برای مخاطب بازار طلا، نقره، دلار و سرمایه‌گذاری عمومی مفید باشد.
+موضوع باید برای مخاطب بازار نقره و سرمایه‌گذاری عمومی مفید باشد.
 
 قوانین:
 - 60 تا 100 کلمه
@@ -4716,10 +5128,12 @@ def ai_economy_lesson_sync():
 - بدون هشتگ
 - عنوان جذاب داشته باشد
 - در پایان یک سؤال کوتاه برای تعامل مخاطب داشته باشد.
+- موضوع آموزش نباید درباره قیمت یا نرخ دلار،
+  قیمت یا نرخ طلا، قیمت سکه یا نرخ ارزها باشد.
 
 موضوع را خودت از بین این موارد انتخاب کن:
-نرخ بهره، تورم، دلار، انس جهانی، حباب سکه،
-عرضه و تقاضا، فلزات گرانبها، فدرال رزرو.
+نرخ بهره، تورم، انس جهانی نقره، عرضه و تقاضا،
+فلزات گرانبها، فدرال رزرو.
 """
 
     response = client.responses.create(
@@ -4858,13 +5272,15 @@ def ai_tomorrow_message_sync():
 نباید رویداد مشخص یا عدد مشخصی اختراع کنی.
 
 فقط 3 مورد عمومی و حرفه‌ای بنویس:
-- مسیر دلار
-- رفتار انس جهانی
+- تحولات مهم اقتصادی و سیاسی
+- رفتار انس جهانی نقره
 - اخبار مهم اقتصادی و سیاسی
 
 لحن حرفه‌ای و کوتاه باشد.
 در پایان یک سؤال تعاملی کوتاه قرار بده.
 بدون هشتگ و بدون Markdown.
+موضوع پست نباید درباره نرخ دلار،
+نرخ ارزها، قیمت طلا یا قیمت سکه باشد.
 """
 
     response = client.responses.create(
@@ -6050,6 +6466,23 @@ async def send_news_post(
 
         return None, None
 
+    # آخرین کنترل درست قبل از انتشار.
+    # حتی اگر یک خبر از هر مسیر دیگری به این تابع برسد،
+    # خبر دلار/ارز/طلا/سکه نباید منتشر شود.
+    if is_blocked_rate_gold_news(
+        article
+    ):
+
+        log.warning(
+            "NEWS SEND BLOCKED | RATE/GOLD/CURRENCY TOPIC | %s",
+            article.get(
+                "title",
+                ""
+            )
+        )
+
+        return None, None
+
     caption = make_news_caption(
         article
     )
@@ -6355,6 +6788,10 @@ async def main():
         "NEWS STATUS = ENABLED | MAX=%s/DAY | GAP=%s MIN",
         NEWS_TOTAL_MAX_PER_DAY,
         NEWS_MIN_GAP_MINUTES
+    )
+
+    log.info(
+        "NEWS RATE/GOLD/CURRENCY FILTER = ENABLED"
     )
 
     client = TelegramClient(
@@ -7180,6 +7617,27 @@ async def main():
                         error
                     )
 
+            # -------------------------------------------------
+            # کنترل نهایی قبل از ارسال به AI
+            # -------------------------------------------------
+
+            if news_article:
+
+                if is_blocked_rate_gold_news(
+                    news_article
+                ):
+
+                    log.warning(
+                        "NEWS REJECTED BEFORE AI | "
+                        "RATE/GOLD/CURRENCY | %s",
+                        news_article.get(
+                            "title",
+                            ""
+                        )
+                    )
+
+                    news_article = None
+
             if news_article:
 
                 try:
@@ -7236,12 +7694,33 @@ async def main():
                                 "importance"
                             ]
 
-                        news_article = ai_article
+                        # -------------------------------------------------
+                        # کنترل نهایی بعد از AI
+                        # -------------------------------------------------
 
-                        log.info(
-                            "AI NEWS READY | %s",
-                            news_article["title"]
-                        )
+                        if is_blocked_rate_gold_news(
+                            ai_article
+                        ):
+
+                            log.warning(
+                                "AI NEWS BLOCKED AFTER SUMMARY | "
+                                "RATE/GOLD/CURRENCY | %s",
+                                ai_article.get(
+                                    "title",
+                                    ""
+                                )
+                            )
+
+                            news_article = None
+
+                        else:
+
+                            news_article = ai_article
+
+                            log.info(
+                                "AI NEWS READY | %s",
+                                news_article["title"]
+                            )
 
                     else:
 
@@ -7252,6 +7731,26 @@ async def main():
                     log.exception(
                         "AI NEWS FAILED: %s",
                         error
+                    )
+
+                    news_article = None
+
+            # -------------------------------------------------
+            # آخرین کنترل درست قبل از انتشار
+            # -------------------------------------------------
+
+            if news_article:
+
+                if is_blocked_rate_gold_news(
+                    news_article
+                ):
+
+                    log.warning(
+                        "FINAL NEWS BLOCK | RATE/GOLD/CURRENCY | %s",
+                        news_article.get(
+                            "title",
+                            ""
+                        )
                     )
 
                     news_article = None
