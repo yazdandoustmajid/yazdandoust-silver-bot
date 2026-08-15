@@ -1,62 +1,89 @@
 import os
 import asyncio
+import inspect
 
 from rubka import Robot
 
 TOKEN = os.getenv("RUBIKA_TOKEN", "").strip()
 
-CHANNEL_VALUES = [
-    "Yazdandoustsilver",
-    "@Yazdandoustsilver",
-    "https://rubika.ir/Yazdandoustsilver",
-]
-
 
 async def main():
+
     if not TOKEN:
         print("❌ RUBIKA_TOKEN پیدا نشد")
         return
 
     bot = Robot(token=TOKEN)
 
-    print("========== RUBIKA CHANNEL DISCOVERY ==========")
+    print("========== RUBIKA CHANNEL UPDATE TEST ==========")
+    print()
+    print("🤖 BOT CHAT ID:")
+    
+    try:
+        bot_chat_id = await bot.get_bot_chat_id()
+        print(bot_chat_id)
+    except Exception as e:
+        print("خطا:", type(e).__name__, e)
 
-    for value in CHANNEL_VALUES:
+    print()
+    print("========== CHANNEL METHOD ==========")
 
-        print("\n======================================")
-        print("TEST VALUE:")
-        print(value)
-        print("======================================")
+    method = getattr(bot, "on_message_channel", None)
 
-        # -----------------------------
-        # get_chat
-        # -----------------------------
-        try:
-            result = await bot.get_chat(value)
+    if method is None:
+        print("❌ on_message_channel پیدا نشد")
+        return
 
-            print("\nGET_CHAT RESULT:")
-            print(result)
+    print("✅ on_message_channel پیدا شد")
 
-        except Exception as e:
-            print("\nGET_CHAT ERROR:")
-            print(type(e).__name__, e)
+    try:
+        print("SIGNATURE:")
+        print(inspect.signature(method))
+    except Exception as e:
+        print("SIGNATURE ERROR:", e)
 
-        # -----------------------------
-        # get_chat_info
-        # -----------------------------
-        try:
-            result = await bot.get_chat_info(value)
+    print()
+    print("====================================")
+    print("حالا یک پیام تست داخل کانال بفرست.")
+    print("====================================")
+    print()
 
-            print("\nGET_CHAT_INFO RESULT:")
-            print(result)
+    # دریافت آپدیت‌ها
+    try:
+        result = await bot.get_updates(limit=100)
 
-        except Exception as e:
-            print("\nGET_CHAT_INFO ERROR:")
-            print(type(e).__name__, e)
+        print("========== RAW UPDATES ==========")
+        print(result)
+        print("=================================")
 
-    print("\n======================================")
-    print("DONE")
-    print("======================================")
+        updates = result.get("data", {}).get("updates", [])
+
+        print()
+        print("تعداد Update ها:", len(updates))
+        print()
+
+        for i, update in enumerate(updates, 1):
+
+            print(f"---------- UPDATE {i} ----------")
+
+            print("TYPE:")
+            print(update.get("type"))
+
+            print("CHAT ID:")
+            print(update.get("chat_id"))
+
+            print("FULL UPDATE:")
+            print(update)
+
+            print()
+
+    except Exception as e:
+        print("❌ GET UPDATES ERROR:")
+        print(type(e).__name__, e
+
+        )
+
+    print("========== DONE ==========")
 
 
 asyncio.run(main())
