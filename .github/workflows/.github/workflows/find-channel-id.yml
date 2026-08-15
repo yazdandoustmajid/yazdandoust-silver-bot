@@ -1,0 +1,30 @@
+name: Find Rubika Channel ID
+
+on:
+  workflow_dispatch:
+
+jobs:
+  find-channel-id:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Rubika Web API
+        run: |
+          python -m pip install --upgrade pip
+          pip install rubka-webapi==3.7.9
+
+      - name: Find Channel ID
+        env:
+          RUBIKA_AUTH_KEY: ${{ secrets.RUBIKA_AUTH_KEY }}
+          RUBIKA_PRIVATE_KEY: ${{ secrets.RUBIKA_PRIVATE_KEY }}
+        run: |
+          python find_channel_id_client.py
