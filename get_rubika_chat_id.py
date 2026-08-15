@@ -1,9 +1,16 @@
 import os
 import asyncio
-import inspect
+
 from rubka import Robot
 
 TOKEN = os.getenv("RUBIKA_TOKEN", "").strip()
+
+CHANNEL_VALUES = [
+    "Yazdandoustsilver",
+    "@Yazdandoustsilver",
+    "https://rubika.ir/Yazdandoustsilver",
+]
+
 
 async def main():
     if not TOKEN:
@@ -12,30 +19,44 @@ async def main():
 
     bot = Robot(token=TOKEN)
 
-    print("========== RUBIKA BOT CHAT ID ==========")
+    print("========== RUBIKA CHANNEL DISCOVERY ==========")
 
-    try:
-        bot_chat_id = await bot.get_bot_chat_id()
+    for value in CHANNEL_VALUES:
 
-        print("BOT CHAT ID:")
-        print(bot_chat_id)
+        print("\n======================================")
+        print("TEST VALUE:")
+        print(value)
+        print("======================================")
 
-    except Exception as e:
-        print("❌ get_bot_chat_id ERROR:")
-        print(type(e).__name__, e)
+        # -----------------------------
+        # get_chat
+        # -----------------------------
+        try:
+            result = await bot.get_chat(value)
 
-    print("\n========== UPDATE CHECK ==========")
+            print("\nGET_CHAT RESULT:")
+            print(result)
 
-    try:
-        updates = await bot.get_updates(limit=100)
+        except Exception as e:
+            print("\nGET_CHAT ERROR:")
+            print(type(e).__name__, e)
 
-        print("RAW UPDATES:")
-        print(updates)
+        # -----------------------------
+        # get_chat_info
+        # -----------------------------
+        try:
+            result = await bot.get_chat_info(value)
 
-    except Exception as e:
-        print("❌ get_updates ERROR:")
-        print(type(e).__name__, e)
+            print("\nGET_CHAT_INFO RESULT:")
+            print(result)
 
-    print("\n========== DONE ==========")
+        except Exception as e:
+            print("\nGET_CHAT_INFO ERROR:")
+            print(type(e).__name__, e)
+
+    print("\n======================================")
+    print("DONE")
+    print("======================================")
+
 
 asyncio.run(main())
