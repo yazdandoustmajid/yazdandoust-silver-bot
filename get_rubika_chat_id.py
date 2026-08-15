@@ -1,4 +1,5 @@
 import os
+import asyncio
 from rubka import Robot
 
 token = os.getenv("RUBIKA_TOKEN", "").strip()
@@ -11,18 +12,24 @@ print("✅ RUBIKA_TOKEN پیدا شد")
 
 bot = Robot(token=token)
 
-try:
-    result = bot.get_updates(limit=20)
 
-    print("\n========== RUBIKA UPDATES ==========\n")
-    print(result)
-    print("\n====================================\n")
+async def main():
+    try:
+        result = await bot.get_updates(limit=20)
 
-    updates = result.get("updates", []) if isinstance(result, dict) else []
+        print("\n========== RUBIKA UPDATES ==========\n")
+        print(result)
+        print("\n====================================\n")
 
-    if not updates:
-        print("⚠️ هیچ Updateای پیدا نشد.")
-    else:
+        if isinstance(result, dict):
+            updates = result.get("updates", [])
+        else:
+            updates = []
+
+        if not updates:
+            print("⚠️ هیچ Updateای پیدا نشد.")
+            return
+
         print(f"✅ تعداد Updateها: {len(updates)}")
 
         for i, update in enumerate(updates, 1):
@@ -30,6 +37,7 @@ try:
             print(update)
 
             if isinstance(update, dict):
+
                 chat_id = update.get("chat_id")
 
                 if chat_id:
@@ -43,7 +51,10 @@ try:
                     if nested_chat_id:
                         print(f"🎯 NESTED CHAT_ID = {nested_chat_id}")
 
-except Exception as e:
-    print("❌ ERROR:")
-    print(type(e).__name__, str(e))
-    raise
+    except Exception as e:
+        print("❌ ERROR:")
+        print(type(e).__name__, str(e))
+        raise
+
+
+asyncio.run(main())
