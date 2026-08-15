@@ -4,24 +4,41 @@ from rubka import Robot
 
 TOKEN = os.getenv("RUBIKA_TOKEN", "").strip()
 
-if not TOKEN:
-    print("❌ RUBIKA_TOKEN پیدا نشد")
-    raise SystemExit(1)
+CHANNEL_USERNAME = "Yazdandoustsilver"
 
 
 async def main():
+
+    if not TOKEN:
+        print("❌ RUBIKA_TOKEN پیدا نشد")
+        return
+
     bot = Robot(token=TOKEN)
 
-    print("========== RUBIKA BOT INFO ==========")
+    print("========== RUBIKA CHANNEL TEST ==========")
+    print(f"CHANNEL USERNAME: {CHANNEL_USERNAME}")
+    print()
 
-    try:
-        result = await bot.get_me()
-        print(result)
-    except Exception as e:
-        print("❌ get_me ERROR:")
-        print(type(e).__name__, str(e))
+    # 1) بررسی متدهای موجود در نسخه Rubka نصب‌شده
+    print("========== AVAILABLE METHODS ==========")
 
-    print("=====================================")
+    methods = [
+        x for x in dir(bot)
+        if not x.startswith("_")
+    ]
+
+    for name in methods:
+        if any(word in name.lower() for word in [
+            "chat",
+            "channel",
+            "search",
+            "username",
+            "object"
+        ]):
+            print(name)
+
+    print()
+    print("========================================")
 
 
 asyncio.run(main())
