@@ -1,7 +1,5 @@
 import os
 import asyncio
-import inspect
-
 from rubka import Robot
 
 TOKEN = os.getenv("RUBIKA_TOKEN", "").strip()
@@ -15,75 +13,93 @@ async def main():
 
     bot = Robot(token=TOKEN)
 
-    print("========== RUBIKA CHANNEL UPDATE TEST ==========")
-    print()
-    print("🤖 BOT CHAT ID:")
-    
+    print("=" * 60)
+    print("       RUBIKA CHANNEL LISTENER TEST")
+    print("=" * 60)
+
     try:
         bot_chat_id = await bot.get_bot_chat_id()
+        print("🤖 BOT CHAT ID:")
         print(bot_chat_id)
     except Exception as e:
-        print("خطا:", type(e).__name__, e)
+        print("❌ BOT CHAT ID ERROR:")
+        print(type(e).__name__, e)
 
     print()
-    print("========== CHANNEL METHOD ==========")
+    print("=" * 60)
+    print("📡 ثبت Listener کانال...")
+    print("=" * 60)
 
-    method = getattr(bot, "on_message_channel", None)
-
-    if method is None:
-        print("❌ on_message_channel پیدا نشد")
-        return
-
-    print("✅ on_message_channel پیدا شد")
-
-    try:
-        print("SIGNATURE:")
-        print(inspect.signature(method))
-    except Exception as e:
-        print("SIGNATURE ERROR:", e)
-
-    print()
-    print("====================================")
-    print("حالا یک پیام تست داخل کانال بفرست.")
-    print("====================================")
-    print()
-
-    # دریافت آپدیت‌ها
-    try:
-        result = await bot.get_updates(limit=100)
-
-        print("========== RAW UPDATES ==========")
-        print(result)
-        print("=================================")
-
-        updates = result.get("data", {}).get("updates", [])
+    @bot.on_message_channel()
+    async def channel_message_handler(message):
 
         print()
-        print("تعداد Update ها:", len(updates))
+        print("=" * 60)
+        print("🎯🎯🎯 CHANNEL MESSAGE RECEIVED 🎯🎯🎯")
+        print("=" * 60)
+
+        print("TYPE:")
+        print(type(message))
+
         print()
+        print("CHAT ID:")
+        print(getattr(message, "chat_id", None))
 
-        for i, update in enumerate(updates, 1):
+        print()
+        print("MESSAGE ID:")
+        print(getattr(message, "message_id", None))
 
-            print(f"---------- UPDATE {i} ----------")
+        print()
+        print("TEXT:")
+        print(getattr(message, "text", None))
 
-            print("TYPE:")
-            print(update.get("type"))
+        print()
+        print("SENDER ID:")
+        print(getattr(message, "sender_id", None))
 
-            print("CHAT ID:")
-            print(update.get("chat_id"))
+        print()
+        print("RAW MESSAGE:")
+        print(message)
 
-            print("FULL UPDATE:")
-            print(update)
+        print()
+        print("=" * 60)
+        print("✅ CHANNEL CHAT ID FOUND")
+        print("=" * 60)
 
+        print()
+        print("📌 CHAT ID:")
+        print(getattr(message, "chat_id", None))
+
+        print()
+        print("=" * 60)
+
+    print()
+    print("=" * 60)
+    print("🟢 LISTENER فعال شد")
+    print("=" * 60)
+    print()
+    print("حالا داخل کانال یک پیام بفرست:")
+    print()
+    print("تست ربات")
+    print()
+    print("⏳ منتظر پیام کانال...")
+    print()
+
+    # اجرای دائمی ربات
+    try:
+        await bot.run()
+    except TypeError:
+        try:
+            bot.run()
+        except Exception as e:
             print()
+            print("❌ BOT RUN ERROR:")
+            print(type(e).__name__, e)
 
     except Exception as e:
-        print("❌ GET UPDATES ERROR:")
-        print(type(e).__name__, e
-
-        )
-
-    print("========== DONE ==========")
+        print()
+        print("❌ BOT RUN ERROR:")
+        print(type(e).__name__, e)
 
 
 asyncio.run(main())
