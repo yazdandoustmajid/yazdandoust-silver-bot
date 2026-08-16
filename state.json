@@ -87,7 +87,8 @@
     326,
     328,
     329,
-    331
+    331,
+    332
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -133,5 +134,6 @@
   "dollar_alert_base": 187600.0,
   "shot_alert_base": 391000.0,
   "1405/05/24_tomorrow_look": true,
-  "1405/05/25_morning": true
+  "1405/05/25_morning": true,
+  "1405/05/25_daily_calendar": true
 }
