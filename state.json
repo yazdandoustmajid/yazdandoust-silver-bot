@@ -93,7 +93,8 @@
     334,
     338,
     343,
-    344
+    344,
+    345
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -227,5 +228,6 @@
   "1405/05/25_daily_calendar": true,
   "1405/05/25_market_pulse": true,
   "1405/05/25_start_trades": true,
-  "1405/05/25_tomorrow_look": true
+  "1405/05/25_tomorrow_look": true,
+  "1405/05/25_end_trades": true
 }
