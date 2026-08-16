@@ -89,7 +89,8 @@
     329,
     331,
     332,
-    333
+    333,
+    334
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -136,6 +137,13 @@
       "silver_ounce": 64.82,
       "gold_ounce": null,
       "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T12:30:40.232077+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
     }
   ],
   "silver_alert_base": 64.82,
@@ -143,5 +151,6 @@
   "shot_alert_base": 391000.0,
   "1405/05/24_tomorrow_look": true,
   "1405/05/25_morning": true,
-  "1405/05/25_daily_calendar": true
+  "1405/05/25_daily_calendar": true,
+  "1405/05/25_market_pulse": true
 }
