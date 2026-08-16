@@ -52,7 +52,8 @@
   "morning_message_history": [
     0,
     2,
-    4
+    4,
+    6
   ],
   "1405/05/22_morning": true,
   "1405/05/22_daily_calendar": true,
@@ -85,7 +86,8 @@
     325,
     326,
     328,
-    329
+    329,
+    331
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -130,5 +132,6 @@
   "silver_alert_base": 64.82,
   "dollar_alert_base": 187600.0,
   "shot_alert_base": 391000.0,
-  "1405/05/24_tomorrow_look": true
+  "1405/05/24_tomorrow_look": true,
+  "1405/05/25_morning": true
 }
