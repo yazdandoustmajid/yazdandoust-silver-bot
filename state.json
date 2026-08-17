@@ -4,16 +4,16 @@
   "world_news_count": 5,
   "news_count": 5,
   "news_last_posted_at": "2026-08-17T18:29:36.724483+03:30",
-  "source_message_id": 34499,
-  "target_message_id": 362,
-  "ounce": 65.81,
+  "source_message_id": 34501,
+  "target_message_id": 364,
+  "ounce": 66.3,
   "tehran": 187000,
-  "shot_995": 396000,
-  "nader_9999": 411000,
-  "mithqal_995": 1824900,
-  "shot_package": 396000000,
-  "nader_package": 411000000,
-  "updated_at": "2026-08-17T15:58:33.822590+03:30",
+  "shot_995": 399000,
+  "nader_9999": 414000,
+  "mithqal_995": 1838700,
+  "shot_package": 399000000,
+  "nader_package": 414000000,
+  "updated_at": "2026-08-17T19:25:13.628619+03:30",
   "news_history": [
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
@@ -53,7 +53,7 @@
   "last_news_message_id": 363,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
-  "price_signature": "{\"mithqal_995\": 1824900, \"nader_9999\": 411000, \"ounce\": 65.81, \"shot_995\": 396000, \"tehran\": 187000}",
+  "price_signature": "{\"mithqal_995\": 1838700, \"nader_9999\": 414000, \"ounce\": 66.3, \"shot_995\": 399000, \"tehran\": 187000}",
   "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
   "morning_message_history": [
     0,
@@ -118,7 +118,8 @@
     358,
     361,
     362,
-    363
+    363,
+    364
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -312,6 +313,13 @@
       "silver_ounce": 65.81,
       "gold_ounce": null,
       "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-17T19:25:13.629475+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 66.3,
+      "gold_ounce": null,
+      "shot_995": 399000.0
     }
   ],
   "silver_alert_base": 64.82,
