@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/26",
   "economic_news_count": 0,
-  "world_news_count": 3,
-  "news_count": 3,
-  "news_last_posted_at": "2026-08-17T08:54:40.826163+03:30",
+  "world_news_count": 4,
+  "news_count": 4,
+  "news_last_posted_at": "2026-08-17T15:27:19.449763+03:30",
   "source_message_id": 34495,
   "target_message_id": 358,
   "ounce": 65.64,
@@ -46,9 +46,10 @@
     "https://www.bbc.com/persian/live/c6m2gjrgd44yt",
     "https://www.bbc.com/persian/articles/cly55wgynnjo",
     "https://www.bbc.com/persian/articles/cp3005ngey9o",
-    "https://www.bbc.com/persian/articles/c62qq279knxo"
+    "https://www.bbc.com/persian/articles/c62qq279knxo",
+    "https://www.bbc.com/persian/articles/c4gwkxqy0k1o"
   ],
-  "last_news_message_id": 355,
+  "last_news_message_id": 361,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1801800, \"nader_9999\": 411000, \"ounce\": 65.64, \"shot_995\": 391000, \"tehran\": 186500}",
@@ -76,7 +77,8 @@
     "اردوغان: بازگشایی تنگه هرمز اولویت است",
     "عراق در پی توازن دیپلماتیک میان تهران و واشنگتن",
     "ایران خواستار اعزام تیم کارشناسی به قطر پس از تکذیب دوحه شد",
-    "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد"
+    "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد",
+    "معاون سیاسی سپاه: باز شدن تنگه هرمز منوط به اجرای تفاهم اسلام‌آباد"
   ],
   "rubika_auto_telegram_message_ids": [
     309,
@@ -111,7 +113,8 @@
     355,
     356,
     357,
-    358
+    358,
+    361
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -256,6 +259,13 @@
       "silver_ounce": 65.64,
       "gold_ounce": null,
       "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-17T15:26:48.985379+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 65.64,
+      "gold_ounce": null,
+      "shot_995": 391000.0
     }
   ],
   "silver_alert_base": 64.82,
@@ -291,6 +301,12 @@
       "timestamp": "2026-08-17T08:54:40.826183+03:30",
       "title": "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد",
       "url": "https://www.bbc.com/persian/articles/c62qq279knxo",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T15:27:19.449786+03:30",
+      "title": "معاون سیاسی سپاه: باز شدن تنگه هرمز منوط به اجرای تفاهم اسلام‌آباد",
+      "url": "https://www.bbc.com/persian/articles/c4gwkxqy0k1o",
       "category": "world"
     }
   ],
