@@ -124,7 +124,8 @@
     364,
     365,
     366,
-    367
+    367,
+    369
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -391,5 +392,65 @@
   "1405/05/26_morning": true,
   "1405/05/26_start_trades": true,
   "1405/05/26_market_pulse_evening": true,
-  "1405/05/26_tomorrow_look": true
+  "1405/05/26_tomorrow_look": true,
+  "market_analysis_sent_at": "2026-08-17T22:06:02.104270+03:30",
+  "last_market_analysis_snapshot": {
+    "silver": {
+      "current": 66.3,
+      "levels": {
+        "support": null,
+        "resistance": null,
+        "support_2": null,
+        "resistance_2": null
+      }
+    },
+    "gold": {
+      "current": null,
+      "levels": {
+        "support": null,
+        "resistance": null,
+        "support_2": null,
+        "resistance_2": null
+      }
+    },
+    "tehran_dollar": {
+      "current": 187000.0,
+      "levels": {
+        "support": 186500.0,
+        "support_2": 186000.0,
+        "resistance": 187600.0,
+        "resistance_2": null
+      }
+    },
+    "shot_995": {
+      "current": 399000.0,
+      "levels": {
+        "support": 396000.0,
+        "support_2": 391000.0,
+        "resistance": null,
+        "resistance_2": null
+      }
+    },
+    "dxy": {
+      "current": 99.61699676513672,
+      "daily_change_percent": -0.05317688851438914
+    },
+    "oil": {
+      "current": 84.66000366210938,
+      "daily_change_percent": 2.742720988325082
+    },
+    "us10y": {
+      "current": 4.727999687194824,
+      "daily_change_percent": 0.681422217564869
+    },
+    "sp500": {
+      "current": 7754.77001953125,
+      "daily_change_percent": -0.3980311109851243
+    },
+    "vix": {
+      "current": 15.149999618530273,
+      "daily_change_percent": 6.315786796703674
+    },
+    "gold_silver_ratio": null
+  }
 }
