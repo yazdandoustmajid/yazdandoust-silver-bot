@@ -128,7 +128,9 @@
     366,
     367,
     369,
-    370
+    370,
+    371,
+    372
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -461,5 +463,6 @@
       "daily_change_percent": 6.315786796703674
     },
     "gold_silver_ratio": null
-  }
+  },
+  "1405/05/26_daily_silver_visual_analysis": true
 }
