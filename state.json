@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/26",
   "economic_news_count": 0,
-  "world_news_count": 2,
-  "news_count": 2,
-  "news_last_posted_at": "2026-08-17T03:09:56.253757+03:30",
+  "world_news_count": 3,
+  "news_count": 3,
+  "news_last_posted_at": "2026-08-17T08:54:40.826163+03:30",
   "source_message_id": 34477,
   "target_message_id": 343,
   "ounce": 64.82,
@@ -45,9 +45,10 @@
     "https://news.google.com/rss/search?q=%D8%A7%DB%8C%D8%B1%D8%A7%D9%86+%D8%A2%D9%85%D8%B1%DB%8C%DA%A9%D8%A7+%D8%A7%D8%B3%D8%B1%D8%A7%D8%A6%DB%8C%D9%84+%D8%AC%D9%86%DA%AF&hl=fa&gl=IR&ceid=IR:fa",
     "https://www.bbc.com/persian/live/c6m2gjrgd44yt",
     "https://www.bbc.com/persian/articles/cly55wgynnjo",
-    "https://www.bbc.com/persian/articles/cp3005ngey9o"
+    "https://www.bbc.com/persian/articles/cp3005ngey9o",
+    "https://www.bbc.com/persian/articles/c62qq279knxo"
   ],
-  "last_news_message_id": 352,
+  "last_news_message_id": 355,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1778800, \"nader_9999\": 410000, \"ounce\": 64.82, \"shot_995\": 386000, \"tehran\": 186800}",
@@ -56,7 +57,8 @@
     0,
     2,
     4,
-    6
+    6,
+    1
   ],
   "1405/05/22_morning": true,
   "1405/05/22_daily_calendar": true,
@@ -73,7 +75,8 @@
     "بیانیه بیش از 200 دانشگاهی و هنرمند علیه تهدیدهای آمریکا",
     "اردوغان: بازگشایی تنگه هرمز اولویت است",
     "عراق در پی توازن دیپلماتیک میان تهران و واشنگتن",
-    "ایران خواستار اعزام تیم کارشناسی به قطر پس از تکذیب دوحه شد"
+    "ایران خواستار اعزام تیم کارشناسی به قطر پس از تکذیب دوحه شد",
+    "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد"
   ],
   "rubika_auto_telegram_message_ids": [
     309,
@@ -103,7 +106,9 @@
     345,
     346,
     347,
-    352
+    352,
+    354,
+    355
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -257,6 +262,13 @@
       "title": "ایران خواستار اعزام تیم کارشناسی به قطر پس از تکذیب دوحه شد",
       "url": "https://www.bbc.com/persian/articles/cp3005ngey9o",
       "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T08:54:40.826183+03:30",
+      "title": "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد",
+      "url": "https://www.bbc.com/persian/articles/c62qq279knxo",
+      "category": "world"
     }
-  ]
+  ],
+  "1405/05/26_morning": true
 }
