@@ -4,16 +4,16 @@
   "world_news_count": 3,
   "news_count": 3,
   "news_last_posted_at": "2026-08-17T08:54:40.826163+03:30",
-  "source_message_id": 34490,
-  "target_message_id": 356,
-  "ounce": 66.04,
-  "tehran": 186000,
-  "shot_995": 395000,
-  "nader_9999": 415000,
-  "mithqal_995": 1820300,
-  "shot_package": 395000000,
-  "nader_package": 415000000,
-  "updated_at": "2026-08-17T11:34:09.814018+03:30",
+  "source_message_id": 34495,
+  "target_message_id": 358,
+  "ounce": 65.64,
+  "tehran": 186500,
+  "shot_995": 391000,
+  "nader_9999": 411000,
+  "mithqal_995": 1801800,
+  "shot_package": 391000000,
+  "nader_package": 411000000,
+  "updated_at": "2026-08-17T13:36:52.700185+03:30",
   "news_history": [
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
@@ -51,7 +51,7 @@
   "last_news_message_id": 355,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
-  "price_signature": "{\"mithqal_995\": 1820300, \"nader_9999\": 415000, \"ounce\": 66.04, \"shot_995\": 395000, \"tehran\": 186000}",
+  "price_signature": "{\"mithqal_995\": 1801800, \"nader_9999\": 411000, \"ounce\": 65.64, \"shot_995\": 391000, \"tehran\": 186500}",
   "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
   "morning_message_history": [
     0,
@@ -110,7 +110,8 @@
     354,
     355,
     356,
-    357
+    357,
+    358
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -241,6 +242,13 @@
       "silver_ounce": 66.04,
       "gold_ounce": null,
       "shot_995": 395000.0
+    },
+    {
+      "timestamp": "2026-08-17T13:36:52.700858+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 65.64,
+      "gold_ounce": null,
+      "shot_995": 391000.0
     }
   ],
   "silver_alert_base": 64.82,
