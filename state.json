@@ -1,9 +1,9 @@
 {
-  "news_date": "1405/05/26",
+  "news_date": "1405/05/27",
   "economic_news_count": 1,
-  "world_news_count": 6,
-  "news_count": 7,
-  "news_last_posted_at": "2026-08-17T22:57:02.525267+03:30",
+  "world_news_count": 0,
+  "news_count": 1,
+  "news_last_posted_at": "2026-08-18T00:00:49.140624+03:30",
   "source_message_id": 34501,
   "target_message_id": 364,
   "ounce": 66.3,
@@ -50,9 +50,10 @@
     "https://www.bbc.com/persian/articles/c4gwkxqy0k1o",
     "https://www.bbc.com/persian/articles/cn8nm51elx7o",
     "https://www.bbc.com/persian/live/cq9988dzrprpt",
+    "https://t.me/iran_jahan_darlahze/43034",
     "https://t.me/iran_jahan_darlahze/43034"
   ],
-  "last_news_message_id": 370,
+  "last_news_message_id": 373,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1838700, \"nader_9999\": 414000, \"ounce\": 66.3, \"shot_995\": 399000, \"tehran\": 187000}",
@@ -84,7 +85,8 @@
     "معاون سیاسی سپاه: باز شدن تنگه هرمز منوط به اجرای تفاهم اسلام‌آباد",
     "کوشنر پس از گفتگو با حماس در اسرائیل با نتانیاهو دیدار کرد",
     "ترامپ تهدید به بمباران عمان در مناقشه هرمز کرد",
-    "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس"
+    "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس",
+    "بن‌بست مذاکرات ایران و آمریکا درباره تمدید آتش‌بس"
   ],
   "rubika_auto_telegram_message_ids": [
     309,
@@ -130,7 +132,8 @@
     369,
     370,
     371,
-    372
+    372,
+    373
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -396,6 +399,12 @@
     {
       "timestamp": "2026-08-17T22:57:02.525288+03:30",
       "title": "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس",
+      "url": "https://t.me/iran_jahan_darlahze/43034",
+      "category": "telegram"
+    },
+    {
+      "timestamp": "2026-08-18T00:00:49.140645+03:30",
+      "title": "بن‌بست مذاکرات ایران و آمریکا درباره تمدید آتش‌بس",
       "url": "https://t.me/iran_jahan_darlahze/43034",
       "category": "telegram"
     }
