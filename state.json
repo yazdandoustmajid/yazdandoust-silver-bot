@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/26",
-  "economic_news_count": 0,
+  "economic_news_count": 1,
   "world_news_count": 6,
-  "news_count": 6,
-  "news_last_posted_at": "2026-08-17T20:31:27.646945+03:30",
+  "news_count": 7,
+  "news_last_posted_at": "2026-08-17T22:57:02.525267+03:30",
   "source_message_id": 34501,
   "target_message_id": 364,
   "ounce": 66.3,
@@ -49,9 +49,10 @@
     "https://www.bbc.com/persian/articles/c62qq279knxo",
     "https://www.bbc.com/persian/articles/c4gwkxqy0k1o",
     "https://www.bbc.com/persian/articles/cn8nm51elx7o",
-    "https://www.bbc.com/persian/live/cq9988dzrprpt"
+    "https://www.bbc.com/persian/live/cq9988dzrprpt",
+    "https://t.me/iran_jahan_darlahze/43034"
   ],
-  "last_news_message_id": 366,
+  "last_news_message_id": 370,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1838700, \"nader_9999\": 414000, \"ounce\": 66.3, \"shot_995\": 399000, \"tehran\": 187000}",
@@ -82,7 +83,8 @@
     "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد",
     "معاون سیاسی سپاه: باز شدن تنگه هرمز منوط به اجرای تفاهم اسلام‌آباد",
     "کوشنر پس از گفتگو با حماس در اسرائیل با نتانیاهو دیدار کرد",
-    "ترامپ تهدید به بمباران عمان در مناقشه هرمز کرد"
+    "ترامپ تهدید به بمباران عمان در مناقشه هرمز کرد",
+    "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس"
   ],
   "rubika_auto_telegram_message_ids": [
     309,
@@ -125,7 +127,8 @@
     365,
     366,
     367,
-    369
+    369,
+    370
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -387,6 +390,12 @@
       "title": "ترامپ تهدید به بمباران عمان در مناقشه هرمز کرد",
       "url": "https://www.bbc.com/persian/live/cq9988dzrprpt",
       "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T22:57:02.525288+03:30",
+      "title": "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس",
+      "url": "https://t.me/iran_jahan_darlahze/43034",
+      "category": "telegram"
     }
   ],
   "1405/05/26_morning": true,
