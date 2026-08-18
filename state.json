@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/27",
-  "economic_news_count": 3,
+  "economic_news_count": 4,
   "world_news_count": 3,
-  "news_count": 6,
-  "news_last_posted_at": "2026-08-18T15:35:07.204265+03:30",
+  "news_count": 7,
+  "news_last_posted_at": "2026-08-18T23:01:48.610025+03:30",
   "source_message_id": 34513,
   "target_message_id": 386,
   "ounce": 65.25,
@@ -56,9 +56,10 @@
     "https://www.reuters.com/world/middle-east/kushner-hold-talks-with-netanyahu-after-rare-meeting-with-hamas-2026-08-17/",
     "https://www.bbc.com/persian/articles/cz9772vgg3do",
     "https://www.reuters.com/world/asia-pacific/erdogan-urges-trump-pursue-talks-with-iran-offers-support-2026-08-17/",
-    "https://t.me/IR_Breakingnews/37404"
+    "https://t.me/IR_Breakingnews/37404",
+    "https://t.me/mrgold995/161761"
   ],
-  "last_news_message_id": 387,
+  "last_news_message_id": 404,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1824900, \"nader_9999\": 416000, \"ounce\": 65.25, \"shot_995\": 396000, \"tehran\": 188000}",
@@ -97,7 +98,8 @@
     "مذاکرات کوشنر با اسرائیل و حماس بی‌نتیجه ماند",
     "تلویزیون دولتی روسیه کره‌شمالی را متحد مرفه نشان داد",
     "اردوغان از ترامپ خواست گفت‌وگو با ایران را دنبال کند",
-    "پایان مهلت 60 روزه تفاهم‌نامه ایران و آمریکا"
+    "پایان مهلت 60 روزه تفاهم‌نامه ایران و آمریکا",
+    "ترامپ: هیچ مذاکره‌ای با ایران در جریان نیست"
   ],
   "rubika_auto_telegram_message_ids": [
     309,
@@ -155,7 +157,10 @@
     384,
     386,
     387,
-    403
+    403,
+    404,
+    405,
+    406
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -501,6 +506,12 @@
       "title": "پایان مهلت 60 روزه تفاهم‌نامه ایران و آمریکا",
       "url": "https://t.me/IR_Breakingnews/37404",
       "category": "telegram"
+    },
+    {
+      "timestamp": "2026-08-18T23:01:48.610159+03:30",
+      "title": "ترامپ: هیچ مذاکره‌ای با ایران در جریان نیست",
+      "url": "https://t.me/mrgold995/161761",
+      "category": "telegram_trump"
     }
   ],
   "1405/05/26_morning": true,
@@ -572,5 +583,12 @@
   "1405/05/27_start_trades": true,
   "gold_18_mashhad": 19311600,
   "coin_imami": 192025000,
-  "1405/05/27_end_trades": true
+  "1405/05/27_end_trades": true,
+  "news_fingerprint_history": [
+    "ترامپ هیچ مذاکره ایران جریان نیست ترامپ اعلام کرد هیچ مذاکره گفت وگویی میان ایالات متحده جمهوری اسلامی ایران جریان نیست برنامه برای ترتیب داده نشده گفت محاصره دریایی تمام توان ادامه دارد تنگه هرمز باز فعال است همه مین های دریایی جمع آوری شده اند منهدم شده اند"
+  ],
+  "news_content_history": [
+    "ترامپ هیچ مذاکره ایران جریان نیست ترامپ اعلام کرد هیچ مذاکره گفت وگویی میان ایالات متحده جمهوری اسلامی ایران جریان نیست برنامه برای ترتیب داده نشده گفت محاصره دریایی تمام توان ادامه دارد تنگه هرمز باز فعال است همه مین های دریایی جمع آوری شده اند منهدم شده اند"
+  ],
+  "1405/05/27_daily_silver_visual_analysis": true
 }
