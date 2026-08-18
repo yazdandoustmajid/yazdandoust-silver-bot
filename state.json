@@ -154,7 +154,8 @@
     380,
     384,
     386,
-    387
+    387,
+    403
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -570,5 +571,6 @@
   "1405/05/27_morning": true,
   "1405/05/27_start_trades": true,
   "gold_18_mashhad": 19311600,
-  "coin_imami": 192025000
+  "coin_imami": 192025000,
+  "1405/05/27_end_trades": true
 }
