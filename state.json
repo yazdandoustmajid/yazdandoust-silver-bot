@@ -1,9 +1,9 @@
 {
   "news_date": "1405/05/27",
   "economic_news_count": 2,
-  "world_news_count": 0,
-  "news_count": 2,
-  "news_last_posted_at": "2026-08-18T02:23:05.687610+03:30",
+  "world_news_count": 1,
+  "news_count": 3,
+  "news_last_posted_at": "2026-08-18T06:41:00.277995+03:30",
   "source_message_id": 34501,
   "target_message_id": 364,
   "ounce": 66.3,
@@ -52,9 +52,10 @@
     "https://www.bbc.com/persian/live/cq9988dzrprpt",
     "https://t.me/iran_jahan_darlahze/43034",
     "https://t.me/iran_jahan_darlahze/43034",
-    "https://t.me/iran_jahan_darlahze/43034"
+    "https://t.me/iran_jahan_darlahze/43034",
+    "https://www.reuters.com/world/middle-east/kushner-hold-talks-with-netanyahu-after-rare-meeting-with-hamas-2026-08-17/"
   ],
-  "last_news_message_id": 374,
+  "last_news_message_id": 375,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
   "price_signature": "{\"mithqal_995\": 1838700, \"nader_9999\": 414000, \"ounce\": 66.3, \"shot_995\": 399000, \"tehran\": 187000}",
@@ -88,7 +89,8 @@
     "ترامپ تهدید به بمباران عمان در مناقشه هرمز کرد",
     "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس",
     "بن‌بست مذاکرات ایران و آمریکا درباره تمدید آتش‌بس",
-    "بن‌بست در مذاکرات تمدید آتش‌بس میان ایران و آمریکا"
+    "بن‌بست در مذاکرات تمدید آتش‌بس میان ایران و آمریکا",
+    "مذاکرات کوشنر با اسرائیل و حماس بی‌نتیجه ماند"
   ],
   "rubika_auto_telegram_message_ids": [
     309,
@@ -136,7 +138,8 @@
     371,
     372,
     373,
-    374
+    374,
+    375
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -416,6 +419,12 @@
       "title": "بن‌بست در مذاکرات تمدید آتش‌بس میان ایران و آمریکا",
       "url": "https://t.me/iran_jahan_darlahze/43034",
       "category": "telegram"
+    },
+    {
+      "timestamp": "2026-08-18T06:41:00.278010+03:30",
+      "title": "مذاکرات کوشنر با اسرائیل و حماس بی‌نتیجه ماند",
+      "url": "https://www.reuters.com/world/middle-east/kushner-hold-talks-with-netanyahu-after-rare-meeting-with-hamas-2026-08-17/",
+      "category": "world"
     }
   ],
   "1405/05/26_morning": true,
