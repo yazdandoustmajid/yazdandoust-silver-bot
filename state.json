@@ -65,7 +65,8 @@
     2,
     4,
     6,
-    1
+    1,
+    7
   ],
   "1405/05/22_morning": true,
   "1405/05/22_daily_calendar": true,
@@ -139,7 +140,8 @@
     372,
     373,
     374,
-    375
+    375,
+    376
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -491,5 +493,6 @@
     },
     "gold_silver_ratio": null
   },
-  "1405/05/26_daily_silver_visual_analysis": true
+  "1405/05/26_daily_silver_visual_analysis": true,
+  "1405/05/27_morning": true
 }
