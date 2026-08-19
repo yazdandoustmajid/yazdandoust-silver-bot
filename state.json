@@ -180,7 +180,8 @@
     426,
     427,
     428,
-    432
+    432,
+    434
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -668,8 +669,8 @@
   "1405/05/26_daily_silver_visual_analysis": true,
   "1405/05/27_morning": true,
   "1405/05/27_start_trades": true,
-  "gold_18_mashhad": 19556500,
-  "coin_imami": 194535000,
+  "gold_18_mashhad": 19755800,
+  "coin_imami": 198035000,
   "1405/05/27_end_trades": true,
   "news_fingerprint_history": [
     "ترامپ هیچ مذاکره ایران جریان نیست ترامپ اعلام کرد هیچ مذاکره گفت وگویی میان ایالات متحده جمهوری اسلامی ایران جریان نیست برنامه برای ترتیب داده نشده گفت محاصره دریایی تمام توان ادامه دارد تنگه هرمز باز فعال است همه مین های دریایی جمع آوری شده اند منهدم شده اند",
@@ -692,5 +693,6 @@
   "1405/05/28_mashhad_11": true,
   "gold_alert_base": 4341.43,
   "1405/05/28_mashhad_15": true,
-  "1405/05/28_tomorrow_look": true
+  "1405/05/28_tomorrow_look": true,
+  "1405/05/28_end_trades": true
 }
