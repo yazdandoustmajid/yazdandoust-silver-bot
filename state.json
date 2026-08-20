@@ -222,7 +222,8 @@
     459,
     460,
     463,
-    464
+    464,
+    467
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -869,5 +870,6 @@
   "1405/05/29_mashhad_11": true,
   "1405/05/29_mashhad_15": true,
   "1405/05/29_mashhad_18": true,
-  "1405/05/29_market_pulse_evening": true
+  "1405/05/29_market_pulse_evening": true,
+  "1405/05/29_end_trades": true
 }
