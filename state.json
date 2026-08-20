@@ -4,16 +4,16 @@
   "world_news_count": 0,
   "news_count": 6,
   "news_last_posted_at": "2026-08-20T17:41:04.359774+03:30",
-  "source_message_id": 34619,
-  "target_message_id": 452,
-  "ounce": 66.93,
+  "source_message_id": 34631,
+  "target_message_id": 456,
+  "ounce": 67.54,
   "tehran": 190500,
-  "shot_995": 406000,
-  "nader_9999": 425000,
-  "mithqal_995": 1871000,
-  "shot_package": 406000000,
-  "nader_package": 425000000,
-  "updated_at": "2026-08-20T13:25:12.453905+03:30",
+  "shot_995": 411000,
+  "nader_9999": 427000,
+  "mithqal_995": 1894000,
+  "shot_package": 411000000,
+  "nader_package": 427000000,
+  "updated_at": "2026-08-20T18:06:17.684073+03:30",
   "news_history": [
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
@@ -73,7 +73,7 @@
   "last_news_message_id": 455,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
-  "price_signature": "{\"mithqal_995\": 1871000, \"nader_9999\": 425000, \"ounce\": 66.93, \"shot_995\": 406000, \"tehran\": 190500}",
+  "price_signature": "{\"mithqal_995\": 1894000, \"nader_9999\": 427000, \"ounce\": 67.54, \"shot_995\": 411000, \"tehran\": 190500}",
   "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
   "morning_message_history": [
     0,
@@ -215,7 +215,10 @@
     452,
     453,
     454,
-    455
+    455,
+    456,
+    457,
+    458
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -549,11 +552,18 @@
       "silver_ounce": 66.93,
       "gold_ounce": 4491.25,
       "shot_995": 406000.0
+    },
+    {
+      "timestamp": "2026-08-20T18:06:17.685087+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 67.54,
+      "gold_ounce": 4491.25,
+      "shot_995": 411000.0
     }
   ],
   "silver_alert_base": 66.69,
   "dollar_alert_base": 187600.0,
-  "shot_alert_base": 391000.0,
+  "shot_alert_base": 411000.0,
   "1405/05/24_tomorrow_look": true,
   "1405/05/25_morning": true,
   "1405/05/25_daily_calendar": true,
@@ -786,8 +796,8 @@
   "1405/05/26_daily_silver_visual_analysis": true,
   "1405/05/27_morning": true,
   "1405/05/27_start_trades": true,
-  "gold_18_mashhad": 19846900,
-  "coin_imami": 199515000,
+  "gold_18_mashhad": 19852700,
+  "coin_imami": 199540000,
   "1405/05/27_end_trades": true,
   "news_fingerprint_history": [
     "ترامپ هیچ مذاکره ایران جریان نیست ترامپ اعلام کرد هیچ مذاکره گفت وگویی میان ایالات متحده جمهوری اسلامی ایران جریان نیست برنامه برای ترتیب داده نشده گفت محاصره دریایی تمام توان ادامه دارد تنگه هرمز باز فعال است همه مین های دریایی جمع آوری شده اند منهدم شده اند",
@@ -820,9 +830,9 @@
   "1405/05/27_daily_silver_visual_analysis": true,
   "1405/05/28_morning": true,
   "1405/05/28_start_trades": true,
-  "gold_ounce": 4491.25,
-  "gold_ounce_updated_at": "2026-08-20T15:29:37.217298+03:30",
-  "gold_secondhand": 19589600,
+  "gold_ounce": 4488.2,
+  "gold_ounce_updated_at": "2026-08-20T18:06:24.275990+03:30",
+  "gold_secondhand": 19588005,
   "1405/05/28_mashhad_11": true,
   "gold_alert_base": 4341.43,
   "1405/05/28_mashhad_15": true,
@@ -832,5 +842,6 @@
   "1405/05/29_morning": true,
   "1405/05/29_start_trades": true,
   "1405/05/29_mashhad_11": true,
-  "1405/05/29_mashhad_15": true
+  "1405/05/29_mashhad_15": true,
+  "1405/05/29_mashhad_18": true
 }
