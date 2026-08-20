@@ -211,7 +211,8 @@
     449,
     450,
     452,
-    453
+    453,
+    454
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -531,6 +532,13 @@
       "silver_ounce": 66.93,
       "gold_ounce": 4493.38,
       "shot_995": 406000.0
+    },
+    {
+      "timestamp": "2026-08-20T15:29:31.400783+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 66.93,
+      "gold_ounce": 4493.38,
+      "shot_995": 406000.0
     }
   ],
   "silver_alert_base": 66.69,
@@ -762,8 +770,8 @@
   "1405/05/26_daily_silver_visual_analysis": true,
   "1405/05/27_morning": true,
   "1405/05/27_start_trades": true,
-  "gold_18_mashhad": 19759400,
-  "coin_imami": 198020000,
+  "gold_18_mashhad": 19846900,
+  "coin_imami": 199515000,
   "1405/05/27_end_trades": true,
   "news_fingerprint_history": [
     "ترامپ هیچ مذاکره ایران جریان نیست ترامپ اعلام کرد هیچ مذاکره گفت وگویی میان ایالات متحده جمهوری اسلامی ایران جریان نیست برنامه برای ترتیب داده نشده گفت محاصره دریایی تمام توان ادامه دارد تنگه هرمز باز فعال است همه مین های دریایی جمع آوری شده اند منهدم شده اند",
@@ -794,9 +802,9 @@
   "1405/05/27_daily_silver_visual_analysis": true,
   "1405/05/28_morning": true,
   "1405/05/28_start_trades": true,
-  "gold_ounce": 4493.38,
-  "gold_ounce_updated_at": "2026-08-20T11:36:56.705601+03:30",
-  "gold_secondhand": 19495985,
+  "gold_ounce": 4491.25,
+  "gold_ounce_updated_at": "2026-08-20T15:29:37.217298+03:30",
+  "gold_secondhand": 19589600,
   "1405/05/28_mashhad_11": true,
   "gold_alert_base": 4341.43,
   "1405/05/28_mashhad_15": true,
@@ -805,5 +813,6 @@
   "1405/05/28_daily_silver_visual_analysis": true,
   "1405/05/29_morning": true,
   "1405/05/29_start_trades": true,
-  "1405/05/29_mashhad_11": true
+  "1405/05/29_mashhad_11": true,
+  "1405/05/29_mashhad_15": true
 }
