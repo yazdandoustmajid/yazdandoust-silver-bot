@@ -929,8 +929,15 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437252,
+  "manual_price_update_offset": 809437255,
   "manual_price_checkpoint_initialized": true,
   "manual_price_overrides": {},
-  "price_menu_stage": "main"
+  "price_menu_stage": "edit",
+  "price_menu_field": null,
+  "price_menu_draft": {
+    "ounce": 68.3,
+    "tehran": 190000,
+    "shot_995": 416000,
+    "nader_9999": 430000
+  }
 }
