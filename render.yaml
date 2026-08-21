@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: yazdandoust-store
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: STORE_ADMIN_USER
+        sync: false
+      - key: STORE_ADMIN_PASSWORD
+        sync: false
+      - key: STORE_SECRET_KEY
+        generateValue: true

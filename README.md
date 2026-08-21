@@ -1,46 +1,29 @@
-# Yazdandoust Silver Rate Bot v2
+# Yazdandoust Silver Store
 
-نسخه نهایی‌تر برای نرخ‌دهی ساچمه نقره ۹۹۵.
+Store + Telegram Mini App starter for Yazdandoust Silver.
 
-## منطق
-- قیمت تئوریک: انس جهانی × دلار ÷ 31.1034768 × 0.995
-- پرمیوم بازار به صورت دستی و تومان
-- نرخ عمومی روی مضرب ۵٬۰۰۰ تومان
-- اگر تغییر نرخ عمومی کمتر از ۵٬۰۰۰ تومان باشد، پیام کانال تغییر نمی‌کند
-- بررسی خودکار هر ۵ دقیقه
-- فقط در بازه ۱۱:۰۰ تا قبل از ۲۱:۰۰
-- همان پیام نرخ در کانال ویرایش می‌شود
-- SQLite برای نگهداری تاریخچه
-- گزارش ۲۱:۰۰ شامل بیشترین، کمترین، آخرین و تغییر نسبت به شروع
-- انس از MetalpriceAPI
-- دلار آزاد از API Developers Iran
+## Categories
+- Silver shot 995
+- Silver bullion
+- 925 silver products
+  - Service
+  - Half-set
+  - Earrings
+  - Rings
 
-## نکته داده‌ها
-MetalpriceAPI برای XAG داده اسپات می‌دهد و تأخیر بسته به پلن متفاوت است؛ پلن رایگان روزانه است و برای نرخ‌دهی چنددقیقه‌ای باید پلن متناسب داشته باشید.
-API Developers Iran نرخ‌های بازار آزاد ارز را ارائه می‌کند و در مستنداتش به بروزرسانی معمولاً ۵ دقیقه‌ای اشاره شده است.
+## Pricing
+925 products: weight (grams) × global 925 product price-per-gram.
+Silver shot 995 uses the configurable base price plus the weight markup rules.
 
-## راه‌اندازی
+## Run locally
 1. Python 3.11+
-2. `pip install -r requirements.txt`
-3. `.env.example` را به `.env` تبدیل کن.
-4. مقادیر را وارد کن.
-5. `python bot.py`
+2. `python -m venv .venv`
+3. Activate the environment
+4. `pip install -r requirements.txt`
+5. `python app.py`
+6. Open http://127.0.0.1:8000
 
-## تست
-در ربات:
-`/id`
-تا ID عددی خودت را ببینی.
+Admin:
+- http://127.0.0.1:8000/admin
 
-سپس:
-`/start`
-
-## دستورات دستی
-`/setounce 63.45`
-`/setdollar 186000`
-`/setpremium 12500`
-`/calc`
-`/publish`
-`/status`
-
-## امنیت
-توکن BotFather و کلیدهای API را داخل چت یا کانال منتشر نکن.
+This is intentionally separate from the existing GitHub Actions bot. The current bot can later publish its live 995 price to this API without changing its core logic.
