@@ -929,6 +929,13 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437250,
-  "manual_price_checkpoint_initialized": true
+  "manual_price_update_offset": 809437251,
+  "manual_price_checkpoint_initialized": true,
+  "manual_price_overrides": {
+    "shot_995": {
+      "price": 425000,
+      "set_at": "2026-08-21T21:20:45.058894+03:30",
+      "expires_at": "2026-08-21T21:50:45.058882+03:30"
+    }
+  }
 }
