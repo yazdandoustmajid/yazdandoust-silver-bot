@@ -77,14 +77,7 @@
   "price_signature": "{\"mithqal_995\": 1917100, \"nader_9999\": 430000, \"ounce\": 68.3, \"shot_995\": 416000, \"tehran\": 190000}",
   "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
   "morning_message_history": [
-    0,
-    2,
-    4,
-    6,
-    1,
-    7,
-    3,
-    5
+    0
   ],
   "1405/05/22_morning": true,
   "1405/05/22_daily_calendar": true,
@@ -228,7 +221,8 @@
     467,
     469,
     470,
-    471
+    471,
+    472
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -885,5 +879,6 @@
   "1405/05/29_mashhad_18": true,
   "1405/05/29_market_pulse_evening": true,
   "1405/05/29_end_trades": true,
-  "1405/05/29_daily_silver_visual_analysis": true
+  "1405/05/29_daily_silver_visual_analysis": true,
+  "1405/05/30_morning": true
 }
