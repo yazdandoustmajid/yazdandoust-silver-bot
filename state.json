@@ -941,28 +941,14 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437267,
+  "manual_price_update_offset": 809437280,
   "manual_price_checkpoint_initialized": true,
-  "manual_price_overrides": {
-    "ounce": {
-      "price": 69.41,
-      "set_at": "2026-08-21T22:28:51.377372+03:30",
-      "expires_at": "2026-08-21T22:33:51.377372+03:30"
-    },
-    "tehran": {
-      "price": 190500,
-      "set_at": "2026-08-21T22:28:51.377372+03:30",
-      "expires_at": "2026-08-21T22:33:51.377372+03:30"
-    },
-    "shot_995": {
-      "price": 416000,
-      "set_at": "2026-08-21T22:28:51.377372+03:30",
-      "expires_at": "2026-08-21T22:33:51.377372+03:30"
-    },
-    "nader_9999": {
-      "price": 445000,
-      "set_at": "2026-08-21T22:28:51.377372+03:30",
-      "expires_at": "2026-08-21T22:33:51.377372+03:30"
-    }
+  "manual_price_overrides": {},
+  "price_menu_stage": "edit",
+  "price_menu_draft": {
+    "ounce": 69.55,
+    "tehran": 190500,
+    "shot_995": 416000,
+    "nader_9999": 445000
   }
 }
