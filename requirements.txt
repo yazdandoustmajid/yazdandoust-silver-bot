@@ -1,0 +1,6 @@
+telethon
+openai
+requests
+beautifulsoup4
+Pillow
+rubka
