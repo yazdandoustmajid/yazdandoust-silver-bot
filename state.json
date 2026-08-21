@@ -928,5 +928,6 @@
   "1405/05/29_daily_silver_visual_analysis": true,
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
-  "1405/05/30_tomorrow_look": true
+  "1405/05/30_tomorrow_look": true,
+  "manual_price_update_offset": 809437250
 }
