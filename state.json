@@ -229,7 +229,8 @@
     472,
     475,
     476,
-    477
+    477,
+    478
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -904,5 +905,6 @@
   "1405/05/29_end_trades": true,
   "1405/05/29_daily_silver_visual_analysis": true,
   "1405/05/30_morning": true,
-  "1405/05/30_market_recap": true
+  "1405/05/30_market_recap": true,
+  "1405/05/30_tomorrow_look": true
 }
