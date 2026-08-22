@@ -300,7 +300,8 @@
     528,
     529,
     530,
-    532
+    532,
+    533
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -1406,5 +1407,6 @@
   },
   "1405/05/31_mashhad_18": true,
   "1405/05/31_tomorrow_look": true,
-  "1405/05/31_end_trades": true
+  "1405/05/31_end_trades": true,
+  "1405/05/31_daily_silver_visual_analysis": true
 }
