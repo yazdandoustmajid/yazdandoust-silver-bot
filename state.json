@@ -4,16 +4,16 @@
   "world_news_count": 4,
   "news_count": 10,
   "news_last_posted_at": "2026-08-22T10:51:42.695878+03:30",
-  "source_message_id": 34691,
-  "target_message_id": 515,
+  "source_message_id": 34694,
+  "target_message_id": 516,
   "ounce": 69.1,
   "tehran": 191500,
   "shot_995": 426000,
-  "nader_9999": 440000,
+  "nader_9999": 446000,
   "mithqal_995": 1963100,
   "shot_package": 426000000,
-  "nader_package": 440000000,
-  "updated_at": "2026-08-22T13:25:09.335361+03:30",
+  "nader_package": 446000000,
+  "updated_at": "2026-08-22T14:24:03.326790+03:30",
   "news_history": [
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
@@ -92,7 +92,7 @@
   "last_news_message_id": 514,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
-  "price_signature": "{\"mithqal_995\": 1963100, \"nader_9999\": 440000, \"ounce\": 69.1, \"shot_995\": 426000, \"tehran\": 191500}",
+  "price_signature": "{\"mithqal_995\": 1963100, \"nader_9999\": 446000, \"ounce\": 69.1, \"shot_995\": 426000, \"tehran\": 191500}",
   "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
   "morning_message_history": [
     0,
@@ -288,7 +288,8 @@
     512,
     513,
     514,
-    515
+    515,
+    516
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -681,6 +682,13 @@
     },
     {
       "timestamp": "2026-08-22T13:25:09.336681+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T14:24:03.328210+03:30",
       "tehran": 191500.0,
       "silver_ounce": 69.1,
       "gold_ounce": 4488.2,
@@ -1128,7 +1136,7 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437367,
+  "manual_price_update_offset": 809437368,
   "manual_price_checkpoint_initialized": true,
   "manual_price_overrides": {},
   "sales_orders": [
@@ -1200,6 +1208,28 @@
       "coupon_code": "",
       "receipt_kind": "photo",
       "receipt_submitted_at": "2026-08-22T09:23:53.852034+03:30"
+    },
+    {
+      "order_id": "YS-260822-0004",
+      "telegram_id": 7097126535,
+      "customer_key": "7097126535",
+      "unit_price": 426000,
+      "weight": 200,
+      "percent": 2,
+      "base_total": 85200000,
+      "markup_amount": 1704000,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 86904000,
+      "status": "awaiting_name",
+      "created_at": "2026-08-22T14:23:38.862829+03:30",
+      "price_lock_expires_at": "2026-08-22T14:28:38.862829+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": ""
     }
   ],
   "price_menu_stage": "edit",
@@ -1235,12 +1265,12 @@
       "phone": "",
       "address": "",
       "created_at": "2026-08-22T10:50:49.064466+03:30",
-      "last_seen_at": "2026-08-22T10:50:50.661118+03:30",
-      "stage": "weight"
+      "last_seen_at": "2026-08-22T14:23:38.862786+03:30",
+      "stage": "order"
     }
   },
   "1405/05/31_morning": true,
-  "sales_order_sequence": 3,
+  "sales_order_sequence": 4,
   "1405/05/31_economic_calendar": true,
   "1405/05/31_start_trades": true
 }
