@@ -4,16 +4,16 @@
   "world_news_count": 4,
   "news_count": 10,
   "news_last_posted_at": "2026-08-22T10:51:42.695878+03:30",
-  "source_message_id": 34700,
-  "target_message_id": 523,
+  "source_message_id": null,
+  "target_message_id": 525,
   "ounce": 69.1,
   "tehran": 193400,
-  "shot_995": 431000,
+  "shot_995": 428000,
   "nader_9999": 450000,
-  "mithqal_995": 1986200,
-  "shot_package": 431000000,
+  "mithqal_995": 1972400,
+  "shot_package": 428000000,
   "nader_package": 450000000,
-  "updated_at": "2026-08-22T16:31:26.075581+03:30",
+  "updated_at": "2026-08-22T16:48:29.902167+03:30",
   "news_history": [
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
@@ -92,7 +92,7 @@
   "last_news_message_id": 514,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
-  "price_signature": "{\"mithqal_995\": 1986200, \"nader_9999\": 450000, \"ounce\": 69.1, \"shot_995\": 431000, \"tehran\": 193400}",
+  "price_signature": "{\"mithqal_995\": 1972400, \"nader_9999\": 450000, \"ounce\": 69.1, \"shot_995\": 428000, \"tehran\": 193400}",
   "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
   "morning_message_history": [
     0,
@@ -293,7 +293,8 @@
     517,
     518,
     523,
-    524
+    524,
+    525
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -735,6 +736,13 @@
     },
     {
       "timestamp": "2026-08-22T16:31:26.078679+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-22T16:47:27.137124+03:30",
       "tehran": 193400.0,
       "silver_ounce": 69.1,
       "gold_ounce": 4607.35,
@@ -1182,9 +1190,30 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437393,
+  "manual_price_update_offset": 809437402,
   "manual_price_checkpoint_initialized": true,
-  "manual_price_overrides": {},
+  "manual_price_overrides": {
+    "ounce": {
+      "price": 69.1,
+      "set_at": "2026-08-22T16:48:27.662478+03:30",
+      "expires_at": "2026-08-22T17:18:27.662478+03:30"
+    },
+    "tehran": {
+      "price": 193400,
+      "set_at": "2026-08-22T16:48:27.662478+03:30",
+      "expires_at": "2026-08-22T17:18:27.662478+03:30"
+    },
+    "shot_995": {
+      "price": 428000,
+      "set_at": "2026-08-22T16:48:27.662478+03:30",
+      "expires_at": "2026-08-22T17:18:27.662478+03:30"
+    },
+    "nader_9999": {
+      "price": 450000,
+      "set_at": "2026-08-22T16:48:27.662478+03:30",
+      "expires_at": "2026-08-22T17:18:27.662478+03:30"
+    }
+  },
   "sales_orders": [
     {
       "order_id": "YS-260822-0001",
@@ -1323,5 +1352,13 @@
       "one_time": true,
       "discount_policy": "weight_fixed_toman_v1"
     }
+  },
+  "price_menu_stage": "edit",
+  "price_menu_field": null,
+  "price_menu_draft": {
+    "ounce": 69.1,
+    "tehran": 193400,
+    "shot_995": 428000,
+    "nader_9999": 450000
   }
 }
