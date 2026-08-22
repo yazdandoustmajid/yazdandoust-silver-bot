@@ -4,16 +4,16 @@
   "world_news_count": 4,
   "news_count": 10,
   "news_last_posted_at": "2026-08-22T10:51:42.695878+03:30",
-  "source_message_id": 34694,
-  "target_message_id": 516,
+  "source_message_id": 34700,
+  "target_message_id": 523,
   "ounce": 69.1,
-  "tehran": 191500,
-  "shot_995": 426000,
-  "nader_9999": 446000,
-  "mithqal_995": 1963100,
-  "shot_package": 426000000,
-  "nader_package": 446000000,
-  "updated_at": "2026-08-22T14:24:03.326790+03:30",
+  "tehran": 193400,
+  "shot_995": 431000,
+  "nader_9999": 450000,
+  "mithqal_995": 1986200,
+  "shot_package": 431000000,
+  "nader_package": 450000000,
+  "updated_at": "2026-08-22T16:31:26.075581+03:30",
   "news_history": [
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
     "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
@@ -92,7 +92,7 @@
   "last_news_message_id": 514,
   "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
   "last_news_category": "economic",
-  "price_signature": "{\"mithqal_995\": 1963100, \"nader_9999\": 446000, \"ounce\": 69.1, \"shot_995\": 426000, \"tehran\": 191500}",
+  "price_signature": "{\"mithqal_995\": 1986200, \"nader_9999\": 450000, \"ounce\": 69.1, \"shot_995\": 431000, \"tehran\": 193400}",
   "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
   "morning_message_history": [
     0,
@@ -291,7 +291,9 @@
     515,
     516,
     517,
-    518
+    518,
+    523,
+    524
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -730,10 +732,17 @@
       "silver_ounce": 69.1,
       "gold_ounce": 4607.35,
       "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T16:31:26.078679+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
     }
   ],
   "silver_alert_base": 69.0,
-  "dollar_alert_base": 187600.0,
+  "dollar_alert_base": 193400.0,
   "shot_alert_base": 411000.0,
   "1405/05/24_tomorrow_look": true,
   "1405/05/25_morning": true,
@@ -1173,7 +1182,7 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437387,
+  "manual_price_update_offset": 809437393,
   "manual_price_checkpoint_initialized": true,
   "manual_price_overrides": {},
   "sales_orders": [
@@ -1270,14 +1279,6 @@
       "updated_at": "2026-08-22T15:14:29.866446+03:30"
     }
   ],
-  "price_menu_stage": "input",
-  "price_menu_field": "tehran",
-  "price_menu_draft": {
-    "ounce": 69.1,
-    "tehran": 191500,
-    "shot_995": 426000,
-    "nader_9999": 446000
-  },
   "sales_customers": {
     "567647281": {
       "telegram_id": 567647281,
