@@ -267,7 +267,8 @@
     499,
     500,
     501,
-    502
+    502,
+    503
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -1032,7 +1033,7 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437325,
+  "manual_price_update_offset": 809437328,
   "manual_price_checkpoint_initialized": true,
   "manual_price_overrides": {},
   "sales_orders": [
@@ -1070,7 +1071,7 @@
       "coupon_percent": 0,
       "discount_amount": 0,
       "total": 128775000,
-      "status": "awaiting_name",
+      "status": "expired",
       "created_at": "2026-08-22T08:19:47.087927+03:30",
       "price_lock_expires_at": "2026-08-22T08:24:47.087927+03:30",
       "payment_method": "",
@@ -1078,7 +1079,8 @@
       "shipping_address": "",
       "tracking_code": "",
       "referral_code": "",
-      "coupon_code": ""
+      "coupon_code": "",
+      "updated_at": "2026-08-22T08:27:24.087986+03:30"
     }
   ],
   "price_menu_stage": "edit",
@@ -1096,10 +1098,11 @@
       "phone": "09016952334",
       "address": "",
       "created_at": "2026-08-22T08:15:03.319723+03:30",
-      "last_seen_at": "2026-08-22T08:19:47.087887+03:30",
-      "stage": "order"
+      "last_seen_at": "2026-08-22T08:27:30.261713+03:30",
+      "stage": "main"
     }
   },
   "1405/05/31_morning": true,
-  "sales_order_sequence": 2
+  "sales_order_sequence": 2,
+  "1405/05/31_economic_calendar": true
 }
