@@ -723,6 +723,13 @@
       "silver_ounce": 69.1,
       "gold_ounce": 4607.35,
       "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T16:18:58.323011+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 426000.0
     }
   ],
   "silver_alert_base": 69.0,
@@ -1166,7 +1173,7 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437378,
+  "manual_price_update_offset": 809437387,
   "manual_price_checkpoint_initialized": true,
   "manual_price_overrides": {},
   "sales_orders": [
@@ -1263,13 +1270,13 @@
       "updated_at": "2026-08-22T15:14:29.866446+03:30"
     }
   ],
-  "price_menu_stage": "edit",
-  "price_menu_field": null,
+  "price_menu_stage": "input",
+  "price_menu_field": "tehran",
   "price_menu_draft": {
-    "ounce": 69.41,
-    "tehran": 190500,
-    "shot_995": 425000,
-    "nader_9999": 445000
+    "ounce": 69.1,
+    "tehran": 191500,
+    "shot_995": 426000,
+    "nader_9999": 446000
   },
   "sales_customers": {
     "567647281": {
