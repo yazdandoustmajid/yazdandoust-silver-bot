@@ -290,7 +290,8 @@
     514,
     515,
     516,
-    517
+    517,
+    518
   ],
   "1405/05/24_morning": true,
   "1405/05/24_daily_calendar": true,
@@ -700,6 +701,13 @@
       "tehran": 191500.0,
       "silver_ounce": 69.1,
       "gold_ounce": 4488.2,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T15:24:26.309423+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
       "shot_995": 426000.0
     }
   ],
@@ -1128,7 +1136,7 @@
   "gold_ounce_updated_at": "2026-08-22T15:15:24.158845+03:30",
   "gold_secondhand": 20621183,
   "1405/05/28_mashhad_11": true,
-  "gold_alert_base": 4341.43,
+  "gold_alert_base": 4607.35,
   "1405/05/28_mashhad_15": true,
   "1405/05/28_tomorrow_look": true,
   "1405/05/28_end_trades": true,
