@@ -651,6 +651,13 @@
       "silver_ounce": 68.3,
       "gold_ounce": 4488.2,
       "shot_995": 419000.0
+    },
+    {
+      "timestamp": "2026-08-22T10:19:12.759220+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 419000.0
     }
   ],
   "silver_alert_base": 69.0,
@@ -1086,7 +1093,7 @@
   "1405/05/30_morning": true,
   "1405/05/30_market_recap": true,
   "1405/05/30_tomorrow_look": true,
-  "manual_price_update_offset": 809437354,
+  "manual_price_update_offset": 809437355,
   "manual_price_checkpoint_initialized": true,
   "manual_price_overrides": {},
   "sales_orders": [
