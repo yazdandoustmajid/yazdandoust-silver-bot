@@ -1,0 +1,118 @@
+name: Run Silver Sales Bot
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "bot_sales_final.py"
+      - ".github/workflows/sales-bot.yml"
+      - "requirements.txt"
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+      timezone: "Asia/Tehran"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: silver-sales-bot
+  cancel-in-progress: false
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install OCR dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-fas
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytesseract
+
+      - name: Run sales bot
+        env:
+          # THIS IS REQUIRED. Without it bot_sales_final.py defaults to price.
+          BOT_ROLE: sales
+
+          # Sales bot token only.
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+          # Sales admin.
+          ADMIN_TELEGRAM_ID: ${{ secrets.ADMIN_TELEGRAM_ID }}
+          ADMIN_TELEGRAM_USERNAME: ${{ secrets.ADMIN_TELEGRAM_USERNAME }}
+
+          # Sales/payment configuration.
+          PAYMENT_CARD_NUMBER: ${{ secrets.PAYMENT_CARD_NUMBER }}
+          PAYMENT_CARD_NAME: ${{ secrets.PAYMENT_CARD_NAME }}
+          PAYMENT_IBAN: ${{ secrets.PAYMENT_IBAN }}
+          PAYMENT_IBAN_NAME: ${{ secrets.PAYMENT_IBAN_NAME }}
+          PAYMENT_URL: ${{ secrets.PAYMENT_URL }}
+
+          # Optional services used by the sales code.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          RUBIKA_TOKEN: ${{ secrets.RUBIKA_TOKEN }}
+          RUBIKA_CHAT_ID: ${{ secrets.RUBIKA_CHAT_ID }}
+
+          TELEGRAM_SESSION_NAME: sales_bot
+          SOURCE_CHANNEL: tghsilver
+          WEBSITE_URL: https://taghizadegan.com
+          MASHHAD_SOURCE_CHANNEL: taybadonline
+
+        run: |
+          python bot_sales_final.py
+
+      - name: Save state safely
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ ! -f state.json ]; then
+            echo "state.json does not exist. Nothing to save."
+            exit 0
+          fi
+
+          git add state.json
+
+          if git diff --cached --quiet; then
+            echo "No state changes."
+            exit 0
+          fi
+
+          git commit -m "Update sales bot state"
+
+          max_attempts=5
+          for attempt in $(seq 1 "$max_attempts"); do
+            echo "State push attempt $attempt/$max_attempts..."
+
+            if git push origin HEAD:main; then
+              echo "State pushed successfully."
+              exit 0
+            fi
+
+            echo "Remote main changed. Fetching latest main..."
+            git fetch origin main
+            git rebase -X theirs origin/main
+            sleep 2
+          done
+
+          echo "::error::Could not push state.json after $max_attempts attempts."
+          exit 1
