@@ -1423,7 +1423,7 @@
       "coupon_percent": 0,
       "discount_amount": 0,
       "total": 431000000,
-      "status": "awaiting_phone",
+      "status": "expired",
       "created_at": "2026-08-23T00:19:39.744160+03:30",
       "price_lock_expires_at": "2026-08-23T00:29:39.744160+03:30",
       "payment_method": "",
@@ -1431,7 +1431,8 @@
       "shipping_address": "",
       "tracking_code": "",
       "referral_code": "",
-      "coupon_code": ""
+      "coupon_code": "",
+      "updated_at": "2026-08-23T14:50:37.031663+03:30"
     }
   ],
   "sales_customers": {
@@ -1501,5 +1502,6 @@
     "tehran": 198900,
     "shot_995": 451000,
     "nader_9999": 470000
-  }
+  },
+  "sales_bot_update_offset": 809437426
 }
