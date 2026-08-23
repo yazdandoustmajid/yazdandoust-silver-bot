@@ -1,0 +1,1615 @@
+{
+  "news_date": "1405/06/02",
+  "economic_news_count": 2,
+  "world_news_count": 0,
+  "news_count": 2,
+  "news_last_posted_at": "2026-08-24T00:46:41.445014+03:30",
+  "source_message_id": null,
+  "target_message_id": 591,
+  "ounce": 69.1,
+  "tehran": 198900,
+  "shot_995": 451000,
+  "nader_9999": 470000,
+  "mithqal_995": 2078300,
+  "shot_package": 451000000,
+  "nader_package": 470000000,
+  "updated_at": "2026-08-24T00:47:11.671839+03:30",
+  "news_history": [
+    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668967/%D8%B1%D8%A6%DB%8C%D8%B3-%DA%A9%D9%84-%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B1%DA%A9%D8%B2%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%B4%D8%B1%DA%A9%D8%AA-%D8%AF%D8%B1-%D8%A7%D8%AC%D9%84%D8%A7%D8%B3-%D8%A8%D8%B1%DB%8C%DA%A9%D8%B3-%D8%B9%D8%A7%D8%B2%D9%85-%D9%87%D9%86%D8%AF-%D8%B4%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668892/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-20",
+    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668659/%D8%AF%D9%84%D8%A7%D8%B1-%D8%AD%D9%88%D8%A7%D9%84%D9%87-155-%D9%87%D8%B2%D8%A7%D8%B1-%D8%AA%D9%88%D9%85%D8%A7%D9%86%DB%8C-%D8%B4%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668573/%D8%AF%D9%88-%D8%B1%D9%88%DB%8C-%D8%B3%DA%A9%D9%87-%DB%8C%DA%A9%D8%B3%D8%A7%D9%86-%D8%B3%D8%A7%D8%B2%DB%8C-%D8%A7%D8%B1%D8%B2-%D8%A7%D8%B2-%D9%85%D9%82%D8%A7%D9%88%D9%85%D8%AA-%D8%AA%D8%A7-%D8%B1%D8%B4%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/20/3668450/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%82%DB%8C%D9%85%D8%AA-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%A8%D9%87-%D8%A8%D8%A7%D9%84%D8%A7%D8%AA%D8%B1%DB%8C%D9%86-%D8%B1%D9%82%D9%85-%D8%AF%D8%B1-2-%D9%85%D8%A7%D9%87-%DA%AF%D8%B0%D8%B4%D8%AA%D9%87",
+    "https://www.tasnimnews.ir/fa/news/1405/05/19/3668048/%D8%AA%D8%B1%D9%85%D8%B2-%D9%85%D9%82%D8%AF%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D8%A7%DB%8C%D8%B3%D8%AA%DA%AF%D8%A7%D9%87-%D9%86%D8%A7%D8%AA%D8%B1%D8%A7%D8%B2%DB%8C-%D8%A8%D8%A7%D9%86%DA%A9%DB%8C-%D8%B3%D9%BE%D8%B1%D8%AF%D9%87-%D9%82%D8%A7%D9%86%D9%88%D9%86%DB%8C-%D8%AD%D8%B1%DB%8C%D9%81-%D8%AA%D9%88%D8%B1%D9%85-%D9%85%DB%8C-%D8%B4%D9%88%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/19/3667862/%D8%A2%DB%8C%D8%A7-%D8%B7%D9%84%D8%A7%DB%8C-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%AC%D9%87%D8%B4-%D8%A8%D8%B2%D8%B1%DA%AF-%D8%A2%D9%85%D8%A7%D8%AF%D9%87-%D9%85%DB%8C-%D8%B4%D9%88%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/19/3667831/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%86%D8%B1%D8%AE-%D8%AD%D9%88%D8%A7%D9%84%D9%87-%D8%AF%D9%84%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87-%DB%8C%D9%88%D8%B1%D9%88-%D8%A7%D8%B1%D8%B2%D8%A7%D9%86-%D8%B4%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/21/3669497/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%82%DB%8C%D9%85%D8%AA-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%A8%D9%87-4414-%D8%AF%D9%84%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%87%D8%B1-%D8%A7%D9%88%D9%86%D8%B3",
+    "https://www.tasnimnews.ir/fa/news/1405/05/17/3665958/%D8%B7%D9%84%D8%A7-%D8%AF%D8%B1-%D8%AF%D9%88-%D8%B1%D8%A7%D9%87%DB%8C-%D9%87%D8%B1%D9%85%D8%B2-%D9%88-%D9%81%D8%AF%D8%B1%D8%A7%D9%84-%D8%B1%D8%B2%D8%B1%D9%88",
+    "https://www.tasnimnews.ir/fa/news/1405/05/06/3658503/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-06",
+    "https://www.tasnimnews.ir/fa/news/1405/05/19/3667555/%D8%AA%D8%AB%D8%A8%DB%8C%D8%AA-%D8%A7%D9%86%D8%B3-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-%D8%B7%D9%84%D8%A7-%D8%AF%D8%B1-%D9%85%D8%AD%D8%AF%D9%88%D8%AF%D9%87-4350-%D8%AF%D9%84%D8%A7%D8%B1",
+    "https://www.tasnimnews.ir/fa/news/1405/05/04/3656718/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-04",
+    "https://www.tasnimnews.ir/fa/news/1405/05/07/3659455/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-07",
+    "https://www.tasnimnews.ir/fa/news/1405/05/05/3657558/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-05",
+    "https://www.tasnimnews.ir/fa/news/1405/05/17/3666250/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-17",
+    "https://www.tasnimnews.ir/fa/news/1405/05/04/3656572/%D8%B1%D8%B4%D8%AF-%D8%AF%D9%88%D8%A8%D8%A7%D8%B1%D9%87-%D8%AF%D9%84%D8%A7%D8%B1-%D9%88-%D8%AF%D8%B1%D9%87%D9%85-%D8%AF%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87-%DB%8C%D9%88%D8%B1%D9%88-%DA%A9%D8%A7%D9%87%D8%B4%DB%8C-%D8%B4%D8%AF",
+    "https://www.tasnimnews.ir/fa/news/1405/05/05/3657391/%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%88-%DB%8C%D9%88%D8%B1%D9%88-%D8%AF%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87",
+    "https://www.tasnimnews.ir/fa/news/1405/05/19/3668016/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-19",
+    "https://www.tasnimnews.ir/fa/news/1405/05/18/3667106/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-18",
+    "https://www.tasnimnews.ir/fa/news/1405/05/03/3655775/%D9%82%DB%8C%D9%85%D8%AA-%D8%B7%D9%84%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%82%DB%8C%D9%85%D8%AA-%D8%B3%DA%A9%D9%87-%D9%88-%D9%82%DB%8C%D9%85%D8%AA-%D8%A7%D8%B1%D8%B2-1405-05-03",
+    "https://www.tasnimnews.ir/fa/news/1405/05/06/3658319/%D8%AF%D9%84%D8%A7%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87-%D8%A7%D8%B2-152%D9%87%D8%B2%D8%A7%D8%B1-%D8%AA%D9%88%D9%85%D8%A7%D9%86-%DA%AF%D8%B0%D8%B4%D8%AA",
+    "https://www.tasnimnews.ir/fa/news/1405/05/03/3655644/%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1-%D9%88-%D8%AF%D8%B1%D9%87%D9%85-%D8%AF%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87-%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%DB%8C%D8%A7%D9%81%D8%AA",
+    "https://www.tasnimnews.ir/fa/news/1405/05/18/3666831/%D8%B5%D8%B9%D9%88%D8%AF-%D9%85%D9%84%D8%A7%DB%8C%D9%85-%D8%AD%D9%88%D8%A7%D9%84%D9%87-%D8%AF%D9%84%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%85%D8%B1%DA%A9%D8%B2-%D9%85%D8%A8%D8%A7%D8%AF%D9%84%D9%87",
+    "https://www.bbc.com/persian/articles/c75gxrx9l1ro",
+    "https://www.bbc.com/persian/articles/cn4nrevkr2vo",
+    "https://www.bbc.com/persian/articles/cpvwpllk70go",
+    "https://news.google.com/rss/search?q=%D8%A7%DB%8C%D8%B1%D8%A7%D9%86+%D8%A2%D9%85%D8%B1%DB%8C%DA%A9%D8%A7+%D8%A7%D8%B3%D8%B1%D8%A7%D8%A6%DB%8C%D9%84+%D8%AC%D9%86%DA%AF&hl=fa&gl=IR&ceid=IR:fa",
+    "https://www.bbc.com/persian/live/c6m2gjrgd44yt",
+    "https://www.bbc.com/persian/articles/cly55wgynnjo",
+    "https://www.bbc.com/persian/articles/cp3005ngey9o",
+    "https://www.bbc.com/persian/articles/c62qq279knxo",
+    "https://www.bbc.com/persian/articles/c4gwkxqy0k1o",
+    "https://www.bbc.com/persian/articles/cn8nm51elx7o",
+    "https://www.bbc.com/persian/live/cq9988dzrprpt",
+    "https://t.me/iran_jahan_darlahze/43034",
+    "https://t.me/iran_jahan_darlahze/43034",
+    "https://t.me/iran_jahan_darlahze/43034",
+    "https://www.reuters.com/world/middle-east/kushner-hold-talks-with-netanyahu-after-rare-meeting-with-hamas-2026-08-17/",
+    "https://www.bbc.com/persian/articles/cz9772vgg3do",
+    "https://www.reuters.com/world/asia-pacific/erdogan-urges-trump-pursue-talks-with-iran-offers-support-2026-08-17/",
+    "https://t.me/IR_Breakingnews/37404",
+    "https://t.me/mrgold995/161761",
+    "https://t.me/mrgold995/161761",
+    "https://t.me/goldonline2016/282582",
+    "https://t.me/iran_jahan_darlahze/43081",
+    "https://t.me/goldonline2016/282619",
+    "https://t.me/goldonline2016/282619",
+    "https://t.me/iran_jahan_darlahze/43109",
+    "https://t.me/iran_jahan_darlahze/43109",
+    "https://t.me/iran_jahan_darlahze/43109",
+    "https://t.me/goldonline2016/282631",
+    "https://t.me/mrgold995/161889",
+    "https://t.me/mrgold995/161889",
+    "https://t.me/iran_jahan_darlahze/43120",
+    "https://t.me/iran_jahan_darlahze/43120",
+    "https://t.me/iran_jahan_darlahze/43120",
+    "https://t.me/iran_jahan_darlahze/43120",
+    "https://t.me/mrgold995/161932",
+    "https://t.me/iran_jahan_darlahze/43131",
+    "https://www.bbc.com/persian/articles/c0qvkd7gy24o",
+    "https://www.tasnimnews.ir/fa/news/1405/05/28/3675139/%D8%AA%D9%88%D9%84%DB%8C%D8%AF-%D9%85%D8%AD%D9%85%D9%88%D9%84%D9%87-%D8%AF%D9%88%D9%85-%D8%A7%D8%AF%D8%AA%DB%8C%D9%88-%D8%A8%D9%88%D9%85%DB%8C-%D8%AF%D8%B1-%D9%86%D9%81%D8%AA-%D8%B3%D9%BE%D8%A7%D9%87%D8%A7%D9%86-%DA%AF%D8%A7%D9%85%DB%8C-%D8%A8%D9%84%D9%86%D8%AF-%D8%AF%D8%B1-%D8%AE%D9%88%D8%AF%DA%A9%D9%81%D8%A7%DB%8C%DB%8C",
+    "https://www.tasnimnews.ir/fa/news/1405/05/29/3675864/%D8%B1%D9%88%D8%B4-%D9%87%D8%A7%DB%8C-%D9%86%D9%88%DB%8C%D9%86-%D9%85%D8%A7%D9%84%DB%8C-%D8%A8%D8%A7%D9%86%DA%A9-%D8%AA%D8%AC%D8%A7%D8%B1%D8%AA-%D9%BE%D8%A7%D8%B3%D8%AE%DA%AF%D9%88%DB%8C-%D8%B5%D9%86%D8%B9%D8%AA-%D9%86%D9%81%D8%AA-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D8%B3%D8%AA",
+    "https://www.tasnimnews.ir/fa/news/1405/05/28/3675184/%D8%B1%D9%88%D9%86%D9%82-%D8%A7%D8%B9%D8%B7%D8%A7%DB%8C-%D8%AA%D8%B3%D9%87%DB%8C%D9%84%D8%A7%D8%AA-%D8%BA%DB%8C%D8%B1%D8%AD%D8%B6%D9%88%D8%B1%DB%8C-%D9%88-%D8%B3%DB%8C%D8%B1-%D8%B5%D8%B9%D9%88%D8%AF%DB%8C-%D8%AA%D8%B1%D8%A7%DA%A9%D9%86%D8%B4-%D9%87%D8%A7-%D8%AF%D8%B1%D8%B3%D9%BE%DB%8C%D9%86%D9%88%DB%8C-%D8%A8%D8%A7%D9%86%DA%A9-%D8%B5%D8%A7%D8%AF%D8%B1%D8%A7%D8%AA",
+    "https://www.bbc.com/persian/articles/cn5n0eqx7y6o",
+    "https://t.me/iran_jahan_darlahze/43151",
+    "https://t.me/mrgold995/161962",
+    "https://t.me/mrgold995/161963",
+    "https://t.me/mrgold995/161964",
+    "https://t.me/iran_jahan_darlahze/43152",
+    "https://www.bbc.com/persian/live/cmj4krgj4xj1t",
+    "https://www.bbc.com/persian/articles/clyl52x01z2o",
+    "https://www.bbc.com/persian/live/c6d7l1djpdpwt",
+    "https://t.me/goldonline2016/282760",
+    "https://t.me/goldonline2016/282797",
+    "https://t.me/goldonline2016/282828",
+    "https://t.me/iran_jahan_darlahze/43169",
+    "https://t.me/goldonline2016/282822"
+  ],
+  "last_news_message_id": 586,
+  "last_news_title": "رئیس کل بانک مرکزی برای شرکت در اجلاس بریکس عازم هند شد",
+  "last_news_category": "economic",
+  "price_signature": "{\"mithqal_995\": 2078300, \"nader_9999\": 470000, \"ounce\": 69.1, \"shot_995\": 451000, \"tehran\": 198900}",
+  "source_message_text": "تاریخ: 1405/05/20\nساعت: 19:04\nانس: 64.78\nنرخ خرید فروش\n#ساچمه\nو\n#شمش\n✅\nجدول‌نرخ شمش‌و‌ساچمه\nدلار تهران حدود 187000\nدلارمشهد حدود 186000\n✅\nخریدبالای۵ کیلو تماس تلفنی\nاستعلام نرخ\n⚠\nعرضه مستقیم شمش امارات ،نیر ترک (قانونی) و شمش ایرانی  تحت لیسانس tgh\nنرخ خرید فاکتورهای مجموعه همانند همیشه هست\nوب سایت ما :\ntaghizadegan.com",
+  "morning_message_history": [
+    0,
+    2
+  ],
+  "1405/05/22_morning": true,
+  "1405/05/22_daily_calendar": true,
+  "1405/05/23_morning": true,
+  "news_title_history": [
+    "افزایش حواله دلار و یورو؛ طلا و سکه در سطوح بالا",
+    "افزایش جزیی نرخ حواله دلار و اعلام قیمت‌های طلا و سکه",
+    "دلار رسمی از مرز 152 هزار تومان گذشت",
+    "رشد ملایم دلار و درهم در مرکز مبادله",
+    "افزایش ملایم نرخ حواله‌های ارزی در مرکز مبادله",
+    "کارتاز؛ مجوز دریایی پرتغال برای کنترل هرمز",
+    "پزشکیان: درآمدهای نفتی ایران قطع شده است",
+    "قاآنی در بغداد و گفت‌وگو درباره خلع سلاح گروه‌ها",
+    "بیانیه بیش از 200 دانشگاهی و هنرمند علیه تهدیدهای آمریکا",
+    "اردوغان: بازگشایی تنگه هرمز اولویت است",
+    "عراق در پی توازن دیپلماتیک میان تهران و واشنگتن",
+    "ایران خواستار اعزام تیم کارشناسی به قطر پس از تکذیب دوحه شد",
+    "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد",
+    "معاون سیاسی سپاه: باز شدن تنگه هرمز منوط به اجرای تفاهم اسلام‌آباد",
+    "کوشنر پس از گفتگو با حماس در اسرائیل با نتانیاهو دیدار کرد",
+    "ترامپ تهدید به بمباران عمان در مناقشه هرمز کرد",
+    "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس",
+    "بن‌بست مذاکرات ایران و آمریکا درباره تمدید آتش‌بس",
+    "بن‌بست در مذاکرات تمدید آتش‌بس میان ایران و آمریکا",
+    "مذاکرات کوشنر با اسرائیل و حماس بی‌نتیجه ماند",
+    "تلویزیون دولتی روسیه کره‌شمالی را متحد مرفه نشان داد",
+    "اردوغان از ترامپ خواست گفت‌وگو با ایران را دنبال کند",
+    "پایان مهلت 60 روزه تفاهم‌نامه ایران و آمریکا",
+    "ترامپ: هیچ مذاکره‌ای با ایران در جریان نیست",
+    "ترامپ: مذاکرات با ایران جریان ندارد؛ محاصره دریایی ادامه دارد",
+    "کاخ سفید اعلام تعلیق مذاکرات با ایران",
+    "رویترز: ترامپ خواستار توقف مذاکرات با ایران شد",
+    "ترامپ: عبور نفت از تنگه هرمز ایده‌آل نخواهد بود",
+    "ترامپ درباره عبور نفت از تنگه هرمز و احتمال مذاکرات",
+    "ترامپ اعلام کرد آغاز «جنگ اقتصادی» علیه ایران",
+    "ترامپ اعلام کرد جنگ اقتصادی گسترده علیه ایران آغاز می‌شود",
+    "ترامپ: آغاز جنگ اقتصادی بی‌سابقه علیه ایران",
+    "رضائی: خروج از پیمان عدم گسترش سلاح‌های هسته‌ای پیشنهاد پاسخ به ترامپ",
+    "سمافور: آمریکا می‌گوید مذاکرات ایران و عمان چند هفته پیش شکست خورده",
+    "سمافور: واشنگتن مذاکرات ایران و عمان را شکست‌خورده می‌داند",
+    "ترامپ: ایران فرصت مذاکره را از دست داد؛ اعلام «جنگ اقتصادی» بی‌سابقه",
+    "ترامپ: بزرگ‌ترین جنگ اقتصادی علیه ایران",
+    "ترامپ از «آغاز بزرگ‌ترین جنگ اقتصادی» خبر داد",
+    "ترامپ آغاز جنگ اقتصادی علیه ایران را اعلام کرد",
+    "ترامپ: دستور کاهش قیمت گوشت چرخ‌کرده دادم",
+    "آمریکا: مذاکرات ایران و عمان شکست خورده",
+    "جنگ با ایران؛ پایان نامشخص و هزینه‌های سنگین",
+    "نفت سپاهان دومین محموله ادتیو بومی را تأمین کرد",
+    "بانک تجارت آماده گسترش همکاری با شرکت ملی نفت",
+    "رشد تراکنش‌ها و تسهیلات غیرحضوری در سپینو",
+    "وزیر خزانه‌داری آمریکا از «ساقط‌کردن حکومت» ایران سخن گفت",
+    "اظهارنظر ترامپ درباره توافق با ایران",
+    "ترامپ: گزینه‌های نظامی آمریکا محدود نشده",
+    "ترامپ: تنگه هرمز تحت حاکمیت آمریکا است",
+    "ترامپ هشدار درباره احتمال استیضاح پس از میان‌دوره‌ای",
+    "ترامپ: فشار اقتصادی، جایگزین گزینه‌های نظامی نیست",
+    "ترامپ تنگه هرمز را «قلمرو آمریکا» خواند",
+    "واکنش گسترده رسانه‌ها به کارزار تحریمی ترامپ",
+    "پزشکیان خواستار پایان جنگ با آمریکا شد",
+    "مقامات ایران: ترامپ درباره دستکاری نفت دروغ گفته",
+    "عراقچی: سیاست‌های ترامپ تکراری و قلدرانه است",
+    "نیویورک‌پست: فشار رهبران غیرنظامی ایران برای توافق با ترامپ",
+    "ادعای ترامپ درباره تنگه هرمز",
+    "قالیباف: سیاست‌های «یخ‌زده» به رکود می‌انجامد"
+  ],
+  "rubika_auto_telegram_message_ids": [
+    309,
+    310,
+    311,
+    312,
+    313,
+    314,
+    316,
+    317,
+    318,
+    320,
+    321,
+    322,
+    323,
+    325,
+    326,
+    328,
+    329,
+    331,
+    332,
+    333,
+    334,
+    338,
+    343,
+    344,
+    345,
+    346,
+    347,
+    352,
+    354,
+    355,
+    356,
+    357,
+    358,
+    361,
+    362,
+    363,
+    364,
+    365,
+    366,
+    367,
+    369,
+    370,
+    371,
+    372,
+    373,
+    374,
+    375,
+    376,
+    377,
+    378,
+    379,
+    380,
+    384,
+    386,
+    387,
+    403,
+    404,
+    405,
+    406,
+    413,
+    414,
+    415,
+    416,
+    417,
+    418,
+    421,
+    424,
+    425,
+    426,
+    427,
+    428,
+    432,
+    434,
+    437,
+    438,
+    439,
+    440,
+    441,
+    442,
+    443,
+    445,
+    446,
+    447,
+    448,
+    449,
+    450,
+    452,
+    453,
+    454,
+    455,
+    456,
+    457,
+    458,
+    459,
+    460,
+    463,
+    464,
+    467,
+    469,
+    470,
+    471,
+    472,
+    475,
+    476,
+    477,
+    478,
+    481,
+    485,
+    488,
+    489,
+    490,
+    493,
+    495,
+    494,
+    497,
+    498,
+    499,
+    500,
+    501,
+    502,
+    503,
+    504,
+    505,
+    507,
+    509,
+    511,
+    510,
+    512,
+    513,
+    514,
+    515,
+    516,
+    517,
+    518,
+    523,
+    524,
+    525,
+    526,
+    527,
+    528,
+    529,
+    530,
+    532,
+    533,
+    535,
+    536,
+    537,
+    538,
+    539,
+    543,
+    544,
+    545,
+    546,
+    547,
+    549,
+    550,
+    551,
+    553,
+    554,
+    555,
+    556,
+    557,
+    558,
+    559,
+    560,
+    561,
+    562,
+    563,
+    564,
+    565,
+    566,
+    567,
+    568,
+    569,
+    570,
+    571,
+    572,
+    573,
+    574,
+    575,
+    576,
+    577,
+    578,
+    579,
+    580,
+    581,
+    552,
+    585,
+    587,
+    588,
+    589,
+    590,
+    591,
+    586
+  ],
+  "1405/05/24_morning": true,
+  "1405/05/24_daily_calendar": true,
+  "1405/05/24_market_pulse": true,
+  "market_history": [
+    {
+      "timestamp": "2026-08-15T18:07:22.593451+03:30",
+      "tehran": 187600.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-15T18:15:01.115951+03:30",
+      "tehran": 187600.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-15T19:10:29.203140+03:30",
+      "tehran": 187600.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-15T19:32:15.502655+03:30",
+      "tehran": 187600.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-15T20:26:44.820591+03:30",
+      "tehran": 187600.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-16T11:17:44.503864+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T12:30:40.232077+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T13:25:52.072395+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T14:25:24.748729+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T14:33:19.340701+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T14:42:34.761769+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T15:11:45.104887+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T16:51:45.801284+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T17:32:37.592837+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T18:26:32.343361+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T19:19:25.768413+03:30",
+      "tehran": 186800.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-16T20:24:27.823129+03:30",
+      "tehran": 186800.0,
+      "silver_ounce": 64.82,
+      "gold_ounce": null,
+      "shot_995": 386000.0
+    },
+    {
+      "timestamp": "2026-08-17T11:34:09.814727+03:30",
+      "tehran": 186000.0,
+      "silver_ounce": 66.04,
+      "gold_ounce": null,
+      "shot_995": 395000.0
+    },
+    {
+      "timestamp": "2026-08-17T13:36:52.700858+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 65.64,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-17T14:34:12.076405+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 65.64,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-17T15:26:48.985379+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 65.64,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-17T15:43:13.772315+03:30",
+      "tehran": 186500.0,
+      "silver_ounce": 65.64,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-17T15:58:33.823304+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 65.81,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-17T16:03:53.517410+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 65.81,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-17T16:28:05.540388+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 65.81,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-17T17:27:33.709700+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 65.81,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-17T18:28:41.348813+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 65.81,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-17T19:25:13.629475+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 66.3,
+      "gold_ounce": null,
+      "shot_995": 399000.0
+    },
+    {
+      "timestamp": "2026-08-17T20:30:47.592661+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 66.3,
+      "gold_ounce": null,
+      "shot_995": 399000.0
+    },
+    {
+      "timestamp": "2026-08-18T11:34:12.801280+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 65.44,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-18T13:24:22.416842+03:30",
+      "tehran": 187000.0,
+      "silver_ounce": 65.44,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-18T14:30:46.021149+03:30",
+      "tehran": 188000.0,
+      "silver_ounce": 65.25,
+      "gold_ounce": null,
+      "shot_995": 391000.0
+    },
+    {
+      "timestamp": "2026-08-18T15:29:38.965807+03:30",
+      "tehran": 188000.0,
+      "silver_ounce": 65.25,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-18T15:34:26.032600+03:30",
+      "tehran": 188000.0,
+      "silver_ounce": 65.25,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-18T17:30:58.672525+03:30",
+      "tehran": 188000.0,
+      "silver_ounce": 65.25,
+      "gold_ounce": null,
+      "shot_995": 396000.0
+    },
+    {
+      "timestamp": "2026-08-19T11:29:09.859017+03:30",
+      "tehran": 188500.0,
+      "silver_ounce": 63.24,
+      "gold_ounce": null,
+      "shot_995": 384000.0
+    },
+    {
+      "timestamp": "2026-08-19T13:00:41.989783+03:30",
+      "tehran": 189000.0,
+      "silver_ounce": 63.38,
+      "gold_ounce": 4341.43,
+      "shot_995": 388000.0
+    },
+    {
+      "timestamp": "2026-08-19T14:21:21.445560+03:30",
+      "tehran": 189000.0,
+      "silver_ounce": 63.38,
+      "gold_ounce": 4341.43,
+      "shot_995": 388000.0
+    },
+    {
+      "timestamp": "2026-08-19T15:24:10.374106+03:30",
+      "tehran": 189000.0,
+      "silver_ounce": 63.38,
+      "gold_ounce": 4341.43,
+      "shot_995": 388000.0
+    },
+    {
+      "timestamp": "2026-08-19T17:36:09.222820+03:30",
+      "tehran": 192000.0,
+      "silver_ounce": 65.02,
+      "gold_ounce": 4363.89,
+      "shot_995": 401000.0
+    },
+    {
+      "timestamp": "2026-08-19T19:19:39.511834+03:30",
+      "tehran": 192000.0,
+      "silver_ounce": 65.02,
+      "gold_ounce": 4363.89,
+      "shot_995": 401000.0
+    },
+    {
+      "timestamp": "2026-08-19T20:29:30.427653+03:30",
+      "tehran": 192000.0,
+      "silver_ounce": 65.02,
+      "gold_ounce": 4363.89,
+      "shot_995": 401000.0
+    },
+    {
+      "timestamp": "2026-08-20T11:36:47.334393+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 66.69,
+      "gold_ounce": 4363.89,
+      "shot_995": 401000.0
+    },
+    {
+      "timestamp": "2026-08-20T13:25:12.454934+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 66.93,
+      "gold_ounce": 4493.38,
+      "shot_995": 406000.0
+    },
+    {
+      "timestamp": "2026-08-20T14:32:46.803683+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 66.93,
+      "gold_ounce": 4493.38,
+      "shot_995": 406000.0
+    },
+    {
+      "timestamp": "2026-08-20T15:29:31.400783+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 66.93,
+      "gold_ounce": 4493.38,
+      "shot_995": 406000.0
+    },
+    {
+      "timestamp": "2026-08-20T17:40:44.570453+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 66.93,
+      "gold_ounce": 4491.25,
+      "shot_995": 406000.0
+    },
+    {
+      "timestamp": "2026-08-20T18:06:17.685087+03:30",
+      "tehran": 190500.0,
+      "silver_ounce": 67.54,
+      "gold_ounce": 4491.25,
+      "shot_995": 411000.0
+    },
+    {
+      "timestamp": "2026-08-20T18:52:32.968494+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 69.0,
+      "gold_ounce": 4488.2,
+      "shot_995": 421000.0
+    },
+    {
+      "timestamp": "2026-08-20T19:23:51.091435+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 68.3,
+      "gold_ounce": 4488.2,
+      "shot_995": 416000.0
+    },
+    {
+      "timestamp": "2026-08-20T20:36:10.806262+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 68.3,
+      "gold_ounce": 4488.2,
+      "shot_995": 416000.0
+    },
+    {
+      "timestamp": "2026-08-22T10:08:39.948916+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 68.3,
+      "gold_ounce": 4488.2,
+      "shot_995": 419000.0
+    },
+    {
+      "timestamp": "2026-08-22T10:19:12.759220+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 419000.0
+    },
+    {
+      "timestamp": "2026-08-22T10:51:13.222212+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 421000.0
+    },
+    {
+      "timestamp": "2026-08-22T12:27:33.741256+03:30",
+      "tehran": 190000.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 421000.0
+    },
+    {
+      "timestamp": "2026-08-22T13:25:09.336681+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T14:24:03.328210+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T15:15:07.799128+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4488.2,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T15:24:26.309423+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T15:49:33.184574+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T16:03:36.964230+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T16:18:58.323011+03:30",
+      "tehran": 191500.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 426000.0
+    },
+    {
+      "timestamp": "2026-08-22T16:31:26.078679+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-22T16:47:27.137124+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-22T17:18:37.980554+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-22T18:15:46.865893+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-22T19:11:55.472000+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-22T19:31:43.245802+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-22T20:27:05.461127+03:30",
+      "tehran": 193400.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 431000.0
+    },
+    {
+      "timestamp": "2026-08-23T14:04:51.333278+03:30",
+      "tehran": 198900.0,
+      "silver_ounce": 69.1,
+      "gold_ounce": 4607.35,
+      "shot_995": 451000.0
+    }
+  ],
+  "silver_alert_base": 69.0,
+  "dollar_alert_base": 193400.0,
+  "shot_alert_base": 451000.0,
+  "1405/05/24_tomorrow_look": true,
+  "1405/05/25_morning": true,
+  "1405/05/25_daily_calendar": true,
+  "1405/05/25_market_pulse": true,
+  "1405/05/25_start_trades": true,
+  "1405/05/25_tomorrow_look": true,
+  "1405/05/25_end_trades": true,
+  "news_archive": [
+    {
+      "timestamp": "2026-08-16T23:53:59.704706+03:30",
+      "title": "اردوغان: بازگشایی تنگه هرمز اولویت است",
+      "url": "https://www.bbc.com/persian/live/c6m2gjrgd44yt",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T00:24:33.604214+03:30",
+      "title": "عراق در پی توازن دیپلماتیک میان تهران و واشنگتن",
+      "url": "https://www.bbc.com/persian/articles/cly55wgynnjo",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T03:09:56.253785+03:30",
+      "title": "ایران خواستار اعزام تیم کارشناسی به قطر پس از تکذیب دوحه شد",
+      "url": "https://www.bbc.com/persian/articles/cp3005ngey9o",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T08:54:40.826183+03:30",
+      "title": "سئول مانور مشترک با آمریکا را آغاز کرد؛ ترامپ خواستار کاهش شد",
+      "url": "https://www.bbc.com/persian/articles/c62qq279knxo",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T15:27:19.449786+03:30",
+      "title": "معاون سیاسی سپاه: باز شدن تنگه هرمز منوط به اجرای تفاهم اسلام‌آباد",
+      "url": "https://www.bbc.com/persian/articles/c4gwkxqy0k1o",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T18:29:36.724503+03:30",
+      "title": "کوشنر پس از گفتگو با حماس در اسرائیل با نتانیاهو دیدار کرد",
+      "url": "https://www.bbc.com/persian/articles/cn8nm51elx7o",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T20:31:27.646966+03:30",
+      "title": "ترامپ تهدید به بمباران عمان در مناقشه هرمز کرد",
+      "url": "https://www.bbc.com/persian/live/cq9988dzrprpt",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-17T22:57:02.525288+03:30",
+      "title": "بن‌بست مذاکرات ایران و آمریکا برای تمدید آتش‌بس",
+      "url": "https://t.me/iran_jahan_darlahze/43034",
+      "category": "telegram"
+    },
+    {
+      "timestamp": "2026-08-18T00:00:49.140645+03:30",
+      "title": "بن‌بست مذاکرات ایران و آمریکا درباره تمدید آتش‌بس",
+      "url": "https://t.me/iran_jahan_darlahze/43034",
+      "category": "telegram"
+    },
+    {
+      "timestamp": "2026-08-18T02:23:05.687631+03:30",
+      "title": "بن‌بست در مذاکرات تمدید آتش‌بس میان ایران و آمریکا",
+      "url": "https://t.me/iran_jahan_darlahze/43034",
+      "category": "telegram"
+    },
+    {
+      "timestamp": "2026-08-18T06:41:00.278010+03:30",
+      "title": "مذاکرات کوشنر با اسرائیل و حماس بی‌نتیجه ماند",
+      "url": "https://www.reuters.com/world/middle-east/kushner-hold-talks-with-netanyahu-after-rare-meeting-with-hamas-2026-08-17/",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-18T09:33:32.508941+03:30",
+      "title": "تلویزیون دولتی روسیه کره‌شمالی را متحد مرفه نشان داد",
+      "url": "https://www.bbc.com/persian/articles/cz9772vgg3do",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-18T11:34:36.909575+03:30",
+      "title": "اردوغان از ترامپ خواست گفت‌وگو با ایران را دنبال کند",
+      "url": "https://www.reuters.com/world/asia-pacific/erdogan-urges-trump-pursue-talks-with-iran-offers-support-2026-08-17/",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-18T15:35:07.204287+03:30",
+      "title": "پایان مهلت 60 روزه تفاهم‌نامه ایران و آمریکا",
+      "url": "https://t.me/IR_Breakingnews/37404",
+      "category": "telegram"
+    },
+    {
+      "timestamp": "2026-08-18T23:01:48.610159+03:30",
+      "title": "ترامپ: هیچ مذاکره‌ای با ایران در جریان نیست",
+      "url": "https://t.me/mrgold995/161761",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-19T02:24:37.176780+03:30",
+      "title": "ترامپ: مذاکرات با ایران جریان ندارد؛ محاصره دریایی ادامه دارد",
+      "url": "https://t.me/mrgold995/161761",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-19T17:36:28.278399+03:30",
+      "title": "کاخ سفید اعلام تعلیق مذاکرات با ایران",
+      "url": "https://t.me/goldonline2016/282582",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-19T19:19:52.881674+03:30",
+      "title": "رویترز: ترامپ خواستار توقف مذاکرات با ایران شد",
+      "url": "https://t.me/iran_jahan_darlahze/43081",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-19T22:42:58.543488+03:30",
+      "title": "ترامپ: عبور نفت از تنگه هرمز ایده‌آل نخواهد بود",
+      "url": "https://t.me/goldonline2016/282619",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-19T23:29:51.627801+03:30",
+      "title": "ترامپ درباره عبور نفت از تنگه هرمز و احتمال مذاکرات",
+      "url": "https://t.me/goldonline2016/282619",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-20T03:17:14.956668+03:30",
+      "title": "ترامپ اعلام کرد آغاز «جنگ اقتصادی» علیه ایران",
+      "url": "https://t.me/iran_jahan_darlahze/43109",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-20T08:37:07.572799+03:30",
+      "title": "ترامپ اعلام کرد جنگ اقتصادی گسترده علیه ایران آغاز می‌شود",
+      "url": "https://t.me/iran_jahan_darlahze/43109",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-20T09:33:44.166496+03:30",
+      "title": "ترامپ: آغاز جنگ اقتصادی بی‌سابقه علیه ایران",
+      "url": "https://t.me/iran_jahan_darlahze/43109",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-20T11:37:09.468286+03:30",
+      "title": "رضائی: خروج از پیمان عدم گسترش سلاح‌های هسته‌ای پیشنهاد پاسخ به ترامپ",
+      "url": "https://t.me/goldonline2016/282631",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-20T14:33:01.327841+03:30",
+      "title": "سمافور: آمریکا می‌گوید مذاکرات ایران و عمان چند هفته پیش شکست خورده",
+      "url": "https://t.me/mrgold995/161889",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-20T17:41:04.359965+03:30",
+      "title": "سمافور: واشنگتن مذاکرات ایران و عمان را شکست‌خورده می‌داند",
+      "url": "https://t.me/mrgold995/161889",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-20T23:50:12.524220+03:30",
+      "title": "ترامپ: ایران فرصت مذاکره را از دست داد؛ اعلام «جنگ اقتصادی» بی‌سابقه",
+      "url": "https://t.me/iran_jahan_darlahze/43120",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-21T18:05:02.780323+03:30",
+      "title": "ترامپ: بزرگ‌ترین جنگ اقتصادی علیه ایران",
+      "url": "https://t.me/iran_jahan_darlahze/43120",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-21T19:46:30.490738+03:30",
+      "title": "ترامپ از «آغاز بزرگ‌ترین جنگ اقتصادی» خبر داد",
+      "url": "https://t.me/iran_jahan_darlahze/43120",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-21T20:37:36.071239+03:30",
+      "title": "ترامپ آغاز جنگ اقتصادی علیه ایران را اعلام کرد",
+      "url": "https://t.me/iran_jahan_darlahze/43120",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-21T21:08:27.332645+03:30",
+      "title": "ترامپ: دستور کاهش قیمت گوشت چرخ‌کرده دادم",
+      "url": "https://t.me/mrgold995/161932",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-21T22:22:03.063124+03:30",
+      "title": "آمریکا: مذاکرات ایران و عمان شکست خورده",
+      "url": "https://t.me/iran_jahan_darlahze/43131",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-21T22:43:58.591850+03:30",
+      "title": "جنگ با ایران؛ پایان نامشخص و هزینه‌های سنگین",
+      "url": "https://www.bbc.com/persian/articles/c0qvkd7gy24o",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-21T23:00:36.943125+03:30",
+      "title": "نفت سپاهان دومین محموله ادتیو بومی را تأمین کرد",
+      "url": "https://www.tasnimnews.ir/fa/news/1405/05/28/3675139/%D8%AA%D9%88%D9%84%DB%8C%D8%AF-%D9%85%D8%AD%D9%85%D9%88%D9%84%D9%87-%D8%AF%D9%88%D9%85-%D8%A7%D8%AF%D8%AA%DB%8C%D9%88-%D8%A8%D9%88%D9%85%DB%8C-%D8%AF%D8%B1-%D9%86%D9%81%D8%AA-%D8%B3%D9%BE%D8%A7%D9%87%D8%A7%D9%86-%DA%AF%D8%A7%D9%85%DB%8C-%D8%A8%D9%84%D9%86%D8%AF-%D8%AF%D8%B1-%D8%AE%D9%88%D8%AF%DA%A9%D9%81%D8%A7%DB%8C%DB%8C",
+      "category": "economic"
+    },
+    {
+      "timestamp": "2026-08-21T23:21:58.586170+03:30",
+      "title": "بانک تجارت آماده گسترش همکاری با شرکت ملی نفت",
+      "url": "https://www.tasnimnews.ir/fa/news/1405/05/29/3675864/%D8%B1%D9%88%D8%B4-%D9%87%D8%A7%DB%8C-%D9%86%D9%88%DB%8C%D9%86-%D9%85%D8%A7%D9%84%DB%8C-%D8%A8%D8%A7%D9%86%DA%A9-%D8%AA%D8%AC%D8%A7%D8%B1%D8%AA-%D9%BE%D8%A7%D8%B3%D8%AE%DA%AF%D9%88%DB%8C-%D8%B5%D9%86%D8%B9%D8%AA-%D9%86%D9%81%D8%AA-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D8%B3%D8%AA",
+      "category": "economic"
+    },
+    {
+      "timestamp": "2026-08-22T00:13:47.692380+03:30",
+      "title": "رشد تراکنش‌ها و تسهیلات غیرحضوری در سپینو",
+      "url": "https://www.tasnimnews.ir/fa/news/1405/05/28/3675184/%D8%B1%D9%88%D9%86%D9%82-%D8%A7%D8%B9%D8%B7%D8%A7%DB%8C-%D8%AA%D8%B3%D9%87%DB%8C%D9%84%D8%A7%D8%AA-%D8%BA%DB%8C%D8%B1%D8%AD%D8%B6%D9%88%D8%B1%DB%8C-%D9%88-%D8%B3%DB%8C%D8%B1-%D8%B5%D8%B9%D9%88%D8%AF%DB%8C-%D8%AA%D8%B1%D8%A7%DA%A9%D9%86%D8%B4-%D9%87%D8%A7-%D8%AF%D8%B1%D8%B3%D9%BE%DB%8C%D9%86%D9%88%DB%8C-%D8%A8%D8%A7%D9%86%DA%A9-%D8%B5%D8%A7%D8%AF%D8%B1%D8%A7%D8%AA",
+      "category": "economic"
+    },
+    {
+      "timestamp": "2026-08-22T01:28:51.308560+03:30",
+      "title": "وزیر خزانه‌داری آمریکا از «ساقط‌کردن حکومت» ایران سخن گفت",
+      "url": "https://www.bbc.com/persian/articles/cn5n0eqx7y6o",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-22T02:26:14.963296+03:30",
+      "title": "اظهارنظر ترامپ درباره توافق با ایران",
+      "url": "https://t.me/iran_jahan_darlahze/43151",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-22T06:37:56.347139+03:30",
+      "title": "ترامپ: گزینه‌های نظامی آمریکا محدود نشده",
+      "url": "https://t.me/mrgold995/161962",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-22T08:15:22.062894+03:30",
+      "title": "ترامپ: تنگه هرمز تحت حاکمیت آمریکا است",
+      "url": "https://t.me/mrgold995/161963",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-22T08:41:12.607951+03:30",
+      "title": "ترامپ هشدار درباره احتمال استیضاح پس از میان‌دوره‌ای",
+      "url": "https://t.me/mrgold995/161964",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-22T09:03:55.510760+03:30",
+      "title": "ترامپ: فشار اقتصادی، جایگزین گزینه‌های نظامی نیست",
+      "url": "https://t.me/iran_jahan_darlahze/43152",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-22T09:22:02.415506+03:30",
+      "title": "ترامپ تنگه هرمز را «قلمرو آمریکا» خواند",
+      "url": "https://www.bbc.com/persian/live/cmj4krgj4xj1t",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-22T10:09:38.667564+03:30",
+      "title": "واکنش گسترده رسانه‌ها به کارزار تحریمی ترامپ",
+      "url": "https://www.bbc.com/persian/articles/clyl52x01z2o",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-22T10:51:42.695986+03:30",
+      "title": "پزشکیان خواستار پایان جنگ با آمریکا شد",
+      "url": "https://www.bbc.com/persian/live/c6d7l1djpdpwt",
+      "category": "world"
+    },
+    {
+      "timestamp": "2026-08-23T00:20:09.134176+03:30",
+      "title": "مقامات ایران: ترامپ درباره دستکاری نفت دروغ گفته",
+      "url": "https://t.me/goldonline2016/282760",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-23T14:05:21.277763+03:30",
+      "title": "عراقچی: سیاست‌های ترامپ تکراری و قلدرانه است",
+      "url": "https://t.me/goldonline2016/282797",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-23T22:53:23.284703+03:30",
+      "title": "نیویورک‌پست: فشار رهبران غیرنظامی ایران برای توافق با ترامپ",
+      "url": "https://t.me/goldonline2016/282828",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-24T00:22:19.749441+03:30",
+      "title": "ادعای ترامپ درباره تنگه هرمز",
+      "url": "https://t.me/iran_jahan_darlahze/43169",
+      "category": "telegram_trump"
+    },
+    {
+      "timestamp": "2026-08-24T00:46:41.445227+03:30",
+      "title": "قالیباف: سیاست‌های «یخ‌زده» به رکود می‌انجامد",
+      "url": "https://t.me/goldonline2016/282822",
+      "category": "telegram_trump"
+    }
+  ],
+  "1405/05/26_morning": true,
+  "1405/05/26_start_trades": true,
+  "1405/05/26_market_pulse_evening": true,
+  "1405/05/26_tomorrow_look": true,
+  "market_analysis_sent_at": "2026-08-17T22:06:02.104270+03:30",
+  "last_market_analysis_snapshot": {
+    "silver": {
+      "current": 66.3,
+      "levels": {
+        "support": null,
+        "resistance": null,
+        "support_2": null,
+        "resistance_2": null
+      }
+    },
+    "gold": {
+      "current": null,
+      "levels": {
+        "support": null,
+        "resistance": null,
+        "support_2": null,
+        "resistance_2": null
+      }
+    },
+    "tehran_dollar": {
+      "current": 187000.0,
+      "levels": {
+        "support": 186500.0,
+        "support_2": 186000.0,
+        "resistance": 187600.0,
+        "resistance_2": null
+      }
+    },
+    "shot_995": {
+      "current": 399000.0,
+      "levels": {
+        "support": 396000.0,
+        "support_2": 391000.0,
+        "resistance": null,
+        "resistance_2": null
+      }
+    },
+    "dxy": {
+      "current": 99.61699676513672,
+      "daily_change_percent": -0.05317688851438914
+    },
+    "oil": {
+      "current": 84.66000366210938,
+      "daily_change_percent": 2.742720988325082
+    },
+    "us10y": {
+      "current": 4.727999687194824,
+      "daily_change_percent": 0.681422217564869
+    },
+    "sp500": {
+      "current": 7754.77001953125,
+      "daily_change_percent": -0.3980311109851243
+    },
+    "vix": {
+      "current": 15.149999618530273,
+      "daily_change_percent": 6.315786796703674
+    },
+    "gold_silver_ratio": null
+  },
+  "1405/05/26_daily_silver_visual_analysis": true,
+  "1405/05/27_morning": true,
+  "1405/05/27_start_trades": true,
+  "gold_18_mashhad": 21040900,
+  "coin_imami": 209035000,
+  "1405/05/27_end_trades": true,
+  "news_fingerprint_history": [
+    "ترامپ هیچ مذاکره ایران جریان نیست ترامپ اعلام کرد هیچ مذاکره گفت وگویی میان ایالات متحده جمهوری اسلامی ایران جریان نیست برنامه برای ترتیب داده نشده گفت محاصره دریایی تمام توان ادامه دارد تنگه هرمز باز فعال است همه مین های دریایی جمع آوری شده اند منهدم شده اند",
+    "ترامپ مذاکرات ایران جریان ندارد محاصره دریایی ادامه دارد ترامپ اعلام کرد هیچ گفت وگو مذاکره جمهوری اسلامی ایران جریان نیست برنامه برای وجود ندارد گفت محاصره دریایی همچنان تمام قدرت ادامه دارد تنگه هرمز باز فعال است مین های دریایی جمع آوری شده اند منهدم شده اند",
+    "کاخ سفید اعلام تعلیق مذاکرات ایران کاخ سفید گفته مذاکرات ایران گفته خود وجود ندارند حالت تعلیق درآورده این اقدام ظاهراً برای افزایش فشار اقتصادی توجیه کرده است این حال هنوز پیام هایی تهران ارسال شود مرندی گفته صداقت ویژگی های ترامپ نیست",
+    "رویترز ترامپ خواستار توقف مذاکرات ایران خبرگزاری رویترز گزارش داده ترامپ مقامات ارشد دولتش خواسته همه مذاکرات ایران متوقف شوند",
+    "ترامپ عبور نفت تنگه هرمز ایده نخواهد بود دونالد ترامپ اعلام کرد جریان عبور نفت تنگه هرمز شکل مطلوب اجرا نخواهد عین حال احتمال شروع مذاکرات مطرح کرد درباره جزئیات بیشتر اظهارنظری نکرد",
+    "ترامپ درباره عبور نفت تنگه هرمز احتمال مذاکرات ترامپ گفت عبور نفت تنگه هرمز وضعیتی ایده نخواهد داشت امکان آغاز مذاکرات اشاره کرد",
+    "ترامپ اعلام کرد آغاز جنگ اقتصادی علیه ایران دونالد ترامپ گفت ایران آخرین فرصت مذاکرات استفاده نکرده آغاز بزرگ ترین جنگ اقتصادی علیه این کشور اعلام کند هشدار داد کشورهایی مؤسسات مالی شرکت فرودگاه نهادهای دولتی خود اجازه کمک مالی ایران دهند عواقب اقتصادی جدی مواجه خواهند ترامپ خواست توقف فوری قاچاق نفت مبادلات انتقال وجه صرافی ثبت کشتی شرکت های پوششی دارد متحدان آمریکا خواست کنارش بایستند",
+    "ترامپ اعلام کرد جنگ اقتصادی گسترده علیه ایران آغاز شود ترامپ اعلام کرد ایران آخرین فرصت مذاکرات استفاده نکرده تصمیم آغاز بزرگ ترین جنگ اقتصادی انزوای سابقه علیه ایران گرفته است هشدار داد کشورهایی نهادهای مالی شرکت فرودگاه نهادهای دولتی خود اجازه کمک مالی ایران بدهند عواقب اقتصادی بسیار جدی مواجه خواهند ترامپ خواستار توقف فوری قاچاق نفت مبادلات مالی انتقال وجه صرافی ثبت کشتی شرکت های پوششی همراهی متحدان آمریکا",
+    "ترامپ آغاز جنگ اقتصادی سابقه علیه ایران دونالد ترامپ اعلام کرد ایران آخرین فرصت مذاکرات استفاده نکرده همین دلیل آغاز بزرگ ترین جنگ اقتصادی علیه این کشور اعلام کند هشدار داد کشورهایی مؤسسات شرکت نهادهای داخلی خود اجازه حمایت مالی هرگونه همکاری اقتصادی ایران دهند پیامدهای اقتصادی بسیار جدی روبه خواهند ترامپ همچنین خواستار توقف فوری قاچاق نفت مبادلات مالی انتقال وجه فعالیت صرافی ثبت کشتی شرکت های پوششی متحدان خواست همراهی کنند",
+    "رضائی خروج پیمان عدم گسترش سلاح های هسته پیشنهاد پاسخ ترامپ ابراهیم رضائی سخنگوی کمیسیون امنیت ملی سیاست خارجی مجلس واکنش اعلام دونالد ترامپ درباره تشدید تحریم گفت بهترین پاسخ ایران خروج پیمان عدم گسترش سلاح های هسته است",
+    "سمافور آمریکا گوید مذاکرات ایران عمان چند هفته پیش شکست خورده سمافور نقل مقام آمریکایی مقام کاخ سفید نوشت دولت آمریکا معتقد است این مذاکرات چند هفته پیش بست رسید گزارش آمده مطرح شدن امکان وضع عوارض برای عبور تنگه هرمز دنبال کردن مسیری جدا گفتگوهای متزلزل ایران آمریکا نارضایتی دونالد ترامپ همراه داشت",
+    "سمافور واشنگتن مذاکرات ایران عمان شکست خورده داند سمافور نقل مقام آمریکایی مقام کاخ سفید گزارش داد دولت آمریکا معتقد است مذاکرات بین ایران عمان چند هفته پیش شکست خورده است پایه این گزارش مطرح شدن احتمال وضع عوارض برای عبور تنگه هرمز پیش بردن مسیری جدا گفت وگوهای ناپایدار میان ایران آمریکا موجب نارضایتی دونالد ترامپ شده بود",
+    "ترامپ ایران فرصت مذاکره دست داد اعلام جنگ اقتصادی سابقه ترامپ گفت ایران آخرین فرصت مذاکره استفاده نکرد اعلام کرد بزرگ ترین جنگ اقتصادی تاریخ آغاز خواهد",
+    "ترامپ بزرگ ترین جنگ اقتصادی علیه ایران ترامپ اشاره اینکه ایران آخرین فرصت مذاکرات استفاده نکرد اعلام کرد قصد دارد بزرگ ترین جنگ اقتصادی تاریخ علیه این کشور آغاز کند این اقدام پیامدی برای پایان مذاکرات عنوان کرد",
+    "ترامپ آغاز بزرگ ترین جنگ اقتصادی خبر داد دونالد ترامپ گفت ایران آخرین فرصت مذاکرات استفاده نکرده است خاطر آغاز بزرگ ترین جنگ اقتصادی علیه کشوری اعلام کرد اظهارات صورت بیانیه اعلام روی جزئیات اجرایی اقدام مشخص دیگری توضیحی ارائه نکرد",
+    "ترامپ آغاز جنگ اقتصادی علیه ایران اعلام کرد دونالد ترامپ اعلام کرد ایران آخرین فرصت مذاکرات دست داده همین خاطر آغاز گسترده ترین جنگ اقتصادی علیه این کشور اعلام کند این اقدام عنوان پاسخ شکست روند گفتگوها مطرح کرد اظهاراتش لحن قطعی داشت",
+    "ترامپ دستور کاهش قیمت گوشت چرخ کرده دادم ترامپ گفت برای کمک خانواده های کارگر دستور داده قیمت گوشت چرخ کرده کاهش یابد این ادعا مقایسه دوره بایدن مطرح کرد گفت زمان قیمت گوشت خیلی سریع افزایش یافت",
+    "آمریکا مذاکرات ایران عمان شکست خورده رسانهٔ آمریکایی سمافور نقل مقام آمریکایی مقام کاخ سفید گزارش داد دولت آمریکا این باور است مذاکرات میان ایران عمان چند هفته پیش شکست خورده است",
+    "جنگ ایران پایان نامشخص هزینه های سنگین جنگ ایران وارد ماه ششم شده راهبرد روشنی برای خاتمه اعلام نشده است رسانه های آمریکایی افزایش حملات ایران کشتی تنگه هرمز خودداری واشنگتن واکنش نظامی مستقیم گزارش دهند این موضوع متحدان خلیج فارس نگران کرده است پنتاگون کاهش ذخایر پدافندی مصرف گسترده سامانه های دفاعی پذیرفته بررسی بازآرایی نیروها جریان است تحلیل گران انرژی مشاوران نفتی هشدار داده اند بازسازی زیرساخت بازگشت کامل صادرات انرژی زمان پرهزینه خواهد بود",
+    "نفت سپاهان دومین محموله ادتیو بومی تأمین کرد شرکت نفت سپاهان دومین محموله صنعتی ادتیو بومی تولید تأمین کرد پروژه بومی سازی سال پیش واحد تحقیق توسعه آغاز نمونه اولیه 1403 ساخته نخستین محموله صنعتی اسفند 1404 وارد چرخه عملیاتی امکان تولید حدود 250 محصول موتوری فراهم آورد تولید محموله دوم نشان دهنده تثبیت مهندسی معکوس قابلیت تکرارپذیری تولید انبوه اساس استانداردهای روز است مدیریت شرکت قصد گسترش خطوط کاهش وابستگی تأمین کنندگان خارجی دارد",
+    "بانک تجارت آماده گسترش همکاری شرکت ملی نفت مدیرعامل بانک تجارت دیدار معاون مالی شرکت ملی نفت ایران اعلام کرد این بانک مایل توسعه همکاری حوزه انرژی است گفت بانک سال شریک مالی صنعت نفت بوده شناخت ظرفیت های این بخش عرضه شیوه محصولات مالی نوآورانه تواند نیازهای شرکت های نفتی پوشش داده فرآیندهای مالی تسهیل کند معاون مالی شرکت ملی نفت نیز حمایت های بانک ستود تنوع محصولات استقبال کرد",
+    "رشد تراکنش تسهیلات غیرحضوری سپینو نئوبانک سپینو بانک صادرات گزارش داد بازگشت خدمات غیرحضوری رفع مغایرت موجب افزایش صدور کارت تسهیلات ازدواج تراکنش های مشتریان شده است صدور کارت حدود درصد پرداخت تسهیلات ازدواج حدود درصد رشد تعداد تراکنش میلیون 122 هزار مورد رسیده مقایسه میانگین سال 1404 نزدیک درصد افزایش دارد بانک رشد کاربران تقویت زیرساخت های فنی اعتماد مشتریان عوامل اصلی این روند معرفی کرد",
+    "وزیر خزانه داری آمریکا ساقط کردن حکومت ایران سخن گفت کاخ سفید دور تازه فشار اقتصادی علیه ایران اعلام کرده وزیر خزانه داری ضربه دوگانه خواند صریح گفت هدفش ساقط کردن حکومت ایران است رسانه تحلیلگران آمریکایی درباره کارآمدی هدف نهایی اختلاف دارند برخی سرخوردگی رئیس جمهور تندتر شدن لحنش گزارش دهند منتقدان گویند نوسان میان تهدید عقب نشینی اعتبار آمریکا تضعیف کرده است تحلیل هشدار دهند فشار اقتصادی نتیجه فوری ندارد بازارها تاکنون واکنش محسوسی نشان نداده اند",
+    "اظهارنظر ترامپ درباره توافق ایران ترامپ اعلام کرد ایران حاضر انجام توافق نیست",
+    "ترامپ گزینه های نظامی آمریکا محدود نشده ترامپ درباره پرسش خبرنگار پیرامون روی آوردن ایران جنگ اقتصادی پاسخ داد این امر معنای محدود شدن گزینه های نظامی آمریکا نیست تأکید کرد وضعیت دنبال کنند ببینند دهد",
+    "ترامپ تنگه هرمز تحت حاکمیت آمریکا است ترامپ ادعا کرد تنگه هرمز قلمروی آمریکا داند قلمرو آمریکایی خواند این اظهارنظر گزارش منبع منعکس شده صرفاً شامل همین ادعاست",
+    "ترامپ هشدار درباره احتمال استیضاح میان دوره دونالد ترامپ گفت اگر انتخابات میان دوره شکست بخورد رقیبانش استیضاح خواهند کرد نظر حتی دلیل این اقدام نمی دانند",
+    "ترامپ فشار اقتصادی جایگزین گزینه های نظامی نیست ترامپ تأکید کرد گرچه تمرکز آمریکا فشار اقتصادی علیه ایران است این معنای کنار گذاشتن محدود شدن گزینه های نظامی واشنگتن نیست",
+    "ترامپ تنگه هرمز قلمرو آمریکا خواند دونالد ترامپ تجمع انتخاباتی تنگه هرمز قلمرو آمریکا اعلام کرد تاکید کرد فشار اقتصادی ایران معنای حذف گزینه نظامی نیست هشدار داد ایران نباید سلاح هسته دست یابد واشنگتن آماده اعلام تحریم های تازه علیه ایران است واکنش سخنگوی ارتش ایران گفت دکترین نیروها حالت دفاعی تهاجمی تغییر کرده اقدام پیش دستانه اشاره کرد پایگاهی اردن هدف قرار داده است",
+    "واکنش گسترده رسانه کارزار تحریمی ترامپ رسانه های عربی نزدیک ایران پوشش وسیعی اعلام دونالد ترامپ درباره کارزار تازه تحریمی علیه تهران دادند برخی شبکه اقدام آمریکا تشدید فشارهای اقتصادی دانستند گروهی دیگر اثر تحریم های جدید اهمیت خواندند امارات تعلیق موقت همه مبادلات تجاری مالی ایران خبر داد زمان فلای دوبی ایرعربیا هماهنگی مجدد حریم هوایی ایران استفاده کردند گزارش هایی نیز درباره ارسال تسلیحات قطعات پهپاد روسیه ایران منتشر",
+    "پزشکیان خواستار پایان جنگ آمریکا رئیس جمهور ایران اشاره موقعیت قدرت تهران گفت اکنون باید جنگ آمریکا پایان یابد تفاهم اسلام آباد دستاوردی مهم توصیف کرد اظهارنظرهای بیرونی ناآگاهانه انتقاد کرد اما تأکید نمود برابر تعرض قلدری عقب نشینی نخواهند کرد پاسخ بازدارنده خواهند داد این سخنان زمان تغییر تاکتیک واشنگتن عملیات نظامی فشارها تحریم های اقتصادی بیان",
+    "مقامات ایران ترامپ درباره دستکاری نفت دروغ گفته مقامات ایرانی گویند دونالد ترامپ ادعای خروج میلیون بشکه نفت تنگه هرمز دروغ مطرح کرده رسانه اکسیوس عنوان پوشش استفاده کرده است گفته آنها ایران نفتکش عراقی اجازه خروج داد مانع عبور سایر کشتی جمله شناورهای چینی نمایندگی کشورهای تحریم شده حرکت کردند",
+    "عراقچی سیاست های ترامپ تکراری قلدرانه است عراقچی اقدامات اقتصادی تهدیدهای مرتبط ترامپ تکراری نشانه درماندگی توصیف کرد گفت طرف آمریکایی بارها همان طرح عملیات نظامی متوسل شده برابر ملت ایران گزینه این طرح های تکراری نمی بیند عراقچی تأکید کرد تنها راه گفت وگوی محترمانه رسیدن راهکاری مبتنی عدالت شرافت است",
+    "نیویورک پست فشار رهبران غیرنظامی ایران برای توافق ترامپ نیویورک پست گوید رهبران ارشد غیرنظامی ایران برای رسیدن توافق ترامپ پایان دادن جنگ فشار آورند خبر بیانیه اشاره کند آمده تحمل نخواهیم کرد",
+    "ادعای ترامپ درباره تنگه هرمز ترامپ پست مدعی تنگه هرمز عنوان قلمروی جدید آمریکا معرفی شده است خبر منبع تنها این ادعا نقل کند جزئیات بیشتری ارائه نداده است",
+    "قالیباف سیاست های زده رکود انجامد قالیباف اشاره اقدام ترامپ واردات گوشت منجمد نوشت چنین تدابیری ممکن است موقتی کارساز باشند اما پرسید آیا قرار است اوراق قرضه بازار مسکن دستمزدها نیز منجمد شوند هشدار داد سیاست خارجی ابتکار همراه این نوع سیاست های اقتصادی منجر رکود خواهد تأکید کرد بومرنگ ایران نهایت بازمی گردد"
+  ],
+  "news_content_history": [
+    "ترامپ هیچ مذاکره ایران جریان نیست ترامپ اعلام کرد هیچ مذاکره گفت وگویی میان ایالات متحده جمهوری اسلامی ایران جریان نیست برنامه برای ترتیب داده نشده گفت محاصره دریایی تمام توان ادامه دارد تنگه هرمز باز فعال است همه مین های دریایی جمع آوری شده اند منهدم شده اند",
+    "ترامپ مذاکرات ایران جریان ندارد محاصره دریایی ادامه دارد ترامپ اعلام کرد هیچ گفت وگو مذاکره جمهوری اسلامی ایران جریان نیست برنامه برای وجود ندارد گفت محاصره دریایی همچنان تمام قدرت ادامه دارد تنگه هرمز باز فعال است مین های دریایی جمع آوری شده اند منهدم شده اند",
+    "کاخ سفید اعلام تعلیق مذاکرات ایران کاخ سفید گفته مذاکرات ایران گفته خود وجود ندارند حالت تعلیق درآورده این اقدام ظاهراً برای افزایش فشار اقتصادی توجیه کرده است این حال هنوز پیام هایی تهران ارسال شود مرندی گفته صداقت ویژگی های ترامپ نیست",
+    "رویترز ترامپ خواستار توقف مذاکرات ایران خبرگزاری رویترز گزارش داده ترامپ مقامات ارشد دولتش خواسته همه مذاکرات ایران متوقف شوند",
+    "ترامپ عبور نفت تنگه هرمز ایده نخواهد بود دونالد ترامپ اعلام کرد جریان عبور نفت تنگه هرمز شکل مطلوب اجرا نخواهد عین حال احتمال شروع مذاکرات مطرح کرد درباره جزئیات بیشتر اظهارنظری نکرد",
+    "ترامپ درباره عبور نفت تنگه هرمز احتمال مذاکرات ترامپ گفت عبور نفت تنگه هرمز وضعیتی ایده نخواهد داشت امکان آغاز مذاکرات اشاره کرد",
+    "ترامپ اعلام کرد آغاز جنگ اقتصادی علیه ایران دونالد ترامپ گفت ایران آخرین فرصت مذاکرات استفاده نکرده آغاز بزرگ ترین جنگ اقتصادی علیه این کشور اعلام کند هشدار داد کشورهایی مؤسسات مالی شرکت فرودگاه نهادهای دولتی خود اجازه کمک مالی ایران دهند عواقب اقتصادی جدی مواجه خواهند ترامپ خواست توقف فوری قاچاق نفت مبادلات انتقال وجه صرافی ثبت کشتی شرکت های پوششی دارد متحدان آمریکا خواست کنارش بایستند",
+    "ترامپ اعلام کرد جنگ اقتصادی گسترده علیه ایران آغاز شود ترامپ اعلام کرد ایران آخرین فرصت مذاکرات استفاده نکرده تصمیم آغاز بزرگ ترین جنگ اقتصادی انزوای سابقه علیه ایران گرفته است هشدار داد کشورهایی نهادهای مالی شرکت فرودگاه نهادهای دولتی خود اجازه کمک مالی ایران بدهند عواقب اقتصادی بسیار جدی مواجه خواهند ترامپ خواستار توقف فوری قاچاق نفت مبادلات مالی انتقال وجه صرافی ثبت کشتی شرکت های پوششی همراهی متحدان آمریکا",
+    "ترامپ آغاز جنگ اقتصادی سابقه علیه ایران دونالد ترامپ اعلام کرد ایران آخرین فرصت مذاکرات استفاده نکرده همین دلیل آغاز بزرگ ترین جنگ اقتصادی علیه این کشور اعلام کند هشدار داد کشورهایی مؤسسات شرکت نهادهای داخلی خود اجازه حمایت مالی هرگونه همکاری اقتصادی ایران دهند پیامدهای اقتصادی بسیار جدی روبه خواهند ترامپ همچنین خواستار توقف فوری قاچاق نفت مبادلات مالی انتقال وجه فعالیت صرافی ثبت کشتی شرکت های پوششی متحدان خواست همراهی کنند",
+    "رضائی خروج پیمان عدم گسترش سلاح های هسته پیشنهاد پاسخ ترامپ ابراهیم رضائی سخنگوی کمیسیون امنیت ملی سیاست خارجی مجلس واکنش اعلام دونالد ترامپ درباره تشدید تحریم گفت بهترین پاسخ ایران خروج پیمان عدم گسترش سلاح های هسته است",
+    "سمافور آمریکا گوید مذاکرات ایران عمان چند هفته پیش شکست خورده سمافور نقل مقام آمریکایی مقام کاخ سفید نوشت دولت آمریکا معتقد است این مذاکرات چند هفته پیش بست رسید گزارش آمده مطرح شدن امکان وضع عوارض برای عبور تنگه هرمز دنبال کردن مسیری جدا گفتگوهای متزلزل ایران آمریکا نارضایتی دونالد ترامپ همراه داشت",
+    "سمافور واشنگتن مذاکرات ایران عمان شکست خورده داند سمافور نقل مقام آمریکایی مقام کاخ سفید گزارش داد دولت آمریکا معتقد است مذاکرات بین ایران عمان چند هفته پیش شکست خورده است پایه این گزارش مطرح شدن احتمال وضع عوارض برای عبور تنگه هرمز پیش بردن مسیری جدا گفت وگوهای ناپایدار میان ایران آمریکا موجب نارضایتی دونالد ترامپ شده بود",
+    "ترامپ ایران فرصت مذاکره دست داد اعلام جنگ اقتصادی سابقه ترامپ گفت ایران آخرین فرصت مذاکره استفاده نکرد اعلام کرد بزرگ ترین جنگ اقتصادی تاریخ آغاز خواهد",
+    "ترامپ بزرگ ترین جنگ اقتصادی علیه ایران ترامپ اشاره اینکه ایران آخرین فرصت مذاکرات استفاده نکرد اعلام کرد قصد دارد بزرگ ترین جنگ اقتصادی تاریخ علیه این کشور آغاز کند این اقدام پیامدی برای پایان مذاکرات عنوان کرد",
+    "ترامپ آغاز بزرگ ترین جنگ اقتصادی خبر داد دونالد ترامپ گفت ایران آخرین فرصت مذاکرات استفاده نکرده است خاطر آغاز بزرگ ترین جنگ اقتصادی علیه کشوری اعلام کرد اظهارات صورت بیانیه اعلام روی جزئیات اجرایی اقدام مشخص دیگری توضیحی ارائه نکرد",
+    "ترامپ آغاز جنگ اقتصادی علیه ایران اعلام کرد دونالد ترامپ اعلام کرد ایران آخرین فرصت مذاکرات دست داده همین خاطر آغاز گسترده ترین جنگ اقتصادی علیه این کشور اعلام کند این اقدام عنوان پاسخ شکست روند گفتگوها مطرح کرد اظهاراتش لحن قطعی داشت",
+    "ترامپ دستور کاهش قیمت گوشت چرخ کرده دادم ترامپ گفت برای کمک خانواده های کارگر دستور داده قیمت گوشت چرخ کرده کاهش یابد این ادعا مقایسه دوره بایدن مطرح کرد گفت زمان قیمت گوشت خیلی سریع افزایش یافت",
+    "آمریکا مذاکرات ایران عمان شکست خورده رسانهٔ آمریکایی سمافور نقل مقام آمریکایی مقام کاخ سفید گزارش داد دولت آمریکا این باور است مذاکرات میان ایران عمان چند هفته پیش شکست خورده است",
+    "جنگ ایران پایان نامشخص هزینه های سنگین جنگ ایران وارد ماه ششم شده راهبرد روشنی برای خاتمه اعلام نشده است رسانه های آمریکایی افزایش حملات ایران کشتی تنگه هرمز خودداری واشنگتن واکنش نظامی مستقیم گزارش دهند این موضوع متحدان خلیج فارس نگران کرده است پنتاگون کاهش ذخایر پدافندی مصرف گسترده سامانه های دفاعی پذیرفته بررسی بازآرایی نیروها جریان است تحلیل گران انرژی مشاوران نفتی هشدار داده اند بازسازی زیرساخت بازگشت کامل صادرات انرژی زمان پرهزینه خواهد بود",
+    "نفت سپاهان دومین محموله ادتیو بومی تأمین کرد شرکت نفت سپاهان دومین محموله صنعتی ادتیو بومی تولید تأمین کرد پروژه بومی سازی سال پیش واحد تحقیق توسعه آغاز نمونه اولیه 1403 ساخته نخستین محموله صنعتی اسفند 1404 وارد چرخه عملیاتی امکان تولید حدود 250 محصول موتوری فراهم آورد تولید محموله دوم نشان دهنده تثبیت مهندسی معکوس قابلیت تکرارپذیری تولید انبوه اساس استانداردهای روز است مدیریت شرکت قصد گسترش خطوط کاهش وابستگی تأمین کنندگان خارجی دارد",
+    "بانک تجارت آماده گسترش همکاری شرکت ملی نفت مدیرعامل بانک تجارت دیدار معاون مالی شرکت ملی نفت ایران اعلام کرد این بانک مایل توسعه همکاری حوزه انرژی است گفت بانک سال شریک مالی صنعت نفت بوده شناخت ظرفیت های این بخش عرضه شیوه محصولات مالی نوآورانه تواند نیازهای شرکت های نفتی پوشش داده فرآیندهای مالی تسهیل کند معاون مالی شرکت ملی نفت نیز حمایت های بانک ستود تنوع محصولات استقبال کرد",
+    "رشد تراکنش تسهیلات غیرحضوری سپینو نئوبانک سپینو بانک صادرات گزارش داد بازگشت خدمات غیرحضوری رفع مغایرت موجب افزایش صدور کارت تسهیلات ازدواج تراکنش های مشتریان شده است صدور کارت حدود درصد پرداخت تسهیلات ازدواج حدود درصد رشد تعداد تراکنش میلیون 122 هزار مورد رسیده مقایسه میانگین سال 1404 نزدیک درصد افزایش دارد بانک رشد کاربران تقویت زیرساخت های فنی اعتماد مشتریان عوامل اصلی این روند معرفی کرد",
+    "وزیر خزانه داری آمریکا ساقط کردن حکومت ایران سخن گفت کاخ سفید دور تازه فشار اقتصادی علیه ایران اعلام کرده وزیر خزانه داری ضربه دوگانه خواند صریح گفت هدفش ساقط کردن حکومت ایران است رسانه تحلیلگران آمریکایی درباره کارآمدی هدف نهایی اختلاف دارند برخی سرخوردگی رئیس جمهور تندتر شدن لحنش گزارش دهند منتقدان گویند نوسان میان تهدید عقب نشینی اعتبار آمریکا تضعیف کرده است تحلیل هشدار دهند فشار اقتصادی نتیجه فوری ندارد بازارها تاکنون واکنش محسوسی نشان نداده اند",
+    "اظهارنظر ترامپ درباره توافق ایران ترامپ اعلام کرد ایران حاضر انجام توافق نیست",
+    "ترامپ گزینه های نظامی آمریکا محدود نشده ترامپ درباره پرسش خبرنگار پیرامون روی آوردن ایران جنگ اقتصادی پاسخ داد این امر معنای محدود شدن گزینه های نظامی آمریکا نیست تأکید کرد وضعیت دنبال کنند ببینند دهد",
+    "ترامپ تنگه هرمز تحت حاکمیت آمریکا است ترامپ ادعا کرد تنگه هرمز قلمروی آمریکا داند قلمرو آمریکایی خواند این اظهارنظر گزارش منبع منعکس شده صرفاً شامل همین ادعاست",
+    "ترامپ هشدار درباره احتمال استیضاح میان دوره دونالد ترامپ گفت اگر انتخابات میان دوره شکست بخورد رقیبانش استیضاح خواهند کرد نظر حتی دلیل این اقدام نمی دانند",
+    "ترامپ فشار اقتصادی جایگزین گزینه های نظامی نیست ترامپ تأکید کرد گرچه تمرکز آمریکا فشار اقتصادی علیه ایران است این معنای کنار گذاشتن محدود شدن گزینه های نظامی واشنگتن نیست",
+    "ترامپ تنگه هرمز قلمرو آمریکا خواند دونالد ترامپ تجمع انتخاباتی تنگه هرمز قلمرو آمریکا اعلام کرد تاکید کرد فشار اقتصادی ایران معنای حذف گزینه نظامی نیست هشدار داد ایران نباید سلاح هسته دست یابد واشنگتن آماده اعلام تحریم های تازه علیه ایران است واکنش سخنگوی ارتش ایران گفت دکترین نیروها حالت دفاعی تهاجمی تغییر کرده اقدام پیش دستانه اشاره کرد پایگاهی اردن هدف قرار داده است",
+    "واکنش گسترده رسانه کارزار تحریمی ترامپ رسانه های عربی نزدیک ایران پوشش وسیعی اعلام دونالد ترامپ درباره کارزار تازه تحریمی علیه تهران دادند برخی شبکه اقدام آمریکا تشدید فشارهای اقتصادی دانستند گروهی دیگر اثر تحریم های جدید اهمیت خواندند امارات تعلیق موقت همه مبادلات تجاری مالی ایران خبر داد زمان فلای دوبی ایرعربیا هماهنگی مجدد حریم هوایی ایران استفاده کردند گزارش هایی نیز درباره ارسال تسلیحات قطعات پهپاد روسیه ایران منتشر",
+    "پزشکیان خواستار پایان جنگ آمریکا رئیس جمهور ایران اشاره موقعیت قدرت تهران گفت اکنون باید جنگ آمریکا پایان یابد تفاهم اسلام آباد دستاوردی مهم توصیف کرد اظهارنظرهای بیرونی ناآگاهانه انتقاد کرد اما تأکید نمود برابر تعرض قلدری عقب نشینی نخواهند کرد پاسخ بازدارنده خواهند داد این سخنان زمان تغییر تاکتیک واشنگتن عملیات نظامی فشارها تحریم های اقتصادی بیان",
+    "مقامات ایران ترامپ درباره دستکاری نفت دروغ گفته مقامات ایرانی گویند دونالد ترامپ ادعای خروج میلیون بشکه نفت تنگه هرمز دروغ مطرح کرده رسانه اکسیوس عنوان پوشش استفاده کرده است گفته آنها ایران نفتکش عراقی اجازه خروج داد مانع عبور سایر کشتی جمله شناورهای چینی نمایندگی کشورهای تحریم شده حرکت کردند",
+    "عراقچی سیاست های ترامپ تکراری قلدرانه است عراقچی اقدامات اقتصادی تهدیدهای مرتبط ترامپ تکراری نشانه درماندگی توصیف کرد گفت طرف آمریکایی بارها همان طرح عملیات نظامی متوسل شده برابر ملت ایران گزینه این طرح های تکراری نمی بیند عراقچی تأکید کرد تنها راه گفت وگوی محترمانه رسیدن راهکاری مبتنی عدالت شرافت است",
+    "نیویورک پست فشار رهبران غیرنظامی ایران برای توافق ترامپ نیویورک پست گوید رهبران ارشد غیرنظامی ایران برای رسیدن توافق ترامپ پایان دادن جنگ فشار آورند خبر بیانیه اشاره کند آمده تحمل نخواهیم کرد",
+    "ادعای ترامپ درباره تنگه هرمز ترامپ پست مدعی تنگه هرمز عنوان قلمروی جدید آمریکا معرفی شده است خبر منبع تنها این ادعا نقل کند جزئیات بیشتری ارائه نداده است",
+    "قالیباف سیاست های زده رکود انجامد قالیباف اشاره اقدام ترامپ واردات گوشت منجمد نوشت چنین تدابیری ممکن است موقتی کارساز باشند اما پرسید آیا قرار است اوراق قرضه بازار مسکن دستمزدها نیز منجمد شوند هشدار داد سیاست خارجی ابتکار همراه این نوع سیاست های اقتصادی منجر رکود خواهد تأکید کرد بومرنگ ایران نهایت بازمی گردد"
+  ],
+  "1405/05/27_daily_silver_visual_analysis": true,
+  "1405/05/28_morning": true,
+  "1405/05/28_start_trades": true,
+  "gold_ounce": 4607.35,
+  "gold_ounce_updated_at": "2026-08-22T18:15:52.970482+03:30",
+  "gold_secondhand": 20704320,
+  "1405/05/28_mashhad_11": true,
+  "gold_alert_base": 4607.35,
+  "1405/05/28_mashhad_15": true,
+  "1405/05/28_tomorrow_look": true,
+  "1405/05/28_end_trades": true,
+  "1405/05/28_daily_silver_visual_analysis": true,
+  "1405/05/29_morning": true,
+  "1405/05/29_start_trades": true,
+  "1405/05/29_mashhad_11": true,
+  "1405/05/29_mashhad_15": true,
+  "1405/05/29_mashhad_18": true,
+  "1405/05/29_market_pulse_evening": true,
+  "1405/05/29_end_trades": true,
+  "1405/05/29_daily_silver_visual_analysis": true,
+  "1405/05/30_morning": true,
+  "1405/05/30_market_recap": true,
+  "1405/05/30_tomorrow_look": true,
+  "manual_price_update_offset": 809437420,
+  "manual_price_checkpoint_initialized": true,
+  "sales_orders": [
+    {
+      "order_id": "YS-260822-0001",
+      "telegram_id": 567647281,
+      "customer_key": "09016952334",
+      "unit_price": 425000,
+      "weight": 200,
+      "percent": 2,
+      "base_total": 85000000,
+      "markup_amount": 1700000,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 86700000,
+      "status": "cancelled",
+      "created_at": "2026-08-22T08:16:56.426025+03:30",
+      "price_lock_expires_at": "2026-08-22T08:21:56.426025+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": ""
+    },
+    {
+      "order_id": "YS-260822-0002",
+      "telegram_id": 567647281,
+      "customer_key": "09016952334",
+      "unit_price": 425000,
+      "weight": 300,
+      "percent": 1,
+      "base_total": 127500000,
+      "markup_amount": 1275000,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 128775000,
+      "status": "expired",
+      "created_at": "2026-08-22T08:19:47.087927+03:30",
+      "price_lock_expires_at": "2026-08-22T08:24:47.087927+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": "",
+      "updated_at": "2026-08-22T08:27:24.087986+03:30"
+    },
+    {
+      "order_id": "YS-260822-0003",
+      "telegram_id": 567647281,
+      "customer_key": "09156270670",
+      "unit_price": 425000,
+      "weight": 10,
+      "percent": 7,
+      "base_total": 4250000,
+      "markup_amount": 297500,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 4547500,
+      "status": "receipt_submitted",
+      "created_at": "2026-08-22T09:22:58.112513+03:30",
+      "price_lock_expires_at": "2026-08-22T09:27:58.112513+03:30",
+      "payment_method": "card",
+      "receipt_file_id": "AgACAgQAAxkBAAPtaok2visrZ1VL1h6HKRzzkwEwAgkAAlMOaxsaWFBQ3xX1JN0M2bgBAAMCAAN5AAM9BA",
+      "shipping_address": "گناباد خ ناصرخسرو ۱ انتهای کوچه و ۲۵",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": "",
+      "receipt_kind": "photo",
+      "receipt_submitted_at": "2026-08-22T09:23:53.852034+03:30"
+    },
+    {
+      "order_id": "YS-260822-0004",
+      "telegram_id": 7097126535,
+      "customer_key": "7097126535",
+      "unit_price": 426000,
+      "weight": 200,
+      "percent": 2,
+      "base_total": 85200000,
+      "markup_amount": 1704000,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 86904000,
+      "status": "expired",
+      "created_at": "2026-08-22T14:23:38.862829+03:30",
+      "price_lock_expires_at": "2026-08-22T14:28:38.862829+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": "",
+      "updated_at": "2026-08-22T15:14:29.866446+03:30"
+    },
+    {
+      "order_id": "YS-260822-0005",
+      "telegram_id": 7097126535,
+      "customer_key": "7097126535",
+      "unit_price": 431000,
+      "weight": 500,
+      "percent": 0,
+      "base_total": 215500000,
+      "markup_amount": 0,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 215500000,
+      "status": "expired",
+      "created_at": "2026-08-22T18:15:32.886149+03:30",
+      "price_lock_expires_at": "2026-08-22T18:25:32.886149+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": "",
+      "updated_at": "2026-08-22T19:11:36.235793+03:30"
+    },
+    {
+      "order_id": "YS-260822-0006",
+      "telegram_id": 339722726,
+      "customer_key": "339722726",
+      "unit_price": 431000,
+      "weight": 10,
+      "percent": 7,
+      "base_total": 4310000,
+      "markup_amount": 301700,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 4611700,
+      "status": "expired",
+      "created_at": "2026-08-22T23:56:47.089069+03:30",
+      "price_lock_expires_at": "2026-08-23T00:06:47.089069+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": "",
+      "updated_at": "2026-08-23T00:19:33.790150+03:30"
+    },
+    {
+      "order_id": "YS-260823-0007",
+      "telegram_id": 7097126535,
+      "customer_key": "7097126535",
+      "unit_price": 431000,
+      "weight": 1000,
+      "percent": 0,
+      "base_total": 431000000,
+      "markup_amount": 0,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 431000000,
+      "status": "expired",
+      "created_at": "2026-08-23T00:19:39.744160+03:30",
+      "price_lock_expires_at": "2026-08-23T00:29:39.744160+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": "",
+      "updated_at": "2026-08-23T14:50:37.031663+03:30"
+    },
+    {
+      "order_id": "YS-260823-0008",
+      "telegram_id": 339722726,
+      "customer_key": "339722726",
+      "unit_price": 451000,
+      "weight": 550,
+      "percent": 0,
+      "base_total": 248050000,
+      "markup_amount": 0,
+      "coupon_percent": 0,
+      "discount_amount": 0,
+      "total": 248050000,
+      "status": "cancelled",
+      "created_at": "2026-08-23T18:21:12.280247+03:30",
+      "price_lock_expires_at": "2026-08-23T18:31:12.280247+03:30",
+      "payment_method": "",
+      "receipt_file_id": "",
+      "shipping_address": "",
+      "tracking_code": "",
+      "referral_code": "",
+      "coupon_code": ""
+    }
+  ],
+  "sales_customers": {
+    "567647281": {
+      "telegram_id": 567647281,
+      "name": "مهشید سیروش",
+      "phone": "09156270670",
+      "address": "گناباد خ ناصرخسرو ۱ انتهای کوچه و ۲۵",
+      "created_at": "2026-08-22T08:15:03.319723+03:30",
+      "last_seen_at": "2026-08-22T09:23:54.373989+03:30",
+      "stage": "order"
+    },
+    "1951076457": {
+      "telegram_id": 1951076457,
+      "name": "",
+      "phone": "",
+      "address": "",
+      "created_at": "2026-08-22T10:50:47.277886+03:30",
+      "last_seen_at": "2026-08-22T10:50:51.942156+03:30",
+      "stage": "weight"
+    },
+    "7097126535": {
+      "telegram_id": 7097126535,
+      "name": "✏️ وزن دلخواه",
+      "phone": "",
+      "address": "",
+      "created_at": "2026-08-22T10:50:49.064466+03:30",
+      "last_seen_at": "2026-08-23T00:19:40.448971+03:30",
+      "stage": "order"
+    },
+    "339722726": {
+      "telegram_id": 339722726,
+      "name": "30 گرم",
+      "phone": "",
+      "address": "",
+      "created_at": "2026-08-22T23:53:31.934951+03:30",
+      "last_seen_at": "2026-08-23T22:34:39.298938+03:30",
+      "stage": "weight"
+    }
+  },
+  "1405/05/31_morning": true,
+  "sales_order_sequence": 8,
+  "1405/05/31_economic_calendar": true,
+  "1405/05/31_start_trades": true,
+  "1405/05/31_mashhad_15": true,
+  "sales_coupons": {
+    "YS-G4OHQL1J": {
+      "created_at": "2026-08-22T15:51:15.346897+03:30",
+      "expires_at": "2026-09-01T15:51:15.346897+03:30",
+      "used": false,
+      "used_at": null,
+      "used_order_id": null,
+      "one_time": true,
+      "discount_policy": "weight_fixed_toman_v1"
+    }
+  },
+  "1405/05/31_mashhad_18": true,
+  "1405/05/31_tomorrow_look": true,
+  "1405/05/31_end_trades": true,
+  "1405/05/31_daily_silver_visual_analysis": true,
+  "1405/06/01_start_trades": true,
+  "1405/06/01_economy_lesson": true,
+  "sales_bot_update_offset": 809437436,
+  "1405/06/01_end_trades": true,
+  "manual_price_auto_mode_migrated_v2": true,
+  "manual_price_auto_mode_migrated_v3": true,
+  "manual_price_overrides": {},
+  "pending_price_post": {
+    "signature": "{\"mithqal_995\": 2078300, \"nader_9999\": 470000, \"ounce\": 69.1, \"shot_995\": 451000, \"tehran\": 198900}",
+    "source_message_id": null,
+    "rate": {
+      "ounce": 69.1,
+      "tehran": 198900
+    },
+    "products": {
+      "shot_995": 451000,
+      "nader_9999": 470000,
+      "mithqal_995": 2078300,
+      "shot_package": 451000000,
+      "nader_package": 470000000
+    },
+    "caption": "📅 تاریخ: 1405/06/02\n🕐 آخرین بروزرسانی: 00:47\n\n🥈 قیمت و معاملات نقره یزدان‌دوست\n\n▫️ خرید و فروش ساچمه نقره ۹۹۵\n▫️ خرید و فروش شمش نقره ۹۹۹.۹\n▫️ خرید نقره مستعمل\n▫️ خرید شمش‌های معتبر و قانونی\n▫️ نرخ خرید فاکتورهای مجموعه طبق روال همیشگی\n\n📦 معاملات بالای ۲ کیلو\nجهت استعلام نرخ ویژه، تماس بگیرید:\n📞 09152449600\n\n💬 خرید، فروش و استعلام قیمت:\n@MajidYazdandoust\n\n",
+    "telegram_message_id": null,
+    "telegram_sent": false,
+    "rubika_sent": false,
+    "rubika_skipped": false,
+    "created_at": "2026-08-24T00:47:17.227383+03:30"
+  }
+}
