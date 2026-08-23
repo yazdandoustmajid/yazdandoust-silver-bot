@@ -1530,5 +1530,13 @@
   "1405/06/01_start_trades": true,
   "1405/06/01_economy_lesson": true,
   "sales_bot_update_offset": 809437436,
-  "1405/06/01_end_trades": true
+  "1405/06/01_end_trades": true,
+  "price_menu_stage": "edit",
+  "price_menu_field": null,
+  "price_menu_draft": {
+    "ounce": 69.1,
+    "tehran": 198900,
+    "shot_995": 451000,
+    "nader_9999": 470000
+  }
 }
