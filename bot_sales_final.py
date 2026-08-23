@@ -54,7 +54,7 @@ BASE = Path(__file__).resolve().parent
 
 TEMPLATE = BASE / "board_only_preview.png"
 OUTPUT = BASE / "latest_price.jpg"
-STATE = BASE / os.getenv("STATE_FILE", "sales_state.json")
+STATE = BASE / "state.json"
 
 # Start/End trading banners are ordinary Telegram images, NOT stickers.
 # Keep them in the same repository folder as bot.py.
@@ -100,7 +100,7 @@ API_HASH = os.getenv(
     ""
 ).strip()
 
-BOT_ROLE = "sales"
+BOT_ROLE = os.getenv("BOT_ROLE", "price").strip().lower()
 if BOT_ROLE not in {"price", "sales"}:
     BOT_ROLE = "price"
 
@@ -17382,7 +17382,7 @@ async def monitor_live_price_changes(
 # price monitor, Rubika publisher, or price-management commands. It only
 # consumes its own Bot API update queue and handles customer + sales-admin
 # messages. This keeps the sales bot completely isolated from the price bot.
-async def run_sales_only_bot(state, duration_seconds=210):
+async def run_sales_only_bot(state, duration_seconds=270):
     started = time.monotonic()
     offset_key = "sales_bot_update_offset"
 
@@ -17395,8 +17395,31 @@ async def run_sales_only_bot(state, duration_seconds=210):
         log.error("SALES BOT POLLING PREPARATION FAILED")
         return
 
+    # Verify that the token used by this workflow is actually the sales bot
+    # token. This makes a wrong GitHub Secret immediately visible in the log
+    # instead of looking like a silent/non-working bot.
+    try:
+        me_response = requests.get(
+            _telegram_bot_api_url("getMe"),
+            timeout=10,
+        )
+        me_response.raise_for_status()
+        me_payload = me_response.json()
+        if not me_payload.get("ok"):
+            log.error("SALES BOT IDENTITY CHECK FAILED | %s", me_payload)
+            return
+        me = me_payload.get("result") or {}
+        log.info(
+            "SALES BOT IDENTITY VERIFIED | username=@%s | id=%s",
+            me.get("username") or "-",
+            me.get("id") or "-",
+        )
+    except Exception as error:
+        log.error("SALES BOT IDENTITY CHECK FAILED | %s", error)
+        return
+
     log.info(
-        "SALES BOT ONLY STARTED | username=@yazdandoustsilverbot | duration=%ss",
+        "SALES BOT ONLY STARTED | duration=%ss",
         duration_seconds,
     )
 
@@ -17519,6 +17542,20 @@ async def run_sales_only_bot(state, duration_seconds=210):
         if changed or updates:
             save_state(state)
 
+    # Do not let asyncio.run() cancel a receipt-forward/OCR task that was
+    # queued just before the polling window ended. Give queued receipt tasks
+    # a bounded grace period to finish forwarding the actual receipt.
+    pending_receipts = list(SALES_RECEIPT_TASKS)
+    if pending_receipts:
+        log.info("SALES RECEIPT TASKS DRAINING | count=%s", len(pending_receipts))
+        try:
+            await asyncio.wait_for(
+                asyncio.gather(*pending_receipts, return_exceptions=True),
+                timeout=25,
+            )
+        except asyncio.TimeoutError:
+            log.warning("SALES RECEIPT TASK DRAIN TIMEOUT")
+
     log.info("SALES BOT ONLY FINISHED")
 
 
@@ -17554,43 +17591,29 @@ async def _main_locked():
     if not BOT_TOKEN:
         missing.append("PRICE_BOT_TOKEN" if BOT_ROLE == "price" else "BOT_TOKEN")
 
-    if not TARGET_CHANNEL:
+    # The sales deployment uses only the Telegram Bot API. It does not need
+    # a Telethon API_ID/API_HASH, channel target, board template, or OpenAI.
+    # Requiring those price-bot settings was an unnecessary failure point for
+    # the sales deployment.
+    if BOT_ROLE == "price" and not TARGET_CHANNEL:
         missing.append("TARGET_CHANNEL")
 
     if missing:
-
         raise RuntimeError(
-
-            "Secrets missing: "
-            + ", ".join(missing)
-
+            "Secrets missing: " + ", ".join(missing)
         )
 
-    if NEWS_ENABLED and AI_NEWS_ENABLED:
+    if BOT_ROLE == "price":
+        if NEWS_ENABLED and AI_NEWS_ENABLED and not OPENAI_API_KEY:
+            raise RuntimeError("OPENAI_API_KEY تنظیم نشده است.")
 
-        if not OPENAI_API_KEY:
+        try:
+            api_id = int(API_ID)
+        except ValueError:
+            raise RuntimeError("API_ID باید عدد باشد.")
 
-            raise RuntimeError(
-                "OPENAI_API_KEY تنظیم نشده است."
-            )
-
-    try:
-
-        api_id = int(
-            API_ID
-        )
-
-    except ValueError:
-
-        raise RuntimeError(
-            "API_ID باید عدد باشد."
-        )
-
-    if not TEMPLATE.exists():
-
-        raise RuntimeError(
-            "board_only_preview.png پیدا نشد."
-        )
+        if not TEMPLATE.exists():
+            raise RuntimeError("board_only_preview.png پیدا نشد.")
 
     state = load_state()
     sales_expire_orders(state)
@@ -17636,7 +17659,7 @@ async def _main_locked():
     client = TelegramClient(
 
         str(
-            BASE / os.getenv("TELEGRAM_SESSION_NAME", "sales_bot")
+            BASE / "bot"
         ),
 
         api_id,
