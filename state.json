@@ -1324,7 +1324,6 @@
   "1405/05/30_tomorrow_look": true,
   "manual_price_update_offset": 809437420,
   "manual_price_checkpoint_initialized": true,
-  "manual_price_overrides": {},
   "sales_orders": [
     {
       "order_id": "YS-260822-0001",
@@ -1572,12 +1571,27 @@
   "1405/06/01_economy_lesson": true,
   "sales_bot_update_offset": 809437436,
   "1405/06/01_end_trades": true,
-  "price_menu_stage": "edit",
-  "price_menu_field": null,
-  "price_menu_draft": {
-    "ounce": 69.1,
-    "tehran": 198900,
-    "shot_995": 451000,
-    "nader_9999": 470000
+  "manual_price_auto_mode_migrated_v2": true,
+  "manual_price_overrides": {},
+  "pending_price_post": {
+    "signature": "{\"mithqal_995\": 2078300, \"nader_9999\": 470000, \"ounce\": 69.1, \"shot_995\": 451000, \"tehran\": 198900}",
+    "source_message_id": null,
+    "rate": {
+      "ounce": 69.1,
+      "tehran": 198900
+    },
+    "products": {
+      "shot_995": 451000,
+      "nader_9999": 470000,
+      "mithqal_995": 2078300,
+      "shot_package": 451000000,
+      "nader_package": 470000000
+    },
+    "caption": "📅 تاریخ: 1405/06/02\n🕐 آخرین بروزرسانی: 00:34\n\n🥈 قیمت و معاملات نقره یزدان‌دوست\n\n▫️ خرید و فروش ساچمه نقره ۹۹۵\n▫️ خرید و فروش شمش نقره ۹۹۹.۹\n▫️ خرید نقره مستعمل\n▫️ خرید شمش‌های معتبر و قانونی\n▫️ نرخ خرید فاکتورهای مجموعه طبق روال همیشگی\n\n📦 معاملات بالای ۲ کیلو\nجهت استعلام نرخ ویژه، تماس بگیرید:\n📞 09152449600\n\n💬 خرید، فروش و استعلام قیمت:\n@MajidYazdandoust\n\n",
+    "telegram_message_id": null,
+    "telegram_sent": false,
+    "rubika_sent": false,
+    "rubika_skipped": false,
+    "created_at": "2026-08-24T00:34:49.662306+03:30"
   }
 }
