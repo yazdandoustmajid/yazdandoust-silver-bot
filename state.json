@@ -1469,7 +1469,7 @@
       "phone": "",
       "address": "",
       "created_at": "2026-08-22T23:53:31.934951+03:30",
-      "last_seen_at": "2026-08-23T00:19:39.390217+03:30",
+      "last_seen_at": "2026-08-23T17:04:47.317045+03:30",
       "stage": "weight"
     }
   },
@@ -1503,5 +1503,5 @@
     "shot_995": 451000,
     "nader_9999": 470000
   },
-  "sales_bot_update_offset": 809437426
+  "sales_bot_update_offset": 809437428
 }
