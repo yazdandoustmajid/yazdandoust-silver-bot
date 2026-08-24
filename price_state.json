@@ -892,6 +892,13 @@
       "silver_ounce": 69.29,
       "gold_ounce": 4607.35,
       "shot_995": 461000.0
+    },
+    {
+      "timestamp": "2026-08-24T13:54:36.559446+03:30",
+      "tehran": 202000.0,
+      "silver_ounce": 69.29,
+      "gold_ounce": 4607.35,
+      "shot_995": 461000.0
     }
   ],
   "silver_alert_base": 69.0,
