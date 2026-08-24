@@ -1,0 +1,120 @@
+name: Run Silver Price Bot
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "bot_sales_final.py"
+      - ".github/workflows/price-bot.yml"
+      - "board_only_preview.png"
+      - "start_trades.png"
+      - "end_trades.png"
+      - "requirements.txt"
+  workflow_dispatch:
+  schedule:
+    # Run every 5 minutes using Tehran time.
+    - cron: "*/5 * * * *"
+      timezone: "Asia/Tehran"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: silver-price-bot
+  cancel-in-progress: false
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install OCR dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-fas
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytesseract
+
+      - name: Run price bot
+        env:
+          BOT_ROLE: price
+          PRICE_BOT_TOKEN: ${{ secrets.PRICE_BOT_TOKEN }}
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          TARGET_CHANNEL: ${{ secrets.TARGET_CHANNEL }}
+          ADMIN_TELEGRAM_ID: ${{ secrets.ADMIN_TELEGRAM_ID }}
+          ADMIN_TELEGRAM_USERNAME: ${{ secrets.ADMIN_TELEGRAM_USERNAME }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          RUBIKA_TOKEN: ${{ secrets.RUBIKA_TOKEN }}
+          RUBIKA_CHAT_ID: ${{ secrets.RUBIKA_CHAT_ID }}
+          PRICE_BOT_USERNAME: Yazdandoustpricebot
+          TELEGRAM_SESSION_NAME: price_bot
+          SOURCE_CHANNEL: tghsilver
+          WEBSITE_URL: https://taghizadegan.com
+          MASHHAD_SOURCE_CHANNEL: taybadonline
+          LIVE_PRICE_MONITOR_SECONDS: "210"
+          LIVE_PRICE_POLL_SECONDS: "5"
+
+        run: |
+          set -euo pipefail
+          test -n "$PRICE_BOT_TOKEN" || { echo "::error::GitHub Secret PRICE_BOT_TOKEN is empty or unavailable."; exit 1; }
+          test -n "$API_ID" || { echo "::error::GitHub Secret API_ID is empty or unavailable."; exit 1; }
+          test -n "$API_HASH" || { echo "::error::GitHub Secret API_HASH is empty or unavailable."; exit 1; }
+          test -n "$TARGET_CHANNEL" || { echo "::error::GitHub Secret TARGET_CHANNEL is empty or unavailable."; exit 1; }
+          test -f bot_sales_final.py || { echo "::error::bot_sales_final.py is missing from the repository root."; exit 1; }
+          python bot_sales_final.py
+
+      - name: Save price state safely
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ ! -f price_state.json ]; then
+            echo "price_state.json does not exist. Nothing to save."
+            exit 0
+          fi
+
+          git add price_state.json
+
+          if git diff --cached --quiet; then
+            echo "No price state changes."
+            exit 0
+          fi
+
+          git commit -m "Update price bot state"
+
+          max_attempts=5
+          for attempt in $(seq 1 "$max_attempts"); do
+            echo "Price state push attempt $attempt/$max_attempts..."
+
+            if git push origin HEAD:main; then
+              echo "Price state pushed successfully."
+              exit 0
+            fi
+
+            echo "Remote main changed. Fetching latest main..."
+            git fetch origin main
+            git rebase -X theirs origin/main
+            sleep 2
+          done
+
+          echo "::error::Could not push price_state.json after $max_attempts attempts."
+          exit 1
